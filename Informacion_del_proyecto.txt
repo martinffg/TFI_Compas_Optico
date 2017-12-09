@@ -1,0 +1,3 @@
+Librerías utilizadas: 
+* Java for Kinect (https://github.com/digitalworlds/java-for-kinect)
+* http://research.dwi.ufl.edu/ufdw/j4k/examples.php
