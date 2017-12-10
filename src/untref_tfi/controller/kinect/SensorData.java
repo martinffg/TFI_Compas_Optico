@@ -15,6 +15,6 @@ public interface SensorData {
 	
 	void setPixelColorPorProfundidad(float dist, int cantPixeles, Color colorContorno);
 	
-	public void pintarCurvaNivel(int distEntreCurvas);
+	void pintarCurvaNivel(int distEntreCurvas);
 	
 }
