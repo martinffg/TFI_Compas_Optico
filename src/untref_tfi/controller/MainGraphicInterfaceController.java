@@ -3,6 +3,8 @@ package untref_tfi.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -25,7 +27,7 @@ public class MainGraphicInterfaceController {
 		
 		imageCapture = new ImageCaptureController(this);
 		imageCapture.startImageCapture();
-		createKinectImageView(kinectImage);
+		createKinectImageView();
 		createImageRosaView();
 		createImageRosaIconView();
 		
@@ -74,7 +76,7 @@ public class MainGraphicInterfaceController {
 		return imageRosaIconView;
 	}
 	
-	private void createKinectImageView(Image imagen){
+	private void createKinectImageView(){
 		
 		kinectImageView = new ImageView(kinectImage);
 		kinectImageView.setPreserveRatio(true);
@@ -82,8 +84,12 @@ public class MainGraphicInterfaceController {
 		kinectImageView.setFitWidth(640);
 		kinectImageView.boundsInLocalProperty();
 		kinectImageView.setPickOnBounds(true);
-		kinectImageView.setOnMouseClicked((MouseEvent e) -> {  System.out.println("["+e.getX()+", "+e.getY()+"]");  });
-		
+		kinectImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+ 
+            public void handle(MouseEvent e) {
+            	System.out.println("["+e.getX()+", "+e.getY()+"]");
+            }
+        });
 	}
 
 	private AnchorPane createAnchorPane(){
