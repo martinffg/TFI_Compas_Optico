@@ -1,7 +1,6 @@
 package untref_tfi.view;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,11 +26,10 @@ public class CompassViewer extends Application{
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		       @Override
-		       public void handle(WindowEvent e) {
-		          Platform.exit();
-		          System.exit(0);
-		       }
+	       @Override
+	       public void handle(WindowEvent e) {
+	          System.exit(0);
+	       }
 		});
 	}
 	

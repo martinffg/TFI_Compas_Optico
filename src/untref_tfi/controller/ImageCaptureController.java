@@ -3,6 +3,7 @@ package untref_tfi.controller;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import untref_tfi.controller.kinect.Kinect;
 import untref_tfi.controller.kinect.SensorData;
 import untref_tfi.controller.kinect.SensorDataProduction;
@@ -13,7 +14,7 @@ public class ImageCaptureController {
 	private Kinect kinect;
 	private MainGraphicInterfaceController compassMGIC;
 	private int contador=0;
-	
+			
 	public ImageCaptureController(MainGraphicInterfaceController mainGIController) {
 		setupKinect();
 		compassMGIC=mainGIController;
@@ -23,19 +24,19 @@ public class ImageCaptureController {
 		construirKinect();
 		startKinect();
 		esperarUmbralInicioKinect();
-		chequearInicializacionKinect();
-		setearAnguloDeElevacionDefault();
+		if (chequearInicializacionKinect()) {
+			setearAnguloDeElevacionDefault(); 
+		}else {
+			System.out.println("El sensor Kinect no esta inicializado, fallo al capturar imagenes");
+		}
 	}
 
 	private void setearAnguloDeElevacionDefault() {
 		kinect.setElevationAngle(0);
 	}
 
-	private void chequearInicializacionKinect() {
-		if (!kinect.isInitialized()) {
-			System.out.println("Falla al inicializar la kinect.");
-			System.exit(1);
-		}
+	private boolean chequearInicializacionKinect() {
+		return kinect.isInitialized();
 	}
 
 	private void esperarUmbralInicioKinect() {
@@ -55,12 +56,15 @@ public class ImageCaptureController {
 	}
 	
 	public void startImageCapture() {
-		data = new SensorDataProduction(kinect);
-		BufferedImage imagenKinect = data.getImagenColor();
-		compassMGIC.setKinectImage(SwingFXUtils.toFXImage(imagenKinect, null));
-
-		ImageCaptureRefresh imageCaptureRefresh = new ImageCaptureRefresh(this);
-		imageCaptureRefresh.run();
+		if (chequearInicializacionKinect()) {
+			data = new SensorDataProduction(kinect);
+			BufferedImage imagenKinect = data.getImagenColor();
+			compassMGIC.setKinectImage(SwingFXUtils.toFXImage(imagenKinect, null)); 
+			ImageCaptureRefresh imageCaptureRefresh = new ImageCaptureRefresh(this);
+			imageCaptureRefresh.run();
+		} else {
+			compassMGIC.setKinectImage(new Image(getClass().getResource("../../resource/images/errorImageOpeningKinectSensor.jpg").toString()));
+		}
 	}
 	
 	public void imageRefresh(){
