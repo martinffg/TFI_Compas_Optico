@@ -14,10 +14,18 @@ public class ImageCaptureController {
 	private Kinect kinect;
 	private MainGraphicInterfaceController compassMGIC;
 	private int contador=0;
+	private boolean isTestMode=false;
 			
-	public ImageCaptureController(MainGraphicInterfaceController mainGIController) {
-		setupKinect();
+	public ImageCaptureController(MainGraphicInterfaceController mainGIController,boolean isTest) {
+		
+		isTestMode=isTest;
+		if (!isTestMode) {
+			setupKinect();
+		} else {
+			construirKinect();
+		}
 		compassMGIC=mainGIController;
+		
 	}
 	
 	private void setupKinect() {
@@ -56,7 +64,7 @@ public class ImageCaptureController {
 	}
 	
 	public void startImageCapture() {
-		if (chequearInicializacionKinect()) {
+		if (chequearInicializacionKinect() && (!isTestMode)) {
 			data = new SensorDataProduction(kinect);
 			BufferedImage imagenKinect = data.getImagenColor();
 			compassMGIC.setKinectImage(SwingFXUtils.toFXImage(imagenKinect, null)); 

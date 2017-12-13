@@ -23,9 +23,9 @@ public class MainGraphicInterfaceController {
 	private ImageCaptureController imageCapture;
 	private Scene mainScene;
 	
-	public MainGraphicInterfaceController(){
+	public MainGraphicInterfaceController(boolean isTest){
 		
-		imageCapture = new ImageCaptureController(this);
+		imageCapture = new ImageCaptureController(this,isTest);
 		imageCapture.startImageCapture();
 		createKinectImageView();
 		createImageRosaView();
