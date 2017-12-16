@@ -10,7 +10,9 @@
 	<property name="reports.xml.dir" location="${reports.dir}/junit-xml" />
 	<property name="reports.html.dir" location="${reports.dir}/junit-html" />
 	<property name="src.dir" location="src" />
-	<property name="kinectlibs" location="${src.dir}/resource/libs" />
+	<property name="resource.dir" location="${src.dir}/resource" />
+	<property name="kinectlibs" location="${resource.dir}/libs" />
+	<property name="images" location="${resource.dir}/images" />
 	<property name="coverage.xml.dir" location="${reports.dir}/cobertura-xml" />
 	<property name="coverage.summaryxml.dir" location="${reports.dir}/cobertura-summary-xml" />
 	<property name="coverage.html.dir" location="${reports.dir}/cobertura-html" />
@@ -56,6 +58,14 @@
 		<mkdir dir="${build}/classes" />
 		<mkdir dir="${build}/tests" />
         <mkdir dir="${reports.dir}" />
+		<mkdir dir="${build}/resource/images" />
+		<mkdir dir="${build}/instrumented/resource/images" />
+		<copy todir="${build}" preservelastmodified="true">
+		    <fileset dir="${kinectlibs}/dll" />
+		</copy>
+		<copy todir="${build}/resource" preservelastmodified="true">
+			<fileset dir="${resource.dir}" />		
+		</copy>
 	</target>
 
 	<target name="compilar.aplicacion" depends="setup, resolve">
@@ -91,7 +101,13 @@
 
 
     <target name="ejecutar.tests" depends="compilar.tests">
-        <junit fork="yes" failureProperty="test.failure" forkmode="once" showoutput="true">
+        <copy todir="${build}/instrumented" preservelastmodified="true">
+		    <fileset dir="${kinectlibs}/dll" />	
+		</copy>
+		<copy todir="${build}/instrumented/resource" preservelastmodified="true">
+			<fileset dir="${resource.dir}" />		
+		</copy>
+		<junit fork="yes" failureProperty="test.failure" forkmode="once" showoutput="true">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${build}/cobertura.ser" />
             <classpath location="${instrumented.dir}" />
             <classpath location="${build}" />

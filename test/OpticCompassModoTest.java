@@ -2,7 +2,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javafx.application.Platform;
-import untref_tfi.OpticCompass;
+
 
 public class OpticCompassModoTest {
 
@@ -14,7 +14,7 @@ public class OpticCompassModoTest {
 				@Override
 				public void run() {
 					try {
-						String[] args = new String[1]; args[0]="test";
+						String[] args = {"test"};
 						OpticCompass.main(args);
 						if (Platform.isFxApplicationThread()) {
 							Assert.assertTrue(Platform.isFxApplicationThread());

@@ -1,18 +1,17 @@
-package untref_tfi;
+package untref_tfi.view;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import untref_tfi.view.CompassViewer;
 
-public class OpticCompass extends Application {
+public class OpticCompassLauncher extends Application {
 	
 	private static boolean isTestMode=false;
 	
 	public static void main(String[] args) {
-		if (args.length>=1) {
-			isTestMode=true;
-		}else {
+		if (args.length==0) {
 			isTestMode=false;
+		} else if (args[0].equals("test")) {
+			isTestMode=true;
 		}
 		launch(args);
 	}
