@@ -4,10 +4,11 @@ import org.junit.Test;
 import javafx.application.Platform;
 
 
-public class OpticCompassModoTest {
+
+public class OpticCompassModoProdTest {
 
 	@Test
-	public void mainTest() {
+	public void mainProdTest() {
 		try {
 			Thread thread = new Thread(new Runnable() {
 				
@@ -15,7 +16,7 @@ public class OpticCompassModoTest {
 				public void run() {
 					try {
 						OpticCompass oc = new OpticCompass();
-						String[] args = {"test"};
+						String[] args = {};
 						oc.start(args);
 						
 						if (Platform.isFxApplicationThread()) {
@@ -32,7 +33,7 @@ public class OpticCompassModoTest {
 			Thread.sleep(1000);
 			Assert.assertFalse(Platform.isFxApplicationThread());
 		}catch(InterruptedException ex){
-			//System.out.println("Exception stopping mainTest catched.");
+			//System.out.println("Exception stopping mainProdTest catched.");
 		}
 	}
 }

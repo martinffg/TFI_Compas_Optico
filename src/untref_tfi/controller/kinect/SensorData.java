@@ -7,7 +7,11 @@ public interface SensorData {
 
 	BufferedImage getImagenColor();
 	
+	BufferedImage getImagenColorBackup();
+	
 	Color getColorEnPixel(int x, int y);
+	
+	void setColorEnPixel(int x, int y, Color color);
 	
 	double getDistancia(int x, int y);
 	

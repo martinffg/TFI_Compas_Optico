@@ -17,8 +17,10 @@ public class SensorDataProduction implements SensorData {
 		
 	public SensorDataProduction(Kinect kinect) {
 		if (!kinect.isInitialized()) {
-			System.out.println("Falla al inicializar la kinect.");
-			System.exit(2);
+			kinect = new Kinect();
+			kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
+			//System.out.println("Falla al inicializar la kinect.");
+			//System.exit(2);
 		}
 				
 		this.colorFrame = kinect.getColorFrame();
@@ -35,6 +37,11 @@ public class SensorDataProduction implements SensorData {
 	public Color getColorEnPixel(int x, int y) {
 		return matrizColor[x][y];
 	}
+	
+	@Override
+	public void setColorEnPixel(int x, int y, Color color) {
+		matrizColor[x][y]=color;
+	}
 
 	@Override
 	public double getDistancia(int x, int y) {
@@ -46,6 +53,7 @@ public class SensorDataProduction implements SensorData {
 		return imagenColor;
 	}
 	
+	@Override
 	public BufferedImage getImagenColorBackup() {
 		return imagenColorBackup;
 	}

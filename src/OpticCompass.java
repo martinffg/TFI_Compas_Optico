@@ -7,4 +7,8 @@ public class OpticCompass  {
 		OpticCompassLauncher.main(args);
 		
 	}
+	
+	public void start(String[] args){
+		OpticCompass.main(args);
+	}
 }

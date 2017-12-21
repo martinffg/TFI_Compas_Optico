@@ -119,7 +119,6 @@ public class MainGraphicInterfaceController {
 	}
 
 	private void createImageRosaView() {
-		//Image imageRosaDeLosVientos = new Image(getClass().getResource("resource/images/rosa_de_los_vientos.jpg").toString());
 		Image imageRosaDeLosVientos = new Image(getClass().getResourceAsStream("../../resource/images/rosa_de_los_vientos.jpg"));
 		imageRosaView = new ImageView(imageRosaDeLosVientos);
 		imageRosaView.setPreserveRatio(true);
