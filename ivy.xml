@@ -8,7 +8,11 @@
     
     <dependencies>
         
-        <dependency org="org.mockito" name="mockito-all" rev="1.9.0" conf="build->default"/>
+        <!--dependency org="org.mockito" name="mockito-all" rev="1.9.0" conf="build->default"/-->
+		
+		<dependency org='org.mockito' name='mockito-core' rev='2.13.0' conf="build->default">
+			<artifact name='mockito-core' ext='pom' />
+		</dependency>
         <dependency org="junit" name="junit" rev="4.11" conf="build->default"/>
         <dependency org="net.sourceforge.cobertura" name="cobertura" rev="2.1.1" conf="build->default"/>
         <dependency org="pmd" name="pmd" rev="4.3" conf="analysis->default"/>

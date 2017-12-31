@@ -1,8 +1,5 @@
-package controller.kinect;
-
 import org.junit.Assert;
 import org.junit.Test;
-
 import untref_tfi.controller.kinect.Kinect;
 
 public class KinectTest {

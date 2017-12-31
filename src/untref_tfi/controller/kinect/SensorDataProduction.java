@@ -19,8 +19,12 @@ public class SensorDataProduction implements SensorData {
 		if (!kinect.isInitialized()) {
 			kinect = new Kinect();
 			kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
-			//System.out.println("Falla al inicializar la kinect.");
-			//System.exit(2);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				//e.printStackTrace();
+			}
+			kinect.setElevationAngle(0);
 		}
 				
 		this.colorFrame = kinect.getColorFrame();
@@ -63,76 +67,6 @@ public class SensorDataProduction implements SensorData {
 		return imagenProfundidad;
 	}
 		
-	@Override
-	public void setPixelColorPorProfundidad(float dist, int cantPixeles, Color colorContorno) {
-		
-		short deltaContorno = 200;
-		
-		for (int i = 0; i < this.getWidth(); i+=cantPixeles) {
-			for (int j = 0; j < this.getHeight() ; j+= cantPixeles) {								
-				evaluarSetPixelColorPorProfundidad(dist, cantPixeles, colorContorno, deltaContorno, i, j);
-			}
-		}
-	}
-
-	private void evaluarSetPixelColorPorProfundidad(float dist, int cantPixeles, Color colorContorno,
-			short deltaContorno, int i, int j) {
-		if(this.getDistancia(i,j) < dist - deltaContorno ){	
-			
-			this.pintarContorno(i, j, cantPixeles, Color.BLACK, this.getImagenProfundidad());		
-		
-		} else 
-			if ( this.getDistancia(i, j) >= dist - deltaContorno && this.getDistancia(i, j) <= dist + deltaContorno) {
-			
-				this.pintarContorno(i, j, cantPixeles,colorContorno, this.getImagenProfundidad());
-			}
-	}	
-	
-	@Override
-	public void pintarCurvaNivel(int distEntreCurvas) {
-		
-		int deltaContorno = 50;
-		int max = 30000;//3 metros
-		int min = 7000;//70 cm
-		int dist = max;
-				
-		int anchoMax= getWidth() -1;
-		int altoMax= getHeight() -1;
-		if (dist >= 2) {
-			deltaContorno = 100;
-		}
-		
-		while(dist >= min){
-		
-			recorrerImagenCurvaNivel(dist, anchoMax, altoMax, deltaContorno);
-			dist -= distEntreCurvas;
-		
-		}
-	}
-
-	private void recorrerImagenCurvaNivel(int dist, int anchoMax, int altoMax, int deltaContorno) {
-		
-		for (int i = anchoMax; i > 0; i -= 3) {
-			for (int j = altoMax; j > 0; j -= 3) {
-												
-				evaluarPintarPuntoCurvaNivel(dist, deltaContorno, i, j);
-			}
-		}
-	}
-
-	private void evaluarPintarPuntoCurvaNivel(int dist, int deltaContorno, int i, int j) {
-		Color color;
-		float hue;
-		if (this.getDistancia(i, j) >= dist - deltaContorno
-				&& this.getDistancia(i, j) <= dist + deltaContorno) {
-			
-			hue = (float)(this.getDistancia(i, j)/100000);
-			color = new Color(Color.HSBtoRGB(hue, 1.0f, 1.0f));
-			
-			this.pintarContorno(i, j, 3, color, this.getImagenColor());
-		}
-	}		
-
 	private void construirMatrizColor() {
 		matrizColor = new Color[this.getWidth()][this.getHeight()];
 		imagenColor = new BufferedImage(this.getWidth(), this.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
@@ -168,10 +102,10 @@ public class SensorDataProduction implements SensorData {
 		matrizProfundidad = new double[this.getWidth()][this.getHeight()];		
 		imagenProfundidad = new BufferedImage(this.getWidth(),this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		
-		for (int i = 0; i < 480; i++) {
-			for (int j = 0; j < 640; j++) {
+		for (int i = 0; i < this.getHeight(); i++) {
+			for (int j = 0; j < this.getWidth(); j++) {
 				
-				int height = 640 * i;
+				int height = this.getWidth() * i;
 				int z = j + height;
 
 				float max = 30000;//3 metros
@@ -189,7 +123,7 @@ public class SensorDataProduction implements SensorData {
 		if (depth[z] == 0) {
 			color = Color.gray;
 		} else if (depth[z] > max) {
-			color = Color.WHITE;
+			color = Color.white;
 		} else if (depth[z] < min) {
 			color = Color.white;
 		} else {
@@ -205,34 +139,5 @@ public class SensorDataProduction implements SensorData {
 
 	private int getHeight() {
 		return this.height;
-	}
-	
-	private void pintarContorno(int fila, int columna, int cantidadDePixeles, Color color,BufferedImage img){
-		
-		int pixeles = cantidadDePixeles/2 + cantidadDePixeles % 2;
-		
-		int pixelInicioDeFila = fila - pixeles;
-		int pixelFinalDeFila = fila + pixeles;
-		int pixelInicioDeColumna = columna - pixeles;
-		int pixelFinalDeColumna = columna + pixeles;
-		
-		for (int i = pixelInicioDeFila; i < pixelFinalDeFila ; i++){
-			
-			for (int j = pixelInicioDeColumna; j < pixelFinalDeColumna ; j++){
-				
-				if (esPosicionValida(i,j)){
-					img.setRGB(i,j, color.getRGB());
-				}
-			}
-		}
-	}
-
-	private boolean esPosicionValida(int fila, int columna) {
-		
-		boolean filaValida = fila >=0 && fila < this.getWidth();
-		boolean columnaValida =  columna >=0 && columna < this.getHeight();
-		
-		return filaValida && columnaValida;
-	}
-		
+	}		
 }

@@ -50,9 +50,9 @@ public class ImageCaptureController {
 
 	private void esperarUmbralInicioKinect() {
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -102,8 +102,18 @@ public class ImageCaptureController {
 
 	private Boolean evaluatePintablePoint(int i, int j) {
 		
-		return ((i==319)||(i==320)||(j==239)||(j==240));
+		return (i==320)||(j==240);
 		
 	}
-
+	
+	public String getXYMatrizRGBColorCadena (int x,int y){
+		String cadenaColor="";
+		Color color = data.getColorEnPixel(x, y);
+		cadenaColor="["+color.getRed()+";"+color.getGreen()+";"+color.getBlue()+"]";	
+		return cadenaColor;
+	}
+	
+	public double getXYMatrizProfundidad (int x,int y){
+		return data.getDistancia(x, y);
+	}
 }

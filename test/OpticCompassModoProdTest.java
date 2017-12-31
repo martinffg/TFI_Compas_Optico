@@ -1,9 +1,6 @@
 import org.junit.Assert;
 import org.junit.Test;
-
 import javafx.application.Platform;
-
-
 
 public class OpticCompassModoProdTest {
 

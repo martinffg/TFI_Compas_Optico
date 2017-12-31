@@ -1,8 +1,5 @@
-package controller;
-
 import org.junit.Assert;
 import org.junit.Test;
-
 import javafx.application.Platform;
 import untref_tfi.controller.ImageCaptureController;
 import untref_tfi.view.CompassViewer;
@@ -39,5 +36,5 @@ public class ImageCaptureControllerTest {
 			//System.out.println("Exception stopping iccProdTest catched.");
 		}
 	}
-	
+
 }
