@@ -65,9 +65,14 @@ public class ImageCaptureController {
 	}
 	
 	public void startImageCapture() {
+		BufferedImage imagenKinect=null;
 		if (chequearInicializacionKinect() && (!isTestMode)) {
 			data = new SensorDataProduction(kinect);
-			BufferedImage imagenKinect = data.getImagenColor();
+			if (!compassMGIC.isDepthImageSelected()){
+				imagenKinect = data.getImagenColor();
+			}else{
+				imagenKinect = data.getImagenProfundidad();
+			}
 			compassMGIC.setKinectImage(SwingFXUtils.toFXImage(imagenKinect, null)); 
 			ImageCaptureRefresh imageCaptureRefresh = new ImageCaptureRefresh(this);
 			imageCaptureRefresh.run();
@@ -77,11 +82,16 @@ public class ImageCaptureController {
 	}
 	
 	public void imageRefresh(){
+		BufferedImage imagenKinect=null;
 		if (contador==360) { 
 			contador=0; 
 		}
 		data = new SensorDataProduction(kinect);
-		BufferedImage imagenKinect = setXYaxesToBuffImage(data.getImagenColor());
+		if (!compassMGIC.isDepthImageSelected()){
+			imagenKinect = setXYaxesToBuffImage(data.getImagenColor());
+		}else{
+			imagenKinect = setXYaxesToBuffImage(data.getImagenProfundidad());
+		}
 		compassMGIC.setKinectImage(SwingFXUtils.toFXImage(imagenKinect, null));
 		compassMGIC.getKinectImageView().setImage(compassMGIC.getKinectImage());
 		compassMGIC.getImageRosaIconView().setRotate(contador++);

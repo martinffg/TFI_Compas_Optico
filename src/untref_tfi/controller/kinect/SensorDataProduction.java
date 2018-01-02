@@ -9,8 +9,8 @@ public class SensorDataProduction implements SensorData {
 	private short[] depth;
 	private Color[][] matrizColor;
 	private double[][] matrizProfundidad;
-	private int width;
-	private int height;
+	private int imageWidth;
+	private int imageHeight;
 	private BufferedImage imagenColor;
 	private BufferedImage imagenColorBackup;
 	private BufferedImage imagenProfundidad;
@@ -29,8 +29,8 @@ public class SensorDataProduction implements SensorData {
 				
 		this.colorFrame = kinect.getColorFrame();
 		this.depth = kinect.getDepthFrame();		
-		this.width = kinect.getColorWidth();
-		this.height = kinect.getColorHeight();
+		this.imageWidth = kinect.getColorWidth();
+		this.imageHeight = kinect.getColorHeight();
 
 		this.construirMatrizColor();
 		this.construirMatrizProfundidad();
@@ -71,22 +71,22 @@ public class SensorDataProduction implements SensorData {
 		matrizColor = new Color[this.getWidth()][this.getHeight()];
 		imagenColor = new BufferedImage(this.getWidth(), this.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
 		imagenColorBackup = new BufferedImage(this.getWidth(), this.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+		int iEspejado=0,posicionInicial=0,height=0,red=0,green=0,blue=0,alpha=0;
+		Color color=null;
 		
-		for (int i = 0; i < this.getHeight(); i++) {
-			for (int j = 0; j < this.getWidth(); j++) {
-
-				int posicionInicial = j * 4;
-				
-				int height = this.getWidth() * 4 * i;
-				int blue = posicionInicial + height;
-				int green = posicionInicial + 1 + height;
-				int red = posicionInicial + 2 + height;
-				int alpha = posicionInicial + 3 + height;
-
-				Color color = construirColor(blue, green, red, alpha);
-				this.matrizColor[j][i] = color;
-				imagenColor.setRGB(j, i, color.getRGB());
-				imagenColorBackup.setRGB(j, i, color.getRGB());
+		for (int j = 0; j < this.getHeight(); j++) {
+			for (int i = 0; i < this.getWidth(); i++) {
+				posicionInicial = i * 4;
+				height = this.getWidth() * 4 * j;
+				blue = posicionInicial + height;
+				green = posicionInicial + 1 + height;
+				red = posicionInicial + 2 + height;
+				alpha = posicionInicial + 3 + height;
+				color = construirColor(blue, green, red, alpha);
+				iEspejado=this.getWidth()-1-i; // como la captura es espejada, se requiere espejar en eje y
+				this.matrizColor[iEspejado][j] = color;
+				this.imagenColor.setRGB(iEspejado, j, color.getRGB());
+				this.imagenColorBackup.setRGB(iEspejado, j, color.getRGB());
 			}
 		}
 	}
@@ -101,43 +101,40 @@ public class SensorDataProduction implements SensorData {
 	private void construirMatrizProfundidad() {
 		matrizProfundidad = new double[this.getWidth()][this.getHeight()];		
 		imagenProfundidad = new BufferedImage(this.getWidth(),this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		int iEspejado=0;
+		float max = 30000;//3 metros
+		float min = 7000;//70 cm
+		int k=0;
+		int height=0;
+		Color color=null;
 		
-		for (int i = 0; i < this.getHeight(); i++) {
-			for (int j = 0; j < this.getWidth(); j++) {
-				
-				int height = this.getWidth() * i;
-				int z = j + height;
-
-				float max = 30000;//3 metros
-				float min = 7000;//70 cm
-
-				Color color = getColorPorProfundidad(z, max, min);
-				this.matrizProfundidad[j][i] = depth[z];
-				imagenProfundidad.setRGB(j, i, color.getRGB());
+		for (int j = 0; j < this.getHeight(); j++) {
+			for (int i = 0; i < this.getWidth(); i++) {
+				height = this.getWidth() * j;
+				k = i + height;
+				iEspejado=this.getWidth()-1-i; // como la captura es espejada, se requiere espejar en eje y
+				color = getColorPorProfundidad(iEspejado,j,k, max, min);
+				this.matrizProfundidad[iEspejado][j] = depth[k];
+				this.imagenProfundidad.setRGB(iEspejado, j, color.getRGB());
 			}
 		}
 	}
 
-	private Color getColorPorProfundidad(int z, float max, float min) {
+	private Color getColorPorProfundidad(int i,int j,int z, float max, float min) {
 		Color color;
-		if (depth[z] == 0) {
-			color = Color.gray;
-		} else if (depth[z] > max) {
-			color = Color.white;
-		} else if (depth[z] < min) {
-			color = Color.white;
+		if ((depth[z]>=min)&&(depth[z]<=max)) {
+			color = this.getColorEnPixel(i, j);
 		} else {
-			float hue = (1 / (max - min)) * (depth[z] - min);
-			color = new Color(Color.HSBtoRGB(hue, 1.0f, 1.0f));
+			color = Color.gray;   // todo lo que esta fuera del rango de captura lo pinta de un color definido
 		}
 		return color;
 	}
 
 	private int getWidth() {
-		return this.width;
+		return this.imageWidth;
 	}
 
 	private int getHeight() {
-		return this.height;
+		return this.imageHeight;
 	}		
 }

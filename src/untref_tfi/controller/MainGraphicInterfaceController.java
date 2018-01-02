@@ -20,6 +20,7 @@ public class MainGraphicInterfaceController {
 	private Image kinectImage;
 	private ImageView kinectImageView;
 	private ImageView imageRosaView;
+	private ImageView imageAngulosView;
 	private ImageView imageRosaIconView;
 	private ImageCaptureController imageCapture;
 	private SelectedPixelPaneController pixelPanel;
@@ -30,6 +31,7 @@ public class MainGraphicInterfaceController {
 	private static final int zeroYref=maxlength/2; // 0Yref: 240
 	private int selectedXpoint=zeroXref;
 	private int selectedYpoint=zeroYref;
+	private boolean depthImageSelected=true;
 	
 	public MainGraphicInterfaceController(boolean isTest){
 		
@@ -37,6 +39,7 @@ public class MainGraphicInterfaceController {
 		imageCapture.startImageCapture();
 		createKinectImageView();
 		createImageRosaView();
+		createImageAngulosView();
 		createImageRosaIconView();
 		pixelPanel= new SelectedPixelPaneController("Point Information");		
 	}
@@ -84,6 +87,11 @@ public class MainGraphicInterfaceController {
 		return imageRosaIconView;
 	}
 	
+	public boolean isDepthImageSelected(){
+		
+		return this.depthImageSelected;
+	}
+	
 	private void createKinectImageView(){
 		
 		kinectImageView = new ImageView(kinectImage);
@@ -117,19 +125,21 @@ public class MainGraphicInterfaceController {
 		
 		Pane pixelPane=pixelPanel.getPane();
 		List<Node> principalPaneChildrens = new ArrayList<Node>();
-		principalPaneChildrens.addAll(Arrays.asList(imageRosaView,kinectImageView,imageRosaIconView,pixelPane));
+		principalPaneChildrens.addAll(Arrays.asList(imageRosaView,imageAngulosView,kinectImageView,imageRosaIconView,pixelPane));
 		AnchorPane anchorpane = new AnchorPane();
 		anchorpane.getChildren().addAll(principalPaneChildrens);
-		AnchorPane.setTopAnchor(imageRosaIconView, 20.0);
-		AnchorPane.setRightAnchor(imageRosaIconView, 15.0);	
-		AnchorPane.setTopAnchor(imageRosaView, 2.0);
-		AnchorPane.setBottomAnchor(imageRosaView, 6.0);
+		AnchorPane.setTopAnchor(imageRosaIconView, 40.0);
+		AnchorPane.setRightAnchor(imageRosaIconView, 20.0);	
+		AnchorPane.setTopAnchor(imageAngulosView, 40.0);
+		AnchorPane.setLeftAnchor(imageAngulosView, 20.0);
+		AnchorPane.setTopAnchor(imageRosaView, 4.0);
+		AnchorPane.setBottomAnchor(imageRosaView, 4.0);
 		AnchorPane.setLeftAnchor(imageRosaView, 128.0);
 		AnchorPane.setTopAnchor(kinectImageView, 272.0);
 		AnchorPane.setBottomAnchor(kinectImageView, 272.0);
 		AnchorPane.setLeftAnchor(kinectImageView, 320.0);
 		AnchorPane.setBottomAnchor(pixelPane, 40.0);
-		AnchorPane.setLeftAnchor(pixelPane, 20.0);
+		AnchorPane.setRightAnchor(pixelPane, 20.0);
 		
 		return anchorpane;
 	}
@@ -138,8 +148,8 @@ public class MainGraphicInterfaceController {
 		Image imageRosaDeLosVientos = new Image(getClass().getResourceAsStream("../../resource/images/rosa_de_los_vientos.jpg"));
 		imageRosaIconView = new ImageView(imageRosaDeLosVientos);
 		imageRosaIconView.setPreserveRatio(true);
-		imageRosaIconView.setFitHeight(120);
-		imageRosaIconView.setFitWidth(160);
+		imageRosaIconView.setFitHeight(180);
+		imageRosaIconView.setFitWidth(280);
 	}
 
 	private void createImageRosaView() {
@@ -148,6 +158,14 @@ public class MainGraphicInterfaceController {
 		imageRosaView.setPreserveRatio(true);
 		imageRosaView.setFitHeight(1024);
 		imageRosaView.setFitWidth(1280);
+	}
+	
+	private void createImageAngulosView() {
+		Image imageAngulos = new Image(getClass().getResourceAsStream("../../resource/images/angulos.jpg"));
+		imageAngulosView = new ImageView(imageAngulos);
+		imageAngulosView.setPreserveRatio(true);
+		imageAngulosView.setFitHeight(160);
+		imageAngulosView.setFitWidth(200);
 	}
 	
 
