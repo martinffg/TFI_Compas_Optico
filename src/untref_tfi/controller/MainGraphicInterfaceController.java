@@ -1,9 +1,9 @@
 package untref_tfi.controller;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -15,6 +15,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
+
+
 public class MainGraphicInterfaceController {
 	
 	private Image kinectImage;
@@ -24,6 +26,7 @@ public class MainGraphicInterfaceController {
 	private ImageView imageRosaIconView;
 	private ImageCaptureController imageCapture;
 	private SelectedPixelPaneController pixelPanel;
+	private OutOfRangePaneController outOfRangePanel;
 	private Scene mainScene;
 	private static final int maxWidth=640;
 	private static final int maxlength=480;
@@ -31,7 +34,9 @@ public class MainGraphicInterfaceController {
 	private static final int zeroYref=maxlength/2; // 0Yref: 240
 	private int selectedXpoint=zeroXref;
 	private int selectedYpoint=zeroYref;
-	private boolean depthImageSelected=true;
+	private boolean depthImageSelected=false;
+	private Color colorOOR= Color.GRAY;
+	
 	
 	public MainGraphicInterfaceController(boolean isTest){
 		
@@ -41,7 +46,8 @@ public class MainGraphicInterfaceController {
 		createImageRosaView();
 		createImageAngulosView();
 		createImageRosaIconView();
-		pixelPanel= new SelectedPixelPaneController("Point Information");		
+		pixelPanel = new SelectedPixelPaneController("Point Information");
+		outOfRangePanel = new OutOfRangePaneController("Out Of Range",this);
 	}
 	
 	public Scene getMainScene(){
@@ -92,6 +98,24 @@ public class MainGraphicInterfaceController {
 		return this.depthImageSelected;
 	}
 	
+	public void enableDepthImageSelection(){
+		this.depthImageSelected=true;
+	}
+	
+	public void disableDepthImageSelection(){
+		this.depthImageSelected=false;
+	}
+	
+	public Color getColorOOR(){
+		
+		return this.colorOOR;
+
+	}
+	
+	public void setColorOutOfRange(float red,float green,float blue,float opacity){
+		this.colorOOR=new Color(red,green,blue,opacity);
+	}
+	
 	private void createKinectImageView(){
 		
 		kinectImageView = new ImageView(kinectImage);
@@ -124,8 +148,9 @@ public class MainGraphicInterfaceController {
 	private AnchorPane createAnchorPane(){
 		
 		Pane pixelPane=pixelPanel.getPane();
+		Pane outOfRangePane=outOfRangePanel.getPane();
 		List<Node> principalPaneChildrens = new ArrayList<Node>();
-		principalPaneChildrens.addAll(Arrays.asList(imageRosaView,imageAngulosView,kinectImageView,imageRosaIconView,pixelPane));
+		principalPaneChildrens.addAll(Arrays.asList(imageRosaView,imageAngulosView,kinectImageView,imageRosaIconView,pixelPane,outOfRangePane));
 		AnchorPane anchorpane = new AnchorPane();
 		anchorpane.getChildren().addAll(principalPaneChildrens);
 		AnchorPane.setTopAnchor(imageRosaIconView, 40.0);
@@ -140,6 +165,8 @@ public class MainGraphicInterfaceController {
 		AnchorPane.setLeftAnchor(kinectImageView, 320.0);
 		AnchorPane.setBottomAnchor(pixelPane, 40.0);
 		AnchorPane.setRightAnchor(pixelPane, 20.0);
+		AnchorPane.setTopAnchor(outOfRangePane, 240.0);
+		AnchorPane.setRightAnchor(outOfRangePane, 20.0);
 		
 		return anchorpane;
 	}
@@ -167,6 +194,5 @@ public class MainGraphicInterfaceController {
 		imageAngulosView.setFitHeight(160);
 		imageAngulosView.setFitWidth(200);
 	}
-	
 
 }

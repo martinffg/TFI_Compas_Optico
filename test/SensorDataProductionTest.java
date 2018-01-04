@@ -12,7 +12,7 @@ public class SensorDataProductionTest {
 	public void pruebaSensorKinectTest() {			
 		try {
 			Kinect kinect = setupKinect();
-			SensorDataProduction sensor = new SensorDataProduction(kinect);
+			SensorDataProduction sensor = new SensorDataProduction(kinect,Color.gray);
 			BufferedImage img1 = sensor.getImagenColor();
 			BufferedImage img2 = sensor.getImagenColorBackup();
 			Assert.assertEquals(img1.getRGB(40,40), img2.getRGB(40,40));

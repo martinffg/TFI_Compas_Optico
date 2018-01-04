@@ -13,7 +13,7 @@ public class SelectedPixelPaneController {
 
 	private static final String EMPTY_VALUE = "";
 	private final TextField yPos;
-	private final VBox pane;
+	private final VBox panel;
 	private final TextField xPos;
 	private final TextField xyDepth;
 	private final TextField xyColor;
@@ -79,15 +79,15 @@ public class SelectedPixelPaneController {
 		xyColor.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
 		xyColor.setAlignment(Pos.CENTER);
 		
-		pane = new VBox();
-		pane.getChildren().addAll(title, posRefPane, posValPane,xyDepthLabel,xyDepth,xyColorLabel,xyColor);
-		pane.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		pane.setMinSize(150, 250);
-		pane.setAlignment(Pos.CENTER);
+		panel = new VBox();
+		panel.getChildren().addAll(title, posRefPane, posValPane,xyDepthLabel,xyDepth,xyColorLabel,xyColor);
+		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
+		panel.setMinSize(150, 250);
+		panel.setAlignment(Pos.CENTER);
 	}
 
 	public VBox getPane() {
-		return this.pane;
+		return this.panel;
 	}
 
 	public boolean setedValues() {

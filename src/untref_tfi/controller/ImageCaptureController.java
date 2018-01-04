@@ -67,7 +67,7 @@ public class ImageCaptureController {
 	public void startImageCapture() {
 		BufferedImage imagenKinect=null;
 		if (chequearInicializacionKinect() && (!isTestMode)) {
-			data = new SensorDataProduction(kinect);
+			data = new SensorDataProduction(kinect,compassMGIC.getColorOOR());
 			if (!compassMGIC.isDepthImageSelected()){
 				imagenKinect = data.getImagenColor();
 			}else{
@@ -86,7 +86,7 @@ public class ImageCaptureController {
 		if (contador==360) { 
 			contador=0; 
 		}
-		data = new SensorDataProduction(kinect);
+		data = new SensorDataProduction(kinect,compassMGIC.getColorOOR());
 		if (!compassMGIC.isDepthImageSelected()){
 			imagenKinect = setXYaxesToBuffImage(data.getImagenColor());
 		}else{
@@ -126,4 +126,5 @@ public class ImageCaptureController {
 	public double getXYMatrizProfundidad (int x,int y){
 		return data.getDistancia(x, y);
 	}
+	
 }

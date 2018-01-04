@@ -8,6 +8,7 @@ public class SensorDataProduction implements SensorData {
 	private byte[] colorFrame;
 	private short[] depth;
 	private Color[][] matrizColor;
+	private Color colorOutOfRange=Color.gray;
 	private double[][] matrizProfundidad;
 	private int imageWidth;
 	private int imageHeight;
@@ -15,7 +16,9 @@ public class SensorDataProduction implements SensorData {
 	private BufferedImage imagenColorBackup;
 	private BufferedImage imagenProfundidad;
 		
-	public SensorDataProduction(Kinect kinect) {
+	public SensorDataProduction(Kinect kinect,Color colorOOR) {
+		
+		this.colorOutOfRange=colorOOR;
 		if (!kinect.isInitialized()) {
 			kinect = new Kinect();
 			kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
@@ -66,7 +69,7 @@ public class SensorDataProduction implements SensorData {
 	public BufferedImage getImagenProfundidad() {
 		return imagenProfundidad;
 	}
-		
+	
 	private void construirMatrizColor() {
 		matrizColor = new Color[this.getWidth()][this.getHeight()];
 		imagenColor = new BufferedImage(this.getWidth(), this.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
@@ -125,7 +128,7 @@ public class SensorDataProduction implements SensorData {
 		if ((depth[z]>=min)&&(depth[z]<=max)) {
 			color = this.getColorEnPixel(i, j);
 		} else {
-			color = Color.gray;   // todo lo que esta fuera del rango de captura lo pinta de un color definido
+			color = this.colorOutOfRange;   // todo lo que esta fuera del rango de captura lo pinta de un color definido
 		}
 		return color;
 	}
