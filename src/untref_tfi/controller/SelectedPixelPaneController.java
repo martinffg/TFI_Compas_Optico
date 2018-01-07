@@ -4,7 +4,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -48,13 +47,16 @@ public class SelectedPixelPaneController {
 		yPos.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
 		yPos.setAlignment(Pos.CENTER);
 		
-		Pane posRefPane = new HBox();
+		HBox posRefPane = new HBox();
 		posRefPane.setMaxSize(140, 30);
 		posRefPane.getChildren().addAll(xLabel, yLabel);
+		posRefPane.setSpacing(3.0);
 		
-		Pane posValPane = new HBox();
+		HBox posValPane = new HBox();
 		posValPane.setMaxSize(140, 30);
 		posValPane.getChildren().addAll(xPos, yPos);
+		posValPane.setSpacing(3.0);
+			
 		
 		Label xyDepthLabel = new Label("depth [m]");
 		xyDepthLabel.setFont(Font.font ("Verdana", 20));
@@ -82,8 +84,9 @@ public class SelectedPixelPaneController {
 		panel = new VBox();
 		panel.getChildren().addAll(title, posRefPane, posValPane,xyDepthLabel,xyDepth,xyColorLabel,xyColor);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(150, 250);
+		panel.setMinSize(140, 260);
 		panel.setAlignment(Pos.CENTER);
+		panel.setSpacing(3.0);
 	}
 
 	public VBox getPane() {

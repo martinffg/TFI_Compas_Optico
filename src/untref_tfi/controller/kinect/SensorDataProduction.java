@@ -12,13 +12,13 @@ public class SensorDataProduction implements SensorData {
 	private double[][] matrizProfundidad;
 	private int imageWidth;
 	private int imageHeight;
+	private int elevationAngle=0;  // angle in degrees between -27 to 27
 	private BufferedImage imagenColor;
 	private BufferedImage imagenColorBackup;
 	private BufferedImage imagenProfundidad;
 		
-	public SensorDataProduction(Kinect kinect,Color colorOOR) {
-		
-		this.colorOutOfRange=colorOOR;
+	public SensorDataProduction(Kinect kinect,Color colorOOR,int elevation) {
+		this.elevationAngle=elevation;
 		if (!kinect.isInitialized()) {
 			kinect = new Kinect();
 			kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
@@ -27,9 +27,11 @@ public class SensorDataProduction implements SensorData {
 			} catch (InterruptedException e) {
 				//e.printStackTrace();
 			}
-			kinect.setElevationAngle(0);
+			
 		}
-				
+		
+		kinect.setElevationAngle(elevationAngle);
+		this.colorOutOfRange=colorOOR;
 		this.colorFrame = kinect.getColorFrame();
 		this.depth = kinect.getDepthFrame();		
 		this.imageWidth = kinect.getColorWidth();
