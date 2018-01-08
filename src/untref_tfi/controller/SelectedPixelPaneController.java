@@ -50,7 +50,7 @@ public class SelectedPixelPaneController {
 		HBox posRefPane = new HBox();
 		posRefPane.setMaxSize(140, 30);
 		posRefPane.getChildren().addAll(xLabel, yLabel);
-		posRefPane.setSpacing(3.0);
+		posRefPane.setSpacing(5.0);
 		
 		HBox posValPane = new HBox();
 		posValPane.setMaxSize(140, 30);
@@ -84,9 +84,9 @@ public class SelectedPixelPaneController {
 		panel = new VBox();
 		panel.getChildren().addAll(title, posRefPane, posValPane,xyDepthLabel,xyDepth,xyColorLabel,xyColor);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(140, 260);
+		panel.setMinSize(150, 285);
 		panel.setAlignment(Pos.CENTER);
-		panel.setSpacing(3.0);
+		panel.setSpacing(5.0);
 	}
 
 	public VBox getPane() {

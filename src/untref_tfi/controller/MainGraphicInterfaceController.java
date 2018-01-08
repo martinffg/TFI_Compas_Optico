@@ -26,8 +26,9 @@ public class MainGraphicInterfaceController {
 	private ImageView imageRosaIconView;
 	private ImageCaptureController imageCapture;
 	private SelectedPixelPaneController pixelPanel;
-	private OutOfRangePaneController outOfRangePanel;
+	private SettingsPaneController outOfRangePanel;
 	private VerticalKinectAngleSelectionPaneController verticalAnglePanel;
+	private HorizontalKinectAngleSelectionPaneController horizontalAnglePanel;
 	private AnglePaneController angleValuesPanel;
 	private Scene mainScene;
 	private static final int maxWidth=640;
@@ -50,8 +51,9 @@ public class MainGraphicInterfaceController {
 		createImageAngulosView();
 		createImageRosaIconView();
 		pixelPanel = new SelectedPixelPaneController("Point Info");
-		outOfRangePanel = new OutOfRangePaneController("Out Of Range",this);
-		verticalAnglePanel = new VerticalKinectAngleSelectionPaneController("vAngle",this);
+		outOfRangePanel = new SettingsPaneController("Settings",this);
+		verticalAnglePanel = new VerticalKinectAngleSelectionPaneController("vAngle[°]",this);
+		horizontalAnglePanel = new HorizontalKinectAngleSelectionPaneController("hAngle[°]",this);
 		angleValuesPanel = new AnglePaneController("Angle Values");
 	}
 	
@@ -157,9 +159,11 @@ public class MainGraphicInterfaceController {
 		Pane pixelPane=pixelPanel.getPane();
 		Pane outOfRangePane=outOfRangePanel.getPane();
 		Pane verticalAnglePane=verticalAnglePanel.getPane();
+		Pane horizontalAnglePane=horizontalAnglePanel.getPane();
 		Pane angleValuesPane=angleValuesPanel.getPane();
 		List<Node> principalPaneChildrens = new ArrayList<Node>();
-		principalPaneChildrens.addAll(Arrays.asList(imageRosaView,imageAngulosView,kinectImageView,imageRosaIconView,pixelPane,outOfRangePane,verticalAnglePane,angleValuesPane));
+		principalPaneChildrens.addAll(Arrays.asList(imageRosaView,imageAngulosView,kinectImageView,imageRosaIconView,pixelPane,outOfRangePane,
+				verticalAnglePane,horizontalAnglePane,angleValuesPane));
 		AnchorPane anchorpane = new AnchorPane();
 		anchorpane.getChildren().addAll(principalPaneChildrens);
 		AnchorPane.setTopAnchor(imageRosaIconView, 40.0);
@@ -173,13 +177,15 @@ public class MainGraphicInterfaceController {
 		AnchorPane.setBottomAnchor(kinectImageView, 272.0);
 		AnchorPane.setLeftAnchor(kinectImageView, 320.0);
 		AnchorPane.setBottomAnchor(pixelPane, 40.0);
-		AnchorPane.setRightAnchor(pixelPane, 20.0);
+		AnchorPane.setLeftAnchor(pixelPane, 20.0);
 		AnchorPane.setTopAnchor(outOfRangePane, 240.0);
 		AnchorPane.setRightAnchor(outOfRangePane, 20.0);
-		AnchorPane.setTopAnchor(verticalAnglePane, 440.0);
+		AnchorPane.setBottomAnchor(verticalAnglePane, 140.0);
 		AnchorPane.setRightAnchor(verticalAnglePane, 20.0);
-		AnchorPane.setBottomAnchor(angleValuesPane, 170.0);
+		AnchorPane.setTopAnchor(angleValuesPane, 205.0);
 		AnchorPane.setLeftAnchor(angleValuesPane, 20.0);
+		AnchorPane.setBottomAnchor(horizontalAnglePane, 40.0);
+		AnchorPane.setRightAnchor(horizontalAnglePane, 20.0);
 	
 		return anchorpane;
 	}

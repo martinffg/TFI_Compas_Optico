@@ -1,5 +1,6 @@
 package untref_tfi.controller;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -28,8 +29,8 @@ public class AnglePaneController {
 		Image thetaImage = new Image(getClass().getResourceAsStream("../../resource/images/theta.jpg"));
 		ImageView thetaImageView = new ImageView(thetaImage);
 		//thetaImageView.setPreserveRatio(true);
-		thetaImageView.setFitHeight(40);
-		thetaImageView.setFitWidth(40);
+		thetaImageView.setFitHeight(35);
+		thetaImageView.setFitWidth(35);
 		
 		thetaTextField = new TextField(EMPTY_VALUE);
 		thetaTextField.setEditable(false);
@@ -40,15 +41,15 @@ public class AnglePaneController {
 		VBox thetaPanel = new VBox();
 		thetaPanel.getChildren().addAll(thetaImageView, thetaTextField);
 		thetaPanel.setStyle("-fx-background-color: #6DF1D8;");
-		thetaPanel.setMinSize(75, 100);
+		thetaPanel.setMinSize(75, 90);
 		thetaPanel.setAlignment(Pos.CENTER);
-		thetaPanel.setSpacing(3.0);
+		thetaPanel.setSpacing(2.0);
 		
 		Image phiImage = new Image(getClass().getResourceAsStream("../../resource/images/phi.jpg"));
 		ImageView phiImageView = new ImageView(phiImage);
 		//phiImageView.setPreserveRatio(true);
-		phiImageView.setFitHeight(40);
-		phiImageView.setFitWidth(40);
+		phiImageView.setFitHeight(35);
+		phiImageView.setFitWidth(35);
 		
 		phiTextField = new TextField(EMPTY_VALUE);
 		phiTextField.setEditable(false);
@@ -59,23 +60,24 @@ public class AnglePaneController {
 		VBox phiPanel = new VBox();
 		phiPanel.getChildren().addAll(phiImageView, phiTextField);
 		phiPanel.setStyle("-fx-background-color: #6DF1D8;");
-		phiPanel.setMinSize(75, 100);
+		phiPanel.setMinSize(75, 90);
 		phiPanel.setAlignment(Pos.CENTER);
-		phiPanel.setSpacing(3.0);
+		phiPanel.setSpacing(2.0);
 		
 		HBox anglesPane = new HBox();
 		anglesPane.getChildren().addAll(thetaPanel, phiPanel);
 		anglesPane.setStyle("-fx-background-color: #6DF1D8;");
-		anglesPane.setMinSize(150, 100);
+		anglesPane.setMinSize(150, 90);
 		anglesPane.setAlignment(Pos.CENTER);
 		anglesPane.setSpacing(2.0); 
 		
 		panel = new VBox();
 		panel.getChildren().addAll(title, anglesPane);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(150, 120);
+		panel.setMinSize(150, 90);
 		panel.setAlignment(Pos.CENTER);
-		panel.setSpacing(5.0);
+		panel.setSpacing(2.0);
+		panel.setPadding(new Insets(2,2,2,2));
 	}
 
 	public VBox getPane() {
