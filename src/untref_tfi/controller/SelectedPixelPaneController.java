@@ -11,11 +11,12 @@ import javafx.scene.text.Font;
 public class SelectedPixelPaneController {
 
 	private static final String EMPTY_VALUE = "";
-	private final TextField yPos;
 	private final VBox panel;
 	private final TextField xPos;
-	private final TextField xyDepth;
+	private final TextField yPos;
+	private final TextField xyDepthZ;
 	private final TextField xyColor;
+	private XYZpoint selectedPoint=null;
 
 	public SelectedPixelPaneController(String paneName) {
 		
@@ -58,16 +59,16 @@ public class SelectedPixelPaneController {
 		posValPane.setSpacing(3.0);
 			
 		
-		Label xyDepthLabel = new Label("depth [m]");
+		Label xyDepthLabel = new Label("Z_depth[m]");
 		xyDepthLabel.setFont(Font.font ("Verdana", 20));
 		xyDepthLabel.setMinSize(140, 30);
 		xyDepthLabel.setAlignment(Pos.CENTER);
 		xyDepthLabel.setTextFill(Paint.valueOf("#29446B"));
-		xyDepth = new TextField(EMPTY_VALUE);
-		xyDepth.setEditable(false);
-		xyDepth.setMaxSize(140, 30);
-		xyDepth.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
-		xyDepth.setAlignment(Pos.CENTER);
+		xyDepthZ = new TextField(EMPTY_VALUE);
+		xyDepthZ.setEditable(false);
+		xyDepthZ.setMaxSize(140, 30);
+		xyDepthZ.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
+		xyDepthZ.setAlignment(Pos.CENTER);
 		
 		
 		Label xyColorLabel = new Label("color [R;G;B]");
@@ -82,7 +83,7 @@ public class SelectedPixelPaneController {
 		xyColor.setAlignment(Pos.CENTER);
 		
 		panel = new VBox();
-		panel.getChildren().addAll(title, posRefPane, posValPane,xyDepthLabel,xyDepth,xyColorLabel,xyColor);
+		panel.getChildren().addAll(title, posRefPane, posValPane,xyDepthLabel,xyDepthZ,xyColorLabel,xyColor);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
 		panel.setMinSize(150, 285);
 		panel.setAlignment(Pos.CENTER);
@@ -97,19 +98,21 @@ public class SelectedPixelPaneController {
 		return !EMPTY_VALUE.equals(xPos.getText()) && !EMPTY_VALUE.equals(yPos.getText());
 	}
 
-	public void setXYvalues(int x, int y, double xydepth, String rgbColor) {
+	public void setXYZvalues(int x, int y, double z_depth, String rgbColor) {
 		xPos.setText(String.valueOf(x));
 		yPos.setText(String.valueOf(y));
-		xyDepth.setText(String.valueOf(xydepth/10000));
+		xyDepthZ.setText(String.format("%.3f", z_depth));
 		xyColor.setText(rgbColor);
+		this.selectedPoint = new XYZpoint(x,y,z_depth);
 	}
 
 	public void clearValues() {
 		xPos.setText(EMPTY_VALUE);
 		yPos.setText(EMPTY_VALUE);
+		xyDepthZ.setText(EMPTY_VALUE);
 	}
 
-	public XYpoint getXYpoint(){
-		return new XYpoint(Integer.valueOf(yPos.getText()), Integer.valueOf(xPos.getText()));
+	public XYZpoint getXYZpoint(){
+		return this.selectedPoint;
 	}
 }

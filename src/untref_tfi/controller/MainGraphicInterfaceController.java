@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import untref_tfi.domain.AnglesCalculator;
 
 
 
@@ -37,6 +38,7 @@ public class MainGraphicInterfaceController {
 	private static final int zeroYref=maxlength/2; // 0Yref: 240
 	private int selectedXpoint=zeroXref;
 	private int selectedYpoint=zeroYref;
+	private double selectedZpoint=0.0;
 	private boolean depthImageSelected=false;
 	private Color colorOOR= Color.GRAY;
 	private int elevationAngle= 0;
@@ -53,7 +55,8 @@ public class MainGraphicInterfaceController {
 		pixelPanel = new SelectedPixelPaneController("Point Info");
 		outOfRangePanel = new SettingsPaneController("Settings",this);
 		verticalAnglePanel = new VerticalKinectAngleSelectionPaneController("vAngle[°]",this);
-		horizontalAnglePanel = new HorizontalKinectAngleSelectionPaneController("hAngle[°]",this);
+		//horizontalAnglePanel = new HorizontalKinectAngleSelectionPaneController("hAngle[°]",this);
+		horizontalAnglePanel = new HorizontalKinectAngleSelectionPaneController("hAngle[°]");
 		angleValuesPanel = new AnglePaneController("Angle Values");
 	}
 	
@@ -141,13 +144,28 @@ public class MainGraphicInterfaceController {
 		kinectImageView.setPickOnBounds(true);
 		kinectImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent e) {
-            	convertXYclicToCartesianSelectedPoint(e);      	
-            	pixelPanel.setXYvalues(selectedXpoint,selectedYpoint,
-            			imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY()),
-            			imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY()));
-            }		
+            	convertXYclicToCartesianSelectedPoint(e); 
+            	selectedZpoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY())/10000; // lo guardo en metros
+            	String selectedColorPoint = imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY());
+            	pixelPanel.setXYZvalues(selectedXpoint,selectedYpoint,selectedZpoint,selectedColorPoint);
+            	calculateThetaPhiAngles(selectedXpoint,selectedYpoint,selectedZpoint);
+            }	
         });
 	}
+	
+	private void calculateThetaPhiAngles(int x,int y, double z) {
+		XYZpoint selectedXYZpoint = new XYZpoint(x,y,z);
+    	AnglesCalculator angCalculator = new AnglesCalculator(selectedXYZpoint);
+    	String theta="N/A";
+    	String phi="N/A";
+    	if (angCalculator.isThetaCalculable()){
+    		theta= String.format("%.3f", angCalculator.getTheta());
+    	}
+    	if (angCalculator.isPhiCalculable()){
+    		phi= String.format("%.3f", angCalculator.getPhi());
+    	}
+    	angleValuesPanel.setThetaPhiValues(theta, phi);
+	}		
 	
 	private void convertXYclicToCartesianSelectedPoint(MouseEvent e) {
 		selectedXpoint=(int) (e.getX() -zeroXref);

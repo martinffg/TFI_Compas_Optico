@@ -8,3 +8,7 @@ directorio que las librerias dll requeridas y el folder resource/images
 INFORMACION TECNICA KINECT
 * https://msdn.microsoft.com/en-us/library/jj131033.aspx
 
+
+El angulo de XY, de X a Y (theta) me permite ver el angulo a elevar/bajar lente
+El angulo de ZX, de Z a X (phi) me permite ver el angulo de desvio para la plataforma horizontal.
+

@@ -34,7 +34,7 @@ public class AnglePaneController {
 		
 		thetaTextField = new TextField(EMPTY_VALUE);
 		thetaTextField.setEditable(false);
-		thetaTextField.setMaxSize(70, 30);
+		thetaTextField.setMaxSize(75, 30);
 		thetaTextField.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
 		thetaTextField.setAlignment(Pos.CENTER);
 		
@@ -53,7 +53,7 @@ public class AnglePaneController {
 		
 		phiTextField = new TextField(EMPTY_VALUE);
 		phiTextField.setEditable(false);
-		phiTextField.setMaxSize(70, 30);
+		phiTextField.setMaxSize(75, 30);
 		phiTextField.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
 		phiTextField.setAlignment(Pos.CENTER);
 		
@@ -88,9 +88,9 @@ public class AnglePaneController {
 		return !EMPTY_VALUE.equals(thetaTextField.getText()) && !EMPTY_VALUE.equals(phiTextField.getText());
 	}
 
-	public void setXYvalues(double theta, double phi) {
-		thetaTextField.setText(String.valueOf(theta));
-		phiTextField.setText(String.valueOf(phi));
+	public void setThetaPhiValues(String theta, String phi) {
+		thetaTextField.setText(theta);
+		phiTextField.setText(phi);
 	}
 
 	public void clearValues() {

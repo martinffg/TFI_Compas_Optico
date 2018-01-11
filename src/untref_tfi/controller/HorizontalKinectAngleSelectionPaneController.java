@@ -19,7 +19,8 @@ public class HorizontalKinectAngleSelectionPaneController {
 	private final VBox panel;
 	private TextField angleValue;
 	
-	public HorizontalKinectAngleSelectionPaneController(String paneName,MainGraphicInterfaceController mgic) {
+	//public HorizontalKinectAngleSelectionPaneController(String paneName,MainGraphicInterfaceController mgic) {
+	public HorizontalKinectAngleSelectionPaneController(String paneName) {
 		
 		Label title = new Label(paneName);
 		title.setFont(Font.font ("Verdana", 20));
