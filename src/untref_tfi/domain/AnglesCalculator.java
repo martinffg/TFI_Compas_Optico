@@ -7,13 +7,16 @@ public class AnglesCalculator {
 	private XYZpoint pointXYZ;
 	private double theta = 0;   // 999 si no es posible calcular
 	private double phi = 0;   // 999 si no es posible calcular
+	private double gamma = 0;   // 999 si no es posible calcular
 	private boolean isThetaCalculable=true;
 	private boolean isPhiCalculable=true;
+	private boolean isGammaCalculable=true;
 		
 	public AnglesCalculator(XYZpoint xyzPoint){
 		this.pointXYZ = xyzPoint;
 		calculateTheta();
 		calculatePhi();
+		calculateGamma();
 	}
 
 	public XYZpoint getPointXYZ() {
@@ -28,6 +31,10 @@ public class AnglesCalculator {
 		return isPhiCalculable;
 	}
 	
+	public boolean isGammaCalculable(){
+		return isGammaCalculable;
+	}
+	
 	public boolean isPointOnTheXYorigin(){
 		return (pointXYZ.getXvalue()==0)&&(pointXYZ.getYvalue()==0);
 	}
@@ -39,16 +46,34 @@ public class AnglesCalculator {
 	public double getPhi() {
 		return phi;
 	}
+	
+	public double getGamma() {
+		return gamma;
+	}
 
 	private void calculateTheta(){
 		int x = pointXYZ.getXvalue();
 	    int y = pointXYZ.getYvalue();
 	    
 	    if ((x!=0)&&(y!=0)) {
-	    	theta= Math.atan((double)y/x);
+	    	theta= Math.toDegrees(Math.atan((double)y/x))+delta(x,y);
 	    } else {
 	    	calculateThetaOnXYaxes(x,y);
 	    }	
+	}
+	
+	private int delta(int x,int y){
+		int delta=0;  // si x>0 e y>0  (condicion ideal)
+		
+		if (x<0) {
+			delta=180;
+		} else {
+			if (y<0) {
+				delta=360;
+			}
+		}
+		
+		return delta;
 	}
 	
 	private void calculateThetaOnXYaxes(int x,int y){
@@ -88,32 +113,26 @@ public class AnglesCalculator {
 	}
 	
 	private void calculatePhi(){
-		double z = pointXYZ.getZvalue();
-	    int x = pointXYZ.getXvalue();
+		double z = pointXYZ.getZlength();
+		double x = pointXYZ.getXlength();
 	    
-	    if ((z!=0)&&(x!=0)) {
-	    	calculatePhiOutOfZXaxes(z,x);
+	    if (z>0.0){
+	    	this.phi=Math.toDegrees(Math.atan((double)x/z));
 	    } else {
-	    	calculatePhiOnZXaxes(z);
+	    	this.phi=999;
+			this.isPhiCalculable=false;
 	    }	
 	}
 	
-	private void calculatePhiOutOfZXaxes(double z,int x){
-		double phiValue = Math.atan(Math.abs((double)x/z));
-		
-		if (x>0) {
-			phi = phiValue;
-		} else {
-			phi = -phiValue;
-		}
-	}
-	
-	private void calculatePhiOnZXaxes(double z){
-		if (!isPointOnTheXYorigin()&&(z>0.0)){
-			phi=0;                   // z_depth no puede ser 0, ya que 0 es el valor de no medicion
-		} else {  // por estar en el origen
-			this.phi=999;
-			this.isPhiCalculable=false;
-		}
+	private void calculateGamma(){
+		double z = pointXYZ.getZlength();
+		double y = pointXYZ.getYlength();
+	    
+	    if (z>0.0){
+	    	this.gamma=Math.toDegrees(Math.atan((double)y/z));
+	    } else {
+	    	this.gamma=999;
+			this.isGammaCalculable=false;
+	    }	
 	}
 }

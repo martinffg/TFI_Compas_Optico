@@ -16,6 +16,8 @@ public class SensorDataProduction implements SensorData {
 	private BufferedImage imagenColor;
 	private BufferedImage imagenColorBackup;
 	private BufferedImage imagenProfundidad;
+	public static final float maxDistanceMMAllowed = 36000;//3,60 m
+	public static final float minDistanceMMAllowed = 8000;// 0,80 m
 		
 	public SensorDataProduction(Kinect kinect,Color colorOOR,int elevation) {
 		this.elevationAngle=elevation;
@@ -107,27 +109,33 @@ public class SensorDataProduction implements SensorData {
 		matrizProfundidad = new double[this.getWidth()][this.getHeight()];		
 		imagenProfundidad = new BufferedImage(this.getWidth(),this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		int iEspejado=0;
-		float max = 30000;//3 metros
-		float min = 7000;//70 cm
+		float fixedMax=maxDistanceMMAllowed/10000;  // paso a metros la medida
+		float fixedMin=minDistanceMMAllowed/10000;  // paso a metros la medida
 		int k=0;
 		int height=0;
 		Color color=null;
+		double unfixedDepth=0.0;
+		double fixedDepth=0.0;
 		
 		for (int j = 0; j < this.getHeight(); j++) {
 			for (int i = 0; i < this.getWidth(); i++) {
 				height = this.getWidth() * j;
 				k = i + height;
 				iEspejado=this.getWidth()-1-i; // como la captura es espejada, se requiere espejar en eje y
-				color = getColorPorProfundidad(iEspejado,j,k, max, min);
-				this.matrizProfundidad[iEspejado][j] = depth[k];
+				// Aqui trato el problema del error de lectura de profundidad con certeza del 0,9785
+				unfixedDepth=(double)depth[k]/10000;  // guardo en metros la profundidad sensada y sin corregir
+				KinectDepthMeassureFixerController meassureFixer = new KinectDepthMeassureFixerController(unfixedDepth);
+				fixedDepth=meassureFixer.getRealKinectDepthMeassure(); 
+				color = getColorPorProfundidad(iEspejado,j,fixedDepth, fixedMax, fixedMin);
+				this.matrizProfundidad[iEspejado][j] = fixedDepth;
 				this.imagenProfundidad.setRGB(iEspejado, j, color.getRGB());
 			}
 		}
 	}
-
-	private Color getColorPorProfundidad(int i,int j,int z, float max, float min) {
+	
+	private Color getColorPorProfundidad(int i,int j,double fixedDepth, float max, float min) {
 		Color color;
-		if ((depth[z]>=min)&&(depth[z]<=max)) {
+		if ((fixedDepth>=min)&&(fixedDepth<=max)) {
 			color = this.getColorEnPixel(i, j);
 		} else {
 			color = this.colorOutOfRange;   // todo lo que esta fuera del rango de captura lo pinta de un color definido

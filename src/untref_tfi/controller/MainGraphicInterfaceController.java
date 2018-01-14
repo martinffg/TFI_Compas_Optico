@@ -14,8 +14,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import untref_tfi.domain.AnglesCalculator;
-
 
 
 public class MainGraphicInterfaceController {
@@ -38,7 +36,7 @@ public class MainGraphicInterfaceController {
 	private static final int zeroYref=maxlength/2; // 0Yref: 240
 	private int selectedXpoint=zeroXref;
 	private int selectedYpoint=zeroYref;
-	private double selectedZpoint=0.0;
+	private double selectedZPoint=0.0;
 	private boolean depthImageSelected=false;
 	private Color colorOOR= Color.GRAY;
 	private int elevationAngle= 0;
@@ -57,7 +55,7 @@ public class MainGraphicInterfaceController {
 		verticalAnglePanel = new VerticalKinectAngleSelectionPaneController("vAngle[°]",this);
 		//horizontalAnglePanel = new HorizontalKinectAngleSelectionPaneController("hAngle[°]",this);
 		horizontalAnglePanel = new HorizontalKinectAngleSelectionPaneController("hAngle[°]");
-		angleValuesPanel = new AnglePaneController("Angle Values");
+		angleValuesPanel = new AnglePaneController("Results");
 	}
 	
 	public Scene getMainScene(){
@@ -145,27 +143,18 @@ public class MainGraphicInterfaceController {
 		kinectImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent e) {
             	convertXYclicToCartesianSelectedPoint(e); 
-            	selectedZpoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY())/10000; // lo guardo en metros
-            	String selectedColorPoint = imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY());
-            	pixelPanel.setXYZvalues(selectedXpoint,selectedYpoint,selectedZpoint,selectedColorPoint);
-            	calculateThetaPhiAngles(selectedXpoint,selectedYpoint,selectedZpoint);
+            	updateDisplayPanels(e);
             }	
         });
 	}
 	
-	private void calculateThetaPhiAngles(int x,int y, double z) {
-		XYZpoint selectedXYZpoint = new XYZpoint(x,y,z);
-    	AnglesCalculator angCalculator = new AnglesCalculator(selectedXYZpoint);
-    	String theta="N/A";
-    	String phi="N/A";
-    	if (angCalculator.isThetaCalculable()){
-    		theta= String.format("%.3f", angCalculator.getTheta());
-    	}
-    	if (angCalculator.isPhiCalculable()){
-    		phi= String.format("%.3f", angCalculator.getPhi());
-    	}
-    	angleValuesPanel.setThetaPhiValues(theta, phi);
-	}		
+	private void updateDisplayPanels(MouseEvent e) {
+		selectedZPoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY());
+    	String selectedColorPoint = imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY());
+    	XYZpoint selectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedZPoint);
+    	pixelPanel.setXYZvalues(selectedPixel,selectedColorPoint);
+    	angleValuesPanel.calculateAnglesFromPoint(selectedPixel);
+	}
 	
 	private void convertXYclicToCartesianSelectedPoint(MouseEvent e) {
 		selectedXpoint=(int) (e.getX() -zeroXref);
@@ -200,7 +189,7 @@ public class MainGraphicInterfaceController {
 		AnchorPane.setRightAnchor(outOfRangePane, 20.0);
 		AnchorPane.setBottomAnchor(verticalAnglePane, 140.0);
 		AnchorPane.setRightAnchor(verticalAnglePane, 20.0);
-		AnchorPane.setTopAnchor(angleValuesPane, 205.0);
+		AnchorPane.setTopAnchor(angleValuesPane, 210.0);
 		AnchorPane.setLeftAnchor(angleValuesPane, 20.0);
 		AnchorPane.setBottomAnchor(horizontalAnglePane, 40.0);
 		AnchorPane.setRightAnchor(horizontalAnglePane, 20.0);
@@ -231,5 +220,5 @@ public class MainGraphicInterfaceController {
 		imageAngulosView.setFitHeight(160);
 		imageAngulosView.setFitWidth(200);
 	}
-
+		
 }

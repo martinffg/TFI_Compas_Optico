@@ -1,0 +1,53 @@
+Analisis matemático del sensor
+https://www.youtube.com/watch?v=r7D2lgI2hQE
+-------------------------------------------------------------------------------
+Analisis de las distancias
+
+a 0.700 m reales, mide ERROR la kinect => Error=Fuera de rango
+a 0,795 m reales, mide 0,641 la kinect => Error=0,154 m (PRIMER CAPTURA REAL EN RANGO)
+a 1,450 m reales, mide 1,173 la kinect => Error=0,277 m
+a 3,000 m reales, mide 2,561 la kinect => Error=0,439 m
+a 3.420 m reales, mide 2,943 la kinect => Error=0,477 m
+
+La estimacion por Cuadrados mínimos es
+
+y = 0,1347x + 0,0903
+ (error de la medición de la depth según valor de depth)
+R² = 0,9785
+
+Valor Real Depth = valorDepthKinect + ErrorMedicion[valorDepthKinect];
+-------------------------------------------------------------------------------
+
+Longitud del pixel a la distancia (para calculo de errores y ajustes - pixel es cuadrado, vale horizontal y vertical la medida)
+
+// con D medida con sensor SIN corrección de errores anterior
+164 pixeles son 555 mm a D=1,5 m -> 1 pixel = 3,384 mm
+60 pixeles son 120 mm a D=0,808 m-> 1 pixel = 2 mm
+87 pixeles son 555 mm a D=2,822m -> 1 pixel = 6,379 mm
+
+La estimación por cuadrados mínimos dio:
+
+y = 0,0021x + 0,0004
+    (longitud del pixel segun distancia en la kinect)
+R² = 0,9925  // cuanto mas cercana a uno es mejor estimación
+
+// con D medida con sensor CON corrección de errores anterior
+ 38 pixeles son 250 mm a D=3,420 m -> 1 pixel = 0,00657895 m
+ 79 pixeles son 250 mm a D=1,628 m -> 1 pixel = 0,00316456 m
+122 pixeles son 250 mm a D=1,067 m -> 1 pixel = 0,00204980 m
+149 pixeles son 250 mm a D=0,900 m -> 1 pixel = 0,00167785 m
+
+La estimación por cuadrados mínimos dio:
+
+y = 0,00193x - 0,00002    (longitud del pixel segun distancia en la kinect)
+R² = 0,9998    (SE VE QUE ES UNA MEJOR APROXIMACION)
+Esto permite calcular longitudes representadas por un pixel, que depende de la distancia, con la kinect (por conteo de pixeles)
+
+Finalmente, verifico que la distancia y la longitud del pixel medido por la kinect guardan una relación-proporción:
+
+Proporcion = Dist[m] / LongPixel[m] = 520 +/-6   (por eso, al ser variable no se puede pasar Z a pixeles)
+
+Entonces, la solución a este problema fue pasar X e Y a metros para poder tener todo en la misma unidad, 
+usando la regla anterior y calculando.
+
+----------------------------------------------
