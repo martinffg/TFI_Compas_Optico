@@ -55,7 +55,7 @@ public class SettingsPaneController {
             public void handle(ActionEvent e) {
             	Color colorOOR=colorPicker.getValue();
             	labelColor.setTextFill(colorOOR);
-            	mgic.setColorOutOfRange((float) colorOOR.getRed(),(float) colorOOR.getGreen(),(float) colorOOR.getBlue(),(float) colorOOR.getOpacity());    
+            	mgic.setColorOutOfRange((int) colorOOR.getRed(),(int) colorOOR.getGreen(),(int) colorOOR.getBlue(),(int) colorOOR.getOpacity());    
             }		
         });
 		

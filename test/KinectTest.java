@@ -12,10 +12,13 @@ public class KinectTest {
 		sensor.onColorFrameEvent(null);
 		sensor.onSkeletonFrameEvent(null,null,null,null);
 		sensor.onDepthFrameEvent(null,null,null,null);
+		sensor.stop();
 		
 		Assert.assertNotNull(sensor);
 		Assert.assertNull(sensor.getColorFrame());	
-		Assert.assertNull(sensor.getDepthFrame());		
+		Assert.assertNull(sensor.getDepthFrame());	
+		
+		
 	}
 
 }

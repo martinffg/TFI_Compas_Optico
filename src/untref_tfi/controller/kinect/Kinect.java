@@ -23,5 +23,4 @@ public class Kinect extends J4KSDK {
 	public void onSkeletonFrameEvent(boolean[] arg0, float[] arg1,float[] arg2, byte[] arg3) {
 		// requested by J4KSDK (abstract method)
 	}
-
 }

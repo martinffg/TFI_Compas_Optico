@@ -3,7 +3,7 @@ package untref_tfi.controller.kinect;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-public class SensorDataProduction implements SensorData {
+public class KinectSensorDataCollector {
 
 	private byte[] colorFrame;
 	private short[] depth;
@@ -19,19 +19,11 @@ public class SensorDataProduction implements SensorData {
 	public static final float maxDistanceMMAllowed = 36000;//3,60 m
 	public static final float minDistanceMMAllowed = 8000;// 0,80 m
 		
-	public SensorDataProduction(Kinect kinect,Color colorOOR,int elevation) {
+	public KinectSensorDataCollector(Kinect kinect,Color colorOOR,int elevation) {
 		this.elevationAngle=elevation;
-		if (!kinect.isInitialized()) {
-			kinect = new Kinect();
-			kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				//e.printStackTrace();
-			}
-			
-		}
-		
+		if (kinect==null) {
+			kinect = startKinectSensor();
+		}	
 		kinect.setElevationAngle(elevationAngle);
 		this.colorOutOfRange=colorOOR;
 		this.colorFrame = kinect.getColorFrame();
@@ -44,32 +36,38 @@ public class SensorDataProduction implements SensorData {
 
 	}
 
-	@Override
+	private Kinect startKinectSensor() {
+		Kinect kinect;
+		kinect = new Kinect();
+		kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			//e.printStackTrace();
+		}
+		return kinect;
+	}
+
 	public Color getColorEnPixel(int x, int y) {
 		return matrizColor[x][y];
 	}
 	
-	@Override
 	public void setColorEnPixel(int x, int y, Color color) {
 		matrizColor[x][y]=color;
 	}
 
-	@Override
 	public double getDistancia(int x, int y) {
 		return matrizProfundidad[x][y];
 	}
 
-	@Override
 	public BufferedImage getImagenColor() {
 		return imagenColor;
 	}
 	
-	@Override
 	public BufferedImage getImagenColorBackup() {
 		return imagenColorBackup;
 	}
 
-	@Override
 	public BufferedImage getImagenProfundidad() {
 		return imagenProfundidad;
 	}

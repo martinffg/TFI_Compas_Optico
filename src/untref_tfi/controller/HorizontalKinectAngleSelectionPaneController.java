@@ -58,13 +58,12 @@ public class HorizontalKinectAngleSelectionPaneController {
 				
 				@Override
 				public Double fromString(String string) {
-					return new Double(string.substring(0, string.length() - 3));
+					return new Double(string.substring(0, string.length() - 1));
 				}
 		});
 		
 		sliderAnguloHorizontal.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-                    //mgic.setRotationAngle(new_val.intValue());
         			angleValue.setText(String.valueOf(new_val.intValue())+"°");
                 }
             });

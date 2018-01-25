@@ -19,9 +19,6 @@ public class ImageCaptureControllerTest {
 							ImageCaptureController icc = new ImageCaptureController(compassView.getMainGraphIntCont(),false);
 							icc.startImageCapture();
 							icc.imageRefresh();
-							if (Platform.isFxApplicationThread()) {
-								Assert.assertTrue(Platform.isFxApplicationThread());
-							}
 						} catch (Exception e) {
 							//System.out.println("iccProdTest() exception");
 						}
@@ -29,10 +26,10 @@ public class ImageCaptureControllerTest {
 			});
 			
 			thread.start();
-	
 			Thread.sleep(1000);
 			Assert.assertFalse(Platform.isFxApplicationThread());
-		}catch(InterruptedException ex){
+			Platform.exit();
+		}catch(Exception ex){
 			//System.out.println("Exception stopping iccProdTest catched.");
 		}
 	}

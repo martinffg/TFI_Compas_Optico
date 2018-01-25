@@ -2,11 +2,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import javafx.application.Platform;
 
-
 public class OpticCompassModoTest {
 
 	@Test
 	public void mainTest() {
+		
 		try {
 			Thread thread = new Thread(new Runnable() {
 				
@@ -15,23 +15,20 @@ public class OpticCompassModoTest {
 					try {
 						OpticCompass oc = new OpticCompass();
 						String[] args = {"test"};
-						oc.start(args);
-						
-						if (Platform.isFxApplicationThread()) {
-							Assert.assertTrue(Platform.isFxApplicationThread());
-						}
+						oc.start(args);							
 					}catch(Exception e){
-						//System.out.println("Exception launching OpticCompass.main catched.");
+						System.out.println("Exception launching mainTest run method catched.");
+						e.printStackTrace();
 					}
 				}
 			});
 			
 			thread.start();
-	
 			Thread.sleep(1000);
 			Assert.assertFalse(Platform.isFxApplicationThread());
-		}catch(InterruptedException ex){
-			//System.out.println("Exception stopping mainTest catched.");
+		}catch(Exception ex){
+			System.out.println("Exception in mainTest thread catched.");
+			ex.printStackTrace();
 		}
 	}
 }

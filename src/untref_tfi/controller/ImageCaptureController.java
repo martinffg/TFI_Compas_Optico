@@ -5,12 +5,11 @@ import java.awt.Color;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import untref_tfi.controller.kinect.Kinect;
-import untref_tfi.controller.kinect.SensorData;
-import untref_tfi.controller.kinect.SensorDataProduction;
+import untref_tfi.controller.kinect.KinectSensorDataCollector;
 
 public class ImageCaptureController {
 	
-	private SensorData data;
+	private KinectSensorDataCollector data;
 	private Kinect kinect;
 	private MainGraphicInterfaceController compassMGIC;
 	private int contador=0;
@@ -35,9 +34,6 @@ public class ImageCaptureController {
 		if (chequearInicializacionKinect()) {
 			setearAnguloDeElevacionDefault(); 
 		}
-		/*else {
-			System.out.println("El sensor Kinect no esta inicializado, fallo al capturar imagenes");
-		}*/
 	}
 
 	private void setearAnguloDeElevacionDefault() {
@@ -67,7 +63,7 @@ public class ImageCaptureController {
 	public void startImageCapture() {
 		BufferedImage imagenKinect=null;
 		if (chequearInicializacionKinect() && (!isTestMode)) {
-			data = new SensorDataProduction(kinect,compassMGIC.getColorOOR(),compassMGIC.getElevationAngle());
+			data = new KinectSensorDataCollector(kinect,compassMGIC.getColorOOR(),compassMGIC.getElevationAngle());
 			if (!compassMGIC.isDepthImageSelected()){
 				imagenKinect = data.getImagenColor();
 			}else{
@@ -86,7 +82,7 @@ public class ImageCaptureController {
 		if (contador==360) { 
 			contador=0; 
 		}
-		data = new SensorDataProduction(kinect,compassMGIC.getColorOOR(),compassMGIC.getElevationAngle());
+		data = new KinectSensorDataCollector(kinect,compassMGIC.getColorOOR(),compassMGIC.getElevationAngle());
 		if (!compassMGIC.isDepthImageSelected()){
 			imagenKinect = setXYaxesToBuffImage(data.getImagenColor());
 		}else{

@@ -31,7 +31,7 @@ public class CompassViewer extends Application{
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 	       @Override
 	       public void handle(WindowEvent e) {
-	          System.exit(0);
+	    	   System.exit(0);
 	       }
 		});
 		primaryStage.show();

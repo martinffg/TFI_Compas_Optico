@@ -120,7 +120,7 @@ public class MainGraphicInterfaceController {
 
 	}
 	
-	public void setColorOutOfRange(float red,float green,float blue,float opacity){
+	public void setColorOutOfRange(int red,int green,int blue,int opacity){
 		this.colorOOR=new Color(red,green,blue,opacity);
 	}
 	

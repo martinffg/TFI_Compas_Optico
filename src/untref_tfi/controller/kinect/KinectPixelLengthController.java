@@ -28,9 +28,9 @@ public class KinectPixelLengthController {
 	private boolean isDistanceOnCaptureAllowedRange(double distance){
 		boolean answer = true;
 		
-		if (distance < (SensorDataProduction.minDistanceMMAllowed/10000)) answer=false;
+		if (distance < (KinectSensorDataCollector.minDistanceMMAllowed/10000)) answer=false;
 		
-		if (distance > (SensorDataProduction.maxDistanceMMAllowed/10000)) answer=false;
+		if (distance > (KinectSensorDataCollector.maxDistanceMMAllowed/10000)) answer=false;
 		
 		return answer;
 	}
