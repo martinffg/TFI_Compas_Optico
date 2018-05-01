@@ -1,9 +1,9 @@
 package untref_tfi.controller;
 
 import java.awt.image.BufferedImage;
-import java.awt.Color;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import java.awt.Color;
 import untref_tfi.controller.kinect.Kinect;
 import untref_tfi.controller.kinect.KinectSensorDataCollector;
 
@@ -14,7 +14,7 @@ public class ImageCaptureController {
 	private MainGraphicInterfaceController compassMGIC;
 	private int contador=0;
 	private boolean isTestMode=false;
-			
+				
 	public ImageCaptureController(MainGraphicInterfaceController mainGIController,boolean isTest) {
 		
 		isTestMode=isTest;
@@ -63,7 +63,7 @@ public class ImageCaptureController {
 	public void startImageCapture() {
 		BufferedImage imagenKinect=null;
 		if (chequearInicializacionKinect() && (!isTestMode)) {
-			data = new KinectSensorDataCollector(kinect,compassMGIC.getColorOOR(),compassMGIC.getElevationAngle());
+			data = new KinectSensorDataCollector(kinect,getAwtColor(compassMGIC.getColorOOR()),compassMGIC.getElevationAngle());
 			if (!compassMGIC.isDepthImageSelected()){
 				imagenKinect = data.getImagenColor();
 			}else{
@@ -82,7 +82,7 @@ public class ImageCaptureController {
 		if (contador==360) { 
 			contador=0; 
 		}
-		data = new KinectSensorDataCollector(kinect,compassMGIC.getColorOOR(),compassMGIC.getElevationAngle());
+		data = new KinectSensorDataCollector(kinect,getAwtColor(compassMGIC.getColorOOR()),compassMGIC.getElevationAngle());
 		if (!compassMGIC.isDepthImageSelected()){
 			imagenKinect = setXYaxesToBuffImage(data.getImagenColor());
 		}else{
@@ -114,13 +114,32 @@ public class ImageCaptureController {
 	
 	public String getXYMatrizRGBColorCadena (int x,int y){
 		String cadenaColor="";
-		Color color = data.getColorEnPixel(x, y);
-		cadenaColor="["+color.getRed()+";"+color.getGreen()+";"+color.getBlue()+"]";	
+		if (validateXYinserted(x, y)) {
+			Color color = data.getColorEnPixel(x, y);
+			cadenaColor="["+color.getRed()+";"+color.getGreen()+";"+color.getBlue()+"]";	
+		}
 		return cadenaColor;
 	}
 	
 	public double getXYMatrizProfundidad (int x,int y){
-		return data.getDistancia(x, y);
+		double resultado=0.0;
+		if (validateXYinserted(x, y)) {
+			resultado = data.getDistancia(x, y);
+		}
+		return resultado;
+	}
+
+	private boolean validateXYinserted(int x, int y) {
+		return (x>=0)&&(y>=0)
+				&&(x<MainGraphicInterfaceController.maxWidth)
+				&&(y<MainGraphicInterfaceController.maxLength);
+	}
+	
+	private Color getAwtColor(javafx.scene.paint.Color colorJFX){
+		
+		Color colorAwt = new Color((float)colorJFX.getRed(),(float)colorJFX.getGreen(),(float)colorJFX.getBlue(),(float)colorJFX.getOpacity());
+		
+		return colorAwt;
 	}
 	
 }

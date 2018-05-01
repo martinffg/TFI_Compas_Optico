@@ -1,4 +1,3 @@
-import java.awt.Color;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,6 +6,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import untref_tfi.controller.MainGraphicInterfaceController;
@@ -15,7 +15,7 @@ public class MainGraphicInterfaceControllerTest extends Application {
 	
 	private MainGraphicInterfaceController mgic=null;
 	private Scene myScene= null;
-	private Color color = new Color(120,120,120,1);
+	private Color color = Color.GRAY;
 	
 	@Test
 	public void mgicTest() {
@@ -50,7 +50,7 @@ public class MainGraphicInterfaceControllerTest extends Application {
 		mgic.disableDepthImageSelection();
 		mgic.enableDepthImageSelection();
 		mgic.setElevationAngle(0);
-		mgic.setColorOutOfRange(120,120,120,1);
+		mgic.setColorOutOfRange(Color.GRAY);
 		mgic.setImageController(mgic.getImageCaptureController());
 		mgic.setKinectImage(mgic.getImageRosaIconView().getImage());
 		mgic.setKinectImageView(mgic.getImageRosaView());

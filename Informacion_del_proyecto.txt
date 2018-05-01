@@ -1,6 +1,7 @@
 Librerías utilizadas: 
 * Java for Kinect (https://github.com/digitalworlds/java-for-kinect)
 * http://research.dwi.ufl.edu/ufdw/j4k/examples.php
+* PanamaHitek_Arduino Library, version 3.0.0, Created by Antony Garcia Gonzalez and Alexey Sokolov at http://panamahitek.com
 
 * El programa se paquetiza en un archivo jar, que debe estar en el mismo
 directorio que las librerias dll requeridas y el folder resource/images

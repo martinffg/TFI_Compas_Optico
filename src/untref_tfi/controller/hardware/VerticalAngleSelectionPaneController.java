@@ -1,4 +1,4 @@
-package untref_tfi.controller;
+package untref_tfi.controller.hardware;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,13 +12,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
+import untref_tfi.controller.MainGraphicInterfaceController;
 
-public class VerticalKinectAngleSelectionPaneController {
+public class VerticalAngleSelectionPaneController {
 
 	private final VBox panel;
 	private TextField angleValue;
 	
-	public VerticalKinectAngleSelectionPaneController(String paneName,MainGraphicInterfaceController mgic) {
+	public VerticalAngleSelectionPaneController(String paneName,MainGraphicInterfaceController mgic) {
 		
 		Label title = new Label(paneName);
 		title.setFont(Font.font ("Verdana", 20));

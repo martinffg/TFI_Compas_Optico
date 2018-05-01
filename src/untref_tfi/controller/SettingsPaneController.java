@@ -29,18 +29,19 @@ public class SettingsPaneController {
 		title.setMinSize(110, 25);
 		title.setTextFill(Paint.valueOf("#29446B"));
 				
-		String[] checkBoxNames = new String[]{"OOR pixels"};
+		String[] checkBoxNames = new String[]{"Dynam Calcs","OOR pixels"};
 		CheckBox[] cbs = new CheckBox[checkBoxNames.length];
 		for (int i = 0; i < checkBoxNames.length; i++) {
 			cbs[i] = new CheckBox(checkBoxNames[i]);
 		}
 		
 		// Defino evento por cada checkbox
-		cbs[0].setOnMouseClicked(getMouseEventHandler(cbs));
+		cbs[0].setOnMouseClicked(getMouseEventHandler(cbs,0));
+		cbs[1].setOnMouseClicked(getMouseEventHandler(cbs,1));
 		
 		VBox vbox = new VBox(cbs);
 		Separator separator = new Separator();
-		vbox.setAlignment(Pos.CENTER);
+		vbox.setAlignment(Pos.CENTER_LEFT);
 		vbox.getChildren().add(checkBoxNames.length, separator);
 		vbox.setSpacing(5.0);
 		vbox.setPadding(new Insets(2,2,2,2));
@@ -50,12 +51,12 @@ public class SettingsPaneController {
 		labelColor.setFont(new Font(16));
 		ColorPicker colorPicker = new ColorPicker(Color.GRAY);
 		colorPicker.setPrefSize(110, 40);
-		colorPicker.setOnAction(new EventHandler<ActionEvent>() {
+		colorPicker.setOnAction(new EventHandler<ActionEvent>() {	
 			
             public void handle(ActionEvent e) {
             	Color colorOOR=colorPicker.getValue();
             	labelColor.setTextFill(colorOOR);
-            	mgic.setColorOutOfRange((int) colorOOR.getRed(),(int) colorOOR.getGreen(),(int) colorOOR.getBlue(),(int) colorOOR.getOpacity());    
+            	mgic.setColorOutOfRange(colorOOR); 
             }		
         });
 		
@@ -72,8 +73,18 @@ public class SettingsPaneController {
 		
 	}
 
-	private EventHandler<MouseEvent> getMouseEventHandler(CheckBox[] cbs) {
+	private EventHandler<MouseEvent> getMouseEventHandler(CheckBox[] cbs,int pos) {
 		return new EventHandler<MouseEvent>() {
+			
+			private void evaluateDynamicMousePointerCheckBoxAction(CheckBox dmpCbs){
+				
+				if (dmpCbs.isSelected()) {
+					mgic.enableDynamicMousePointer();
+				}else{
+					mgic.disableDynamicMousePointer();
+				}
+				
+			}
 			
 			private void evaluateOORCheckBoxAction(CheckBox oorCbs){
 				
@@ -86,8 +97,13 @@ public class SettingsPaneController {
 			}
  
             public void handle(MouseEvent e) {
-
-            	this.evaluateOORCheckBoxAction(cbs[0]);
+            	switch (pos) {
+            		case 0: this.evaluateDynamicMousePointerCheckBoxAction(cbs[0]);
+            		break;
+            		case 1: this.evaluateOORCheckBoxAction(cbs[1]);
+            		break;
+            		default:{}
+            	}
   
             }		
         };

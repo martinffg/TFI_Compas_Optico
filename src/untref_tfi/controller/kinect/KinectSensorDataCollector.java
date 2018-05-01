@@ -33,7 +33,6 @@ public class KinectSensorDataCollector {
 
 		this.construirMatrizColor();
 		this.construirMatrizProfundidad();
-
 	}
 
 	private Kinect startKinectSensor() {
@@ -140,7 +139,7 @@ public class KinectSensorDataCollector {
 		}
 		return color;
 	}
-
+	
 	private int getWidth() {
 		return this.imageWidth;
 	}

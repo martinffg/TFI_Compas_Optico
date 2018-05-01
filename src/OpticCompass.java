@@ -11,4 +11,5 @@ public class OpticCompass  {
 	public void start(String[] args){
 		OpticCompass.main(args);
 	}
+	
 }
