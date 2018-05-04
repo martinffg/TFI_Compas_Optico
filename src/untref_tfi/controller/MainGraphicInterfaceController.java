@@ -43,6 +43,9 @@ public class MainGraphicInterfaceController {
 	private int selectedXpoint=zeroXref;
 	private int selectedYpoint=zeroYref;
 	private double selectedZPoint=0.0;
+	private String selectedColorPoint="";
+	private XYZpoint lastSelectedPixel=null;
+	private XYZpoint previousSelectedPixel=null;
 	private boolean depthImageSelected=false;
 	private boolean dynamicMousePointerSelection=false;
 	private Color colorOOR= Color.GRAY;
@@ -65,7 +68,7 @@ public class MainGraphicInterfaceController {
 		createImageAngulosView();
 		createImageRosaIconView();
 		angleValuesPanel = new AnglePaneController("Results");
-		pixelPanel = new SelectedPixelPaneController("Point Info");
+		pixelPanel = new SelectedPixelPaneController("Point Info",this);
 		outOfRangePanel = new SettingsPaneController("Settings",this);
 		verticalAnglePanel = new VerticalAngleSelectionPaneController("V_Elevate",this);
 		horizontalAngleController = new HorizontalAngleRotationController();
@@ -149,6 +152,14 @@ public class MainGraphicInterfaceController {
 		this.colorOOR=color;
 	}
 	
+	public XYZpoint getLastSelectedPixel(){
+		return this.lastSelectedPixel;
+	}
+	
+	public XYZpoint getPreviousSelectedPixel(){
+		return this.previousSelectedPixel;
+	}
+	
 	public int getElevationAngle(){
 		return this.elevationAngle;
 	}
@@ -167,6 +178,10 @@ public class MainGraphicInterfaceController {
 		kinectAnglePositionPanel.setHVvalues(rotationAngle, elevationAngle);
 	}
 	
+	public HorizontalAngleSelectionPaneController getHorizontalAnglePanel(){
+		return this.horizontalAnglePanel;
+	}
+	
 	private void createKinectImageView(){
 		
 		kinectImageView = new ImageView(kinectImage);
@@ -178,8 +193,16 @@ public class MainGraphicInterfaceController {
 		kinectImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent e) {
             	try {
-            		convertXYclicToCartesianSelectedPoint(e); 
+            		swapSelectedPixel();
+            		getAllInfoAboutXYCartesianSelectedPoint(e); 
             		updateDisplayPanels(e);
+            		/*
+            		if (lastSelectedPixel != null) {	
+            			System.out.println("Ultimo: "+lastSelectedPixel.getXlength()
+            			+" "+lastSelectedPixel.getYlength()
+            			+" "+lastSelectedPixel.getZlength());
+            		}
+            		*/	
             	} catch (Exception ex){
             		System.out.println("Modo Test - Funcion deshabilitada");
             	}
@@ -189,7 +212,7 @@ public class MainGraphicInterfaceController {
             public void handle(MouseEvent e) {
             	if (dynamicMousePointerSelection){
 	            	try {
-	            		convertXYclicToCartesianSelectedPoint(e); 
+	            		getAllInfoAboutXYCartesianSelectedPoint(e); 
 	            		updateDisplayPanels(e);
 	            	} catch (Exception ex){
 	            		System.out.println("Modo Test - Funcion deshabilitada");
@@ -200,18 +223,18 @@ public class MainGraphicInterfaceController {
 	}
 	
 	private void updateDisplayPanels(MouseEvent e) {
-		selectedZPoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY());
-    	String selectedColorPoint = imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY());
-    	XYZpoint selectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedZPoint);
-    	pixelPanel.setXYZvalues(selectedPixel,selectedColorPoint);
-    	angleValuesPanel.calculateAnglesFromPoint(selectedPixel);
+		pixelPanel.setXYZvalues(lastSelectedPixel,selectedColorPoint);
+    	angleValuesPanel.setAnglesValues(lastSelectedPixel.getAnglesCalculator());
 	}
 	
-	private void convertXYclicToCartesianSelectedPoint(MouseEvent e) {
-		selectedXpoint=(int) (e.getX() -zeroXref);
-    	selectedYpoint=(int) (e.getY() * -1) + zeroYref;
+	private void getAllInfoAboutXYCartesianSelectedPoint(MouseEvent e) {
+		selectedXpoint=(int) (e.getX() -zeroXref);			// Convert X to cartesian axe
+    	selectedYpoint=(int) (e.getY() * -1) + zeroYref;	// Convert Y to cartesian axe
     	//System.out.println(e.getX());
     	//System.out.println(e.getY());
+    	selectedZPoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY());
+    	selectedColorPoint = imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY());
+    	lastSelectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedZPoint);
 	}
 
 	private AnchorPane createAnchorPane(){
@@ -280,5 +303,16 @@ public class MainGraphicInterfaceController {
 	public void updateSensorPositionPanel(){
 		kinectAnglePositionPanel.setHVvalues(rotationAngle, elevationAngle);
 	}
-		
+	
+	private void swapSelectedPixel() {
+	
+		previousSelectedPixel=lastSelectedPixel;
+		if (previousSelectedPixel != null) {		
+			/*
+			System.out.println("Previo: "+previousSelectedPixel.getXlength()
+			+" "+previousSelectedPixel.getYlength()
+			+" "+previousSelectedPixel.getZlength()); 
+			*/
+		}		
+	}
 }

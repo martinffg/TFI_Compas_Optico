@@ -129,22 +129,8 @@ public class AnglePaneController {
 				&& !EMPTY_VALUE.equals(gammaTextField.getText());
 	}
 
-	private void setAnglesPhiValues(String theta, String phi, String gamma) {
-		thetaTextField.setText(theta);
-		phiTextField.setText(phi);
-		gammaTextField.setText(gamma);
-	}
-
-	public void clearValues() {
-		thetaTextField.setText(EMPTY_VALUE);
-		phiTextField.setText(EMPTY_VALUE);
-		gammaTextField.setText(EMPTY_VALUE);
-	}
-	
-	public void calculateAnglesFromPoint(XYZpoint selectedXYZpoint) {
-		
-    	AnglesCalculator angCalculator = new AnglesCalculator(selectedXYZpoint);
-    	String theta="N/A";
+	public void setAnglesValues(AnglesCalculator angCalculator) {
+		String theta="N/A";
     	String phi="N/A";
     	String gamma="N/A";
     	if (angCalculator.isThetaCalculable()){
@@ -156,6 +142,14 @@ public class AnglePaneController {
     	if (angCalculator.isGammaCalculable()){
     		gamma= String.format("%.1f", angCalculator.getGamma())+"°";
     	}
-    	this.setAnglesPhiValues(theta, phi, gamma);
+		thetaTextField.setText(theta);
+		phiTextField.setText(phi);
+		gammaTextField.setText(gamma);
+	}
+
+	public void clearValues() {
+		thetaTextField.setText(EMPTY_VALUE);
+		phiTextField.setText(EMPTY_VALUE);
+		gammaTextField.setText(EMPTY_VALUE);
 	}
 }

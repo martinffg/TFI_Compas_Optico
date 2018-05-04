@@ -116,7 +116,7 @@ public class HorizontalAngleSelectionPaneController {
 		return this.panel;
 	}
 	
-	private void moveArduinoController(Double angleSelected){
+	public void moveArduinoController(Double angleSelected){
 		int stepsSelected = stepsCalculator(angleSelected);
 		
 		System.out.println("Pasos a mover: " + stepsSelected);

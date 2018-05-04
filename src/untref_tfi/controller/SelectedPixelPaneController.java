@@ -1,13 +1,17 @@
 package untref_tfi.controller;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import untref_tfi.controller.hardware.HorizontalAngleSelectionPaneController;
 
 public class SelectedPixelPaneController {
 
@@ -20,9 +24,11 @@ public class SelectedPixelPaneController {
 	private final TextField zLength;
 	private final TextField xyColor;
 	private XYZpoint selectedPoint=null;
+	private MainGraphicInterfaceController maingic=null;
 
-	public SelectedPixelPaneController(String paneName) {
+	public SelectedPixelPaneController(String paneName, MainGraphicInterfaceController mgic) {
 		
+		maingic = mgic;
 		Label title = new Label(paneName);
 		title.setFont(Font.font ("Verdana", 20));
 		title.setAlignment(Pos.TOP_CENTER);
@@ -106,8 +112,15 @@ public class SelectedPixelPaneController {
 		xyColor.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
 		xyColor.setAlignment(Pos.CENTER);
 		
+		Button jfxButton = new Button("Focus On It!");
+		jfxButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+								            public void handle(MouseEvent e) {
+								            	setFocusOnIt();
+								            }	
+							        });
+		
 		panel = new VBox();
-		panel.getChildren().addAll(title, posRefPane, posValPane,xLengthLabel,xLength,yLengthLabel,yLength,zLengthLabel,zLength,xyColorLabel,xyColor);
+		panel.getChildren().addAll(title, posRefPane, posValPane,xLengthLabel,xLength,yLengthLabel,yLength,zLengthLabel,zLength,xyColorLabel,xyColor,jfxButton);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
 		panel.setMinSize(130, 300);
 		panel.setAlignment(Pos.CENTER);
@@ -143,5 +156,25 @@ public class SelectedPixelPaneController {
 
 	public XYZpoint getXYZpoint(){
 		return this.selectedPoint;
+	}
+	
+	private void setFocusOnIt(){
+		HorizontalAngleSelectionPaneController horizontalSPC = maingic.getHorizontalAnglePanel();
+		XYZpoint focusedPoint = maingic.getLastSelectedPixel();
+		
+		if (focusedPoint.isFocusablePoint()) {
+		
+			double relativeElevation = focusedPoint.getAnglesCalculator().getGamma();
+			int absoluteElevation = (int) Math.round(maingic.getElevationAngle()+relativeElevation);
+			double relativeRotation = focusedPoint.getAnglesCalculator().getPhi();
+			if (Math.abs(absoluteElevation)<=27) {  // HW limit for kinect Elevetion degree
+				horizontalSPC.moveArduinoController(relativeRotation);
+				maingic.setElevationAngle(absoluteElevation);			
+			} else {
+				System.out.println("Punto no enfocable, fuera de rango de captura vertical");
+			}
+		} else {
+			System.out.println("Punto no enfocable, fuera de rango de captura");
+		}
 	}
 }
