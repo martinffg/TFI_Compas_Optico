@@ -15,10 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import untref_tfi.controller.hardware.HorizontalAngleRotationController;
-import untref_tfi.controller.hardware.HorizontalAngleSelectionPaneController;
-import untref_tfi.controller.hardware.VerticalAngleSelectionPaneController;
-
+import untref_tfi.controller.hardware.HardwareController;
 
 public class MainGraphicInterfaceController {
 	
@@ -28,11 +25,11 @@ public class MainGraphicInterfaceController {
 	private ImageView imageAngulosView;
 	private ImageView imageRosaIconView;
 	private ImageCaptureController imageCapture;
+	private HardwareController hwController;
 	private SelectedPixelPaneController pixelPanel;
 	private SettingsPaneController outOfRangePanel;
 	private VerticalAngleSelectionPaneController verticalAnglePanel;
 	private HorizontalAngleSelectionPaneController horizontalAnglePanel;
-	private HorizontalAngleRotationController horizontalAngleController;
 	private AnglePaneController angleValuesPanel;
 	private KinectAnglePositionPaneController kinectAnglePositionPanel;
 	private Scene mainScene;
@@ -49,18 +46,22 @@ public class MainGraphicInterfaceController {
 	private boolean depthImageSelected=false;
 	private boolean dynamicMousePointerSelection=false;
 	private Color colorOOR= Color.GRAY;
-	private int elevationAngle=0;
-	private double rotationAngle=0.0;
-	
+		
 	public MainGraphicInterfaceController(boolean isTest){
 		try {
 			initializeMGIC(isTest);
 		} catch (Exception e) {
 			initializeMGIC(true);
+			//e.printStackTrace();
 		}
 	}
 	
 	public void initializeMGIC(boolean isTest){
+		try {
+			hwController = new HardwareController(this,isTest);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		imageCapture = new ImageCaptureController(this,isTest);
 		imageCapture.startImageCapture();
 		createKinectImageView();
@@ -68,14 +69,11 @@ public class MainGraphicInterfaceController {
 		createImageAngulosView();
 		createImageRosaIconView();
 		angleValuesPanel = new AnglePaneController("Results");
-		pixelPanel = new SelectedPixelPaneController("Point Info",this);
+		pixelPanel = new SelectedPixelPaneController("Point Info",this,hwController);
 		outOfRangePanel = new SettingsPaneController("Settings",this);
-		verticalAnglePanel = new VerticalAngleSelectionPaneController("V_Elevate",this);
-		horizontalAngleController = new HorizontalAngleRotationController();
-		horizontalAnglePanel = new HorizontalAngleSelectionPaneController("H_Rotate",horizontalAngleController,this);
+		verticalAnglePanel = new VerticalAngleSelectionPaneController("V_Elevate",hwController);
+		horizontalAnglePanel = new HorizontalAngleSelectionPaneController("H_Rotate",hwController);
 		kinectAnglePositionPanel = new KinectAnglePositionPaneController("Sensor Position");
-		this.setElevationAngle(0);
-		this.setRotationAngle(0.0);
 	}
 	
 	public Scene getMainScene(){
@@ -160,28 +158,6 @@ public class MainGraphicInterfaceController {
 		return this.previousSelectedPixel;
 	}
 	
-	public int getElevationAngle(){
-		return this.elevationAngle;
-	}
-	
-	public void setElevationAngle(int elevation){
-		this.elevationAngle=elevation;
-		kinectAnglePositionPanel.setHVvalues(rotationAngle, elevationAngle);
-	}
-	
-	public double getRotationAngle(){
-		return this.rotationAngle;
-	}
-	
-	public void setRotationAngle(double rotation){
-		this.rotationAngle+=rotation;
-		kinectAnglePositionPanel.setHVvalues(rotationAngle, elevationAngle);
-	}
-	
-	public HorizontalAngleSelectionPaneController getHorizontalAnglePanel(){
-		return this.horizontalAnglePanel;
-	}
-	
 	private void createKinectImageView(){
 		
 		kinectImageView = new ImageView(kinectImage);
@@ -263,7 +239,7 @@ public class MainGraphicInterfaceController {
 		AnchorPane.setBottomAnchor(pixelPane, 40.0);
 		AnchorPane.setLeftAnchor(pixelPane, 20.0);
 		AnchorPane.setBottomAnchor(kinectAnglePositionPane, 40.0);
-		AnchorPane.setLeftAnchor(kinectAnglePositionPane, 155.0);
+		AnchorPane.setLeftAnchor(kinectAnglePositionPane, 150.0);
 		AnchorPane.setTopAnchor(outOfRangePane, 240.0);
 		AnchorPane.setRightAnchor(outOfRangePane, 20.0);
 		AnchorPane.setBottomAnchor(verticalAnglePane, 140.0);
@@ -301,7 +277,7 @@ public class MainGraphicInterfaceController {
 	}
 	
 	public void updateSensorPositionPanel(){
-		kinectAnglePositionPanel.setHVvalues(rotationAngle, elevationAngle);
+		kinectAnglePositionPanel.setHVvalues(hwController.getRotationAngle(),hwController.getElevationAngle());
 	}
 	
 	private void swapSelectedPixel() {
@@ -314,5 +290,9 @@ public class MainGraphicInterfaceController {
 			+" "+previousSelectedPixel.getZlength()); 
 			*/
 		}		
+	}
+	
+	public HardwareController getHardwareController(){
+		return this.hwController;
 	}
 }

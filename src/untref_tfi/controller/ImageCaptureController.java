@@ -4,66 +4,28 @@ import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import java.awt.Color;
-import untref_tfi.controller.kinect.Kinect;
+import untref_tfi.controller.hardware.HardwareController;
 import untref_tfi.controller.kinect.KinectSensorDataCollector;
 
 public class ImageCaptureController {
 	
-	private KinectSensorDataCollector data;
-	private Kinect kinect;
-	private MainGraphicInterfaceController compassMGIC;
+	private MainGraphicInterfaceController compassMGIC=null;
+	private HardwareController hwController=null;
+	private KinectSensorDataCollector data=null;
 	private int contador=0;
 	private boolean isTestMode=false;
 				
 	public ImageCaptureController(MainGraphicInterfaceController mainGIController,boolean isTest) {
 		
-		isTestMode=isTest;
-		if (!isTestMode) {
-			setupKinect();
-		} else {
-			construirKinect();
-		}
-		compassMGIC=mainGIController;
-		
-	}
-	
-	private void setupKinect() {
-		construirKinect();
-		startKinect();
-		esperarUmbralInicioKinect();
-		if (chequearInicializacionKinect()) {
-			setearAnguloDeElevacionDefault(); 
-		}
-	}
-
-	private void setearAnguloDeElevacionDefault() {
-		kinect.setElevationAngle(0);
-	}
-
-	private boolean chequearInicializacionKinect() {
-		return kinect.isInitialized();
-	}
-
-	private void esperarUmbralInicioKinect() {
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			//e.printStackTrace();
-		}
-	}
-
-	private void construirKinect() {
-		kinect = new Kinect();
-	}
-
-	private void startKinect() {
-		kinect.start(Kinect.DEPTH | Kinect.COLOR | Kinect.SKELETON | Kinect.XYZ | Kinect.PLAYER_INDEX);
+		this.compassMGIC=mainGIController;
+		this.hwController=mainGIController.getHardwareController();
+		isTestMode=isTest;	
 	}
 	
 	public void startImageCapture() {
 		BufferedImage imagenKinect=null;
-		if (chequearInicializacionKinect() && (!isTestMode)) {
-			data = new KinectSensorDataCollector(kinect,getAwtColor(compassMGIC.getColorOOR()),compassMGIC.getElevationAngle());
+		if (hwController.chequearInicializacionKinect() && (!isTestMode)) {
+			data = hwController.getKinectSensorDataCollector();
 			if (!compassMGIC.isDepthImageSelected()){
 				imagenKinect = data.getImagenColor();
 			}else{
@@ -82,7 +44,7 @@ public class ImageCaptureController {
 		if (contador==360) { 
 			contador=0; 
 		}
-		data = new KinectSensorDataCollector(kinect,getAwtColor(compassMGIC.getColorOOR()),compassMGIC.getElevationAngle());
+		data = hwController.getKinectSensorDataCollector();
 		if (!compassMGIC.isDepthImageSelected()){
 			imagenKinect = setXYaxesToBuffImage(data.getImagenColor());
 		}else{
@@ -133,13 +95,5 @@ public class ImageCaptureController {
 		return (x>=0)&&(y>=0)
 				&&(x<MainGraphicInterfaceController.maxWidth)
 				&&(y<MainGraphicInterfaceController.maxLength);
-	}
-	
-	private Color getAwtColor(javafx.scene.paint.Color colorJFX){
-		
-		Color colorAwt = new Color((float)colorJFX.getRed(),(float)colorJFX.getGreen(),(float)colorJFX.getBlue(),(float)colorJFX.getOpacity());
-		
-		return colorAwt;
-	}
-	
+	}	
 }

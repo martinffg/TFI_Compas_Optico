@@ -18,7 +18,8 @@ public class HorizontalAngleRotationController {
 			Thread.sleep(4000);  			// Tiempo de espera para que Arduino escuche comandos al abrir puerto COM3
 	    	
 	    } catch (ArduinoException | InterruptedException e){    	
-	    	e.printStackTrace();
+	    	//e.printStackTrace();
+	    	System.out.println("Error de conexion contra HW Arduino durante inicializacion");
 	    } 
 	    
 	}

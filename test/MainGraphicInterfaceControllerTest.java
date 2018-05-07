@@ -49,7 +49,6 @@ public class MainGraphicInterfaceControllerTest extends Application {
 		myScene = mgic.getMainScene();
 		mgic.disableDepthImageSelection();
 		mgic.enableDepthImageSelection();
-		mgic.setElevationAngle(0);
 		mgic.setColorOutOfRange(Color.GRAY);
 		mgic.setImageController(mgic.getImageCaptureController());
 		mgic.setKinectImage(mgic.getImageRosaIconView().getImage());
@@ -69,7 +68,6 @@ public class MainGraphicInterfaceControllerTest extends Application {
 		primaryStage.show();
 		Assert.assertNotNull(mgic);
 		Assert.assertTrue(mgic.isDepthImageSelected());
-		Assert.assertEquals(0, mgic.getElevationAngle());
 		Assert.assertEquals(color,mgic.getColorOOR());
 		Assert.assertNotNull(mgic.getImageCaptureController());
 		Assert.assertNotNull(mgic.getImageRosaIconView());
