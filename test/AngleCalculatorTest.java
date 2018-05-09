@@ -8,15 +8,15 @@ public class AngleCalculatorTest {
 
 	@Test
 	public void AngleTest() {
-		
-		XYZpoint point1 = new XYZpoint(1,0,2.0);
-		XYZpoint point2 = new XYZpoint(1,1,2.0);
-		XYZpoint point3 = new XYZpoint(0,0,2.0);
-		XYZpoint point4 = new XYZpoint(0,1,2.0);
-		XYZpoint point5 = new XYZpoint(0,-1,-2.0);
-		XYZpoint point6 = new XYZpoint(-1,0,-2.0);
-		XYZpoint point7 = new XYZpoint(1,-1,-2.0);
-		XYZpoint point8 = new XYZpoint(-1,-1,-2.0);
+		String color ="[0;0;0]";
+		XYZpoint point1 = new XYZpoint(1,0,2.0,color);
+		XYZpoint point2 = new XYZpoint(1,1,2.0,color);
+		XYZpoint point3 = new XYZpoint(0,0,2.0,color);
+		XYZpoint point4 = new XYZpoint(0,1,2.0,color);
+		XYZpoint point5 = new XYZpoint(0,-1,-2.0,color);
+		XYZpoint point6 = new XYZpoint(-1,0,-2.0,color);
+		XYZpoint point7 = new XYZpoint(1,-1,-2.0,color);
+		XYZpoint point8 = new XYZpoint(-1,-1,-2.0,color);
 		
 		AnglesCalculator angleCalc1 = new AnglesCalculator(point1);
 		AnglesCalculator angleCalc2 = new AnglesCalculator(point2);

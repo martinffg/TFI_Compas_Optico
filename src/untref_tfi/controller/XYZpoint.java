@@ -11,8 +11,9 @@ public class XYZpoint {
 	private double yLength=0.0;
 	private double zLength=0.0;
 	private AnglesCalculator angCalculator=null;
+	private String colorString="";
 	
-	public XYZpoint(Integer xPos, Integer yPos, Double zPos){
+	public XYZpoint(Integer xPos, Integer yPos, Double zPos,String color){
 		this.xValue=xPos;
 		this.yValue=yPos;
 		this.zLength=zPos;
@@ -21,6 +22,7 @@ public class XYZpoint {
 		KinectPixelLengthController yLengthController = new KinectPixelLengthController(zPos,yPos);
 		this.yLength=yLengthController.getLengthOfPixelsCountedInMetters();	
 		this.angCalculator = new AnglesCalculator(this);
+		this.colorString=color;
 	}
 
 	public int getXvalue() {
@@ -55,5 +57,9 @@ public class XYZpoint {
 		return (angCalculator.isThetaCalculable() 
 				&& angCalculator.isPhiCalculable() 
 				&& angCalculator.isGammaCalculable());
+	}
+	
+	public String getColorString(){
+		return this.colorString;
 	}
 }

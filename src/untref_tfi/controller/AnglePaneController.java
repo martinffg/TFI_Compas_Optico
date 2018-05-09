@@ -24,13 +24,14 @@ public class AnglePaneController {
 		
 		Label title = new Label(paneName);
 		title.setFont(Font.font ("Verdana", 20));
-		title.setAlignment(Pos.TOP_CENTER);
-		title.setMaxSize(120, 25);
+		title.setAlignment(Pos.CENTER);
+		title.setWrapText(true);
+		title.setPrefSize(120, 50);
 		title.setTextFill(Paint.valueOf("#29446B"));
 		
 		Label thetaTitle = new Label("[ X -> Y ]");
-		thetaTitle.setFont(Font.font ("Verdana", 20));
-		thetaTitle.setAlignment(Pos.TOP_CENTER);
+		thetaTitle.setFont(Font.font ("Verdana", 16));
+		thetaTitle.setAlignment(Pos.CENTER);
 		thetaTitle.setMaxSize(120, 25);
 		thetaTitle.setTextFill(Paint.valueOf("#29446B"));
 		
@@ -54,8 +55,8 @@ public class AnglePaneController {
 		thetaPanel.setSpacing(2.0);
 		
 		Label phiTitle = new Label("[ Z -> X ]");
-		phiTitle.setFont(Font.font ("Verdana", 20));
-		phiTitle.setAlignment(Pos.TOP_CENTER);
+		phiTitle.setFont(Font.font ("Verdana", 16));
+		phiTitle.setAlignment(Pos.CENTER);
 		phiTitle.setMaxSize(120, 25);
 		phiTitle.setTextFill(Paint.valueOf("#29446B"));
 				
@@ -79,8 +80,8 @@ public class AnglePaneController {
 		phiPanel.setSpacing(2.0);
 		
 		Label gammaTitle = new Label("[ Z -> Y ]");
-		gammaTitle.setFont(Font.font ("Verdana", 20));
-		gammaTitle.setAlignment(Pos.TOP_CENTER);
+		gammaTitle.setFont(Font.font ("Verdana", 16));
+		gammaTitle.setAlignment(Pos.CENTER);
 		gammaTitle.setMaxSize(120, 25);
 		gammaTitle.setTextFill(Paint.valueOf("#29446B"));
 		

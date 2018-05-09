@@ -57,19 +57,16 @@ public class MainGraphicInterfaceController {
 	}
 	
 	public void initializeMGIC(boolean isTest){
-		try {
-			hwController = new HardwareController(this,isTest);
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		
+		hwController = new HardwareController(this,isTest);
 		imageCapture = new ImageCaptureController(this,isTest);
 		imageCapture.startImageCapture();
 		createKinectImageView();
 		createImageRosaView();
 		createImageAngulosView();
 		createImageRosaIconView();
-		angleValuesPanel = new AnglePaneController("Results");
-		pixelPanel = new SelectedPixelPaneController("Point Info",this,hwController);
+		angleValuesPanel = new AnglePaneController("Relative\n Angles");
+		pixelPanel = new SelectedPixelPaneController("Selected\n  Point",this);
 		outOfRangePanel = new SettingsPaneController("Settings",this);
 		verticalAnglePanel = new VerticalAngleSelectionPaneController("V_Elevate",hwController);
 		horizontalAnglePanel = new HorizontalAngleSelectionPaneController("H_Rotate",hwController);
@@ -158,6 +155,10 @@ public class MainGraphicInterfaceController {
 		return this.previousSelectedPixel;
 	}
 	
+	public void setPreviousSelectedPixel(XYZpoint point){
+		this.previousSelectedPixel=point;
+	}
+	
 	private void createKinectImageView(){
 		
 		kinectImageView = new ImageView(kinectImage);
@@ -169,16 +170,16 @@ public class MainGraphicInterfaceController {
 		kinectImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent e) {
             	try {
-            		swapSelectedPixel();
+            		orderSelectedPixel();
             		getAllInfoAboutXYCartesianSelectedPoint(e); 
-            		updateDisplayPanels(e);
-            		/*
+            		updateDisplayPanels();
+            		///*
             		if (lastSelectedPixel != null) {	
             			System.out.println("Ultimo: "+lastSelectedPixel.getXlength()
             			+" "+lastSelectedPixel.getYlength()
             			+" "+lastSelectedPixel.getZlength());
             		}
-            		*/	
+            		//*/	
             	} catch (Exception ex){
             		System.out.println("Modo Test - Funcion deshabilitada");
             	}
@@ -189,7 +190,7 @@ public class MainGraphicInterfaceController {
             	if (dynamicMousePointerSelection){
 	            	try {
 	            		getAllInfoAboutXYCartesianSelectedPoint(e); 
-	            		updateDisplayPanels(e);
+	            		updateDisplayPanels();
 	            	} catch (Exception ex){
 	            		System.out.println("Modo Test - Funcion deshabilitada");
 	            	}
@@ -198,8 +199,8 @@ public class MainGraphicInterfaceController {
         });
 	}
 	
-	private void updateDisplayPanels(MouseEvent e) {
-		pixelPanel.setXYZvalues(lastSelectedPixel,selectedColorPoint);
+	public void updateDisplayPanels() {
+		pixelPanel.setXYZvalues(lastSelectedPixel,lastSelectedPixel.getColorString());
     	angleValuesPanel.setAnglesValues(lastSelectedPixel.getAnglesCalculator());
 	}
 	
@@ -210,7 +211,7 @@ public class MainGraphicInterfaceController {
     	//System.out.println(e.getY());
     	selectedZPoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY());
     	selectedColorPoint = imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY());
-    	lastSelectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedZPoint);
+    	lastSelectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedZPoint,selectedColorPoint);
 	}
 
 	private AnchorPane createAnchorPane(){
@@ -280,16 +281,26 @@ public class MainGraphicInterfaceController {
 		kinectAnglePositionPanel.setHVvalues(hwController.getRotationAngle(),hwController.getElevationAngle());
 	}
 	
-	private void swapSelectedPixel() {
+	public void orderSelectedPixel() {
 	
 		previousSelectedPixel=lastSelectedPixel;
+	//	/*
 		if (previousSelectedPixel != null) {		
-			/*
+			
 			System.out.println("Previo: "+previousSelectedPixel.getXlength()
 			+" "+previousSelectedPixel.getYlength()
 			+" "+previousSelectedPixel.getZlength()); 
-			*/
-		}		
+			
+		} else {
+			System.out.println("Previo: null");
+		}	
+	//	*/
+	}
+	
+	public void swapSelectedPixel() {
+		XYZpoint swap=previousSelectedPixel;
+		previousSelectedPixel=lastSelectedPixel;
+		lastSelectedPixel=swap;
 	}
 	
 	public HardwareController getHardwareController(){
