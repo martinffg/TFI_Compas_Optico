@@ -1,7 +1,6 @@
-package untref_tfi.controller;
+package untref_tfi.domain;
 
 import untref_tfi.controller.kinect.KinectPixelLengthController;
-import untref_tfi.domain.AnglesCalculator;
 
 public class XYZpoint {
 	
@@ -17,10 +16,9 @@ public class XYZpoint {
 		this.xValue=xPos;
 		this.yValue=yPos;
 		this.zLength=zPos;
-		KinectPixelLengthController xLengthController = new KinectPixelLengthController(zPos,xPos);
-		this.xLength=xLengthController.getLengthOfPixelsCountedInMetters();
-		KinectPixelLengthController yLengthController = new KinectPixelLengthController(zPos,yPos);
-		this.yLength=yLengthController.getLengthOfPixelsCountedInMetters();	
+		KinectPixelLengthController pointLengthController = new KinectPixelLengthController(xPos,yPos,zPos);
+		this.xLength=pointLengthController.getXLengthOfPixelsCountedInMetters();
+		this.yLength=pointLengthController.getYLengthOfPixelsCountedInMetters();	
 		this.angCalculator = new AnglesCalculator(this);
 		this.colorString=color;
 	}

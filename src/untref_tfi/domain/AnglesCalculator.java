@@ -1,7 +1,5 @@
 package untref_tfi.domain;
 
-import untref_tfi.controller.XYZpoint;
-
 public class AnglesCalculator {
 	
 	private XYZpoint pointXYZ;

@@ -24,11 +24,13 @@ public class HorizontalAngleSelectionPaneController {
 	private TextField angleValue;
 	private Double angleTarget;
 	private HardwareController hwController=null;
+	private double oneStepAngle = 0.0;
 	
 	public HorizontalAngleSelectionPaneController(String paneName,HardwareController hwController) {
 		
 		this.hwController=hwController;
 		angleTarget=0.0;
+		oneStepAngle = hwController.getHorizontalCtrl().getOneStepDegree();
 		
 		Label title = new Label(paneName);
 		title.setFont(Font.font ("Verdana", 16));
@@ -52,14 +54,14 @@ public class HorizontalAngleSelectionPaneController {
 		Button plusButton = new Button("+");
 		plusButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 								            public void handle(MouseEvent e) {
-								            	hwController.moveArduinoController(1.8);
+								            	hwController.moveArduinoController(oneStepAngle);
 								            }	
 							        });
 		
 		Button minusButton = new Button("-");
 		minusButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 								            public void handle(MouseEvent e) {
-								            	hwController.moveArduinoController(-1.8);
+								            	hwController.moveArduinoController(-oneStepAngle);
 								            }	
 							        });
 				
@@ -74,7 +76,7 @@ public class HorizontalAngleSelectionPaneController {
 		sliderAnguloHorizontal.setMajorTickUnit(45.0);
 		sliderAnguloHorizontal.setShowTickLabels(true);
 		sliderAnguloHorizontal.setShowTickMarks(true);
-		sliderAnguloHorizontal.setBlockIncrement(1.8);
+		sliderAnguloHorizontal.setBlockIncrement(oneStepAngle);
 		sliderAnguloHorizontal.setSnapToTicks(true);
 		sliderAnguloHorizontal.setMinorTickCount(18);
 		sliderAnguloHorizontal.setOrientation(Orientation.HORIZONTAL);

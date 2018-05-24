@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import untref_tfi.controller.hardware.HardwareController;
+import untref_tfi.domain.XYZpoint;
 
 public class SelectedPixelPaneController {
 
@@ -206,8 +207,8 @@ public class SelectedPixelPaneController {
 	
 	private void setBackToStartPoint(){
 		hwController.setElevationAngle(0);
-		double correctionAngel = (-1)*hwController.getRotationAngle();
-		hwController.moveArduinoController(correctionAngel);
+		double correctionAngle = (-1)*hwController.getRotationAngle();
+		hwController.moveArduinoController(correctionAngle);
 		hwController.setRotationAngle(hwController.getRotationAngle());
 	}
 	

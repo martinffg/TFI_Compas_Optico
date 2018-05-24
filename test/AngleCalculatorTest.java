@@ -1,8 +1,8 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import untref_tfi.controller.XYZpoint;
 import untref_tfi.domain.AnglesCalculator;
+import untref_tfi.domain.XYZpoint;
 
 public class AngleCalculatorTest {
 

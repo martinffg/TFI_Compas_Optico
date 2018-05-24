@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import untref_tfi.controller.hardware.HardwareController;
+import untref_tfi.domain.XYZpoint;
 
 public class MainGraphicInterfaceController {
 	

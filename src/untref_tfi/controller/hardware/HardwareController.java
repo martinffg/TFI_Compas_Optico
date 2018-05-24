@@ -37,7 +37,7 @@ public class HardwareController {
 	}
 	
 	private int stepsCalculator(Double angle){
-		return (int)Math.round(angle / 1.8);
+		return (int)Math.round(angle / horizontalCtrl.getOneStepDegree());
 	}
 	
 	public int getElevationAngle(){
@@ -56,6 +56,10 @@ public class HardwareController {
 	public void setRotationAngle(double rotation){
 		this.rotationAngle+=rotation;
 		mgic.updateSensorPositionPanel();
+	}
+	
+	public HorizontalAngleRotationController getHorizontalCtrl() {
+		return horizontalCtrl;
 	}
 	
 	public Kinect getKinect(){
