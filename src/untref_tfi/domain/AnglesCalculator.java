@@ -58,6 +58,7 @@ public class AnglesCalculator {
 	    } else {
 	    	calculateThetaOnXYaxes(x,y);
 	    }	
+	    System.out.println(theta);
 	}
 	
 	private int delta(int x,int y){
@@ -115,11 +116,12 @@ public class AnglesCalculator {
 		double x = pointXYZ.getXlength();
 	    
 	    if (z>0.0){
-	    	this.phi=Math.toDegrees(Math.atan((double)x/z));
+	    	this.phi=Math.toDegrees(Math.atan(x/z));
 	    } else {
 	    	this.phi=999;
 			this.isPhiCalculable=false;
 	    }	
+	    System.out.println(phi);
 	}
 	
 	private void calculateGamma(){
@@ -127,10 +129,11 @@ public class AnglesCalculator {
 		double y = pointXYZ.getYlength();
 	    
 	    if (z>0.0){
-	    	this.gamma=Math.toDegrees(Math.atan((double)y/z));
+	    	this.gamma=Math.toDegrees(Math.atan(y/z));
 	    } else {
 	    	this.gamma=999;
 			this.isGammaCalculable=false;
 	    }	
+	    System.out.println(gamma);
 	}
 }

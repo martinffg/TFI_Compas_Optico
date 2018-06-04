@@ -5,6 +5,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import java.awt.Color;
 import untref_tfi.controller.hardware.HardwareController;
+import untref_tfi.controller.kinect.Kinect;
 import untref_tfi.controller.kinect.KinectSensorDataCollector;
 
 public class ImageCaptureController {
@@ -93,7 +94,7 @@ public class ImageCaptureController {
 
 	private boolean validateXYinserted(int x, int y) {
 		return (x>=0)&&(y>=0)
-				&&(x<MainGraphicInterfaceController.maxWidth)
-				&&(y<MainGraphicInterfaceController.maxLength);
+				&&(x<Kinect.screenWidth)
+				&&(y<Kinect.screenHeight);
 	}	
 }

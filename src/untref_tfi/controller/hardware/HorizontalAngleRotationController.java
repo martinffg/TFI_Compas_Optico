@@ -9,11 +9,11 @@ public class HorizontalAngleRotationController {
 	
 	private final int defaultMotorFullStepCount=200;        // cantidad de pasos default del motor
 	private final double defaultOneStepDegree = 1.8; // medida en grados default para 1 paso del motor
-	private final int microSteppingDivisor= 4;       // divisor de 1 paso - microstepping
+	private final int microSteppingDivisor= 16;       // divisor de 1 paso - microstepping
 	private final int motorFullStepCount = defaultMotorFullStepCount * microSteppingDivisor;  // cantidad de pasos totales con microstepping
 	private final double oneStepDegree = (double)defaultOneStepDegree / microSteppingDivisor; // cada paso es 1/microSteppingDivisor del defaultOneStepDegree grados del motor
 	private final int motorHalfStepCount = motorFullStepCount / 2;  // cantidad de pasos para 180°
-	private final int timeWaitThread=10; // tiempo de espera para lanzar cada iteracion de movimiento.
+	private final int timeWaitThread=5; // tiempo de espera para lanzar cada iteracion de movimiento.
 	
 	private PanamaHitek_Arduino arduino;
 
@@ -75,7 +75,7 @@ public class HorizontalAngleRotationController {
 	}
 	
 	private boolean stepsValidator(int steps) {
-		return (steps>0)&&(steps<=motorHalfStepCount);  // controlo que los pasos sean de 1 a motorHalfStepCount cubriendo abanico de 0° a 180° de giro
+		return (steps>0)&&(steps<=motorHalfStepCount+microSteppingDivisor);  // controlo que los pasos sean de 1 a motorHalfStepCount cubriendo abanico de 0° a 180° de giro
 	}
 
 	public int getMotorFullStepCount() {

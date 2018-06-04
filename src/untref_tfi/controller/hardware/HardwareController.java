@@ -14,17 +14,21 @@ public class HardwareController {
 	private MainGraphicInterfaceController mgic=null;
 	private Kinect kinect=null;
 	private KinectSensorDataCollector data=null;
-	
+				
 	public HardwareController (MainGraphicInterfaceController maingic,boolean isTestMode){	
 		this.mgic=maingic;
 		this.horizontalCtrl = new HorizontalAngleRotationController();
 		this.startKinectWork(isTestMode);
 	}
 	
-	public void moveArduinoController(Double angleSelected){
-		int stepsSelected = stepsCalculator(angleSelected);
+	public void moveArduinoController(double angleSelected){
+		double fixedAngleSelected=fixAngleSelectedHorizontalDesviation(angleSelected);
+
+		int stepsSelected = stepsCalculator(fixedAngleSelected);
 		
 		System.out.println("Pasos a mover: " + stepsSelected);
+		System.out.println("Angulo sin fix a mover: " + angleSelected);
+		System.out.println("Angulo fixeado a mover: " + fixedAngleSelected);
 		
 		if (stepsSelected>=0){
 			horizontalCtrl.movingForwardArduino(stepsSelected);
@@ -36,7 +40,7 @@ public class HardwareController {
 		
 	}
 	
-	private int stepsCalculator(Double angle){
+	private int stepsCalculator(double angle){
 		return (int)Math.round(angle / horizontalCtrl.getOneStepDegree());
 	}
 	
@@ -45,8 +49,10 @@ public class HardwareController {
 	}
 	
 	public void setElevationAngle(int elevation){
+
 		this.elevationAngle=elevation;
 		mgic.updateSensorPositionPanel();
+	
 	}
 	
 	public double getRotationAngle(){
@@ -117,5 +123,21 @@ public class HardwareController {
 		Color colorAwt = new Color((float)colorJFX.getRed(),(float)colorJFX.getGreen(),(float)colorJFX.getBlue(),(float)colorJFX.getOpacity());
 		
 		return colorAwt;
+	}
+	
+	private double fixAngleSelectedHorizontalDesviation(double angleSelected){
+		
+		double fixedAngle=0.0;
+		
+		if (Math.abs(angleSelected)<=18.0) {
+			// y = 0,0855x + 0,2162		R² = 0,9957		Correccion Angular horizontal de desvio en cono de 28,5°
+			fixedAngle=Math.abs(angleSelected)+(0.0855*Math.abs(angleSelected)+0.2162);
+		} else {
+			fixedAngle=Math.abs(angleSelected)+1.8;
+		}
+		if (angleSelected<0.0) {
+			fixedAngle=(-1)*fixedAngle;
+		}
+		return fixedAngle;
 	}
 }

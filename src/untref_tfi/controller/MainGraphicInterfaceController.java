@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import untref_tfi.controller.hardware.HardwareController;
+import untref_tfi.controller.kinect.Kinect;
 import untref_tfi.domain.XYZpoint;
 
 public class MainGraphicInterfaceController {
@@ -34,13 +35,11 @@ public class MainGraphicInterfaceController {
 	private AnglePaneController angleValuesPanel;
 	private KinectAnglePositionPaneController kinectAnglePositionPanel;
 	private Scene mainScene;
-	public static final int maxWidth=640;
-	public static final int maxLength=480;
-	private static final int zeroXref=maxWidth/2;  // 0Xref: 320
-	private static final int zeroYref=maxLength/2; // 0Yref: 240
+	private static final int zeroXref=Kinect.screenWidth/2;  // 0Xref: 320
+	private static final int zeroYref=Kinect.screenHeight/2; // 0Yref: 240
 	private int selectedXpoint=zeroXref;
 	private int selectedYpoint=zeroYref;
-	private double selectedZPoint=0.0;
+	private double selectedDepthPoint=0.0;
 	private String selectedColorPoint="";
 	private XYZpoint lastSelectedPixel=null;
 	private XYZpoint previousSelectedPixel=null;
@@ -164,8 +163,8 @@ public class MainGraphicInterfaceController {
 		
 		kinectImageView = new ImageView(kinectImage);
 		kinectImageView.setPreserveRatio(true);
-		kinectImageView.setFitHeight(480);
-		kinectImageView.setFitWidth(640);
+		kinectImageView.setFitHeight(Kinect.screenHeight);
+		kinectImageView.setFitWidth(Kinect.screenWidth);
 		kinectImageView.boundsInLocalProperty();
 		kinectImageView.setPickOnBounds(true);
 		kinectImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -210,9 +209,9 @@ public class MainGraphicInterfaceController {
     	selectedYpoint=(int) (e.getY() * -1) + zeroYref;	// Convert Y to cartesian axe
     	//System.out.println(e.getX());
     	//System.out.println(e.getY());
-    	selectedZPoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY());
+    	selectedDepthPoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY());
     	selectedColorPoint = imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY());
-    	lastSelectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedZPoint,selectedColorPoint);
+    	lastSelectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedDepthPoint,selectedColorPoint);
 	}
 
 	private AnchorPane createAnchorPane(){

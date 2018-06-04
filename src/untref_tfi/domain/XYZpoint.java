@@ -1,24 +1,27 @@
 package untref_tfi.domain;
 
-import untref_tfi.controller.kinect.KinectPixelLengthController;
+import untref_tfi.controller.kinect.KinectPointComponentsLengthController;
 
 public class XYZpoint {
 	
 	private int xValue=0;
-	private double xLength=0.0;
 	private int yValue=0;
+	private double xLength=0.0;
 	private double yLength=0.0;
 	private double zLength=0.0;
+	private double kinectDepth=0.0;
 	private AnglesCalculator angCalculator=null;
 	private String colorString="";
 	
-	public XYZpoint(Integer xPos, Integer yPos, Double zPos,String color){
+	public XYZpoint(Integer xPos, Integer yPos, Double kinectDepthMeassure,String color){
 		this.xValue=xPos;
 		this.yValue=yPos;
-		this.zLength=zPos;
-		KinectPixelLengthController pointLengthController = new KinectPixelLengthController(xPos,yPos,zPos);
-		this.xLength=pointLengthController.getXLengthOfPixelsCountedInMetters();
-		this.yLength=pointLengthController.getYLengthOfPixelsCountedInMetters();	
+		this.kinectDepth=kinectDepthMeassure;
+		
+		KinectPointComponentsLengthController pointLengthController = new KinectPointComponentsLengthController(xPos,yPos,kinectDepthMeassure);
+		this.xLength=pointLengthController.getXlengthInMeters();
+		this.yLength=pointLengthController.getYlengthInMeters();
+		this.zLength=pointLengthController.getZlengthInMeters();
 		this.angCalculator = new AnglesCalculator(this);
 		this.colorString=color;
 	}
@@ -29,6 +32,10 @@ public class XYZpoint {
 
 	public int getYvalue() {
 		return yValue;
+	}
+	
+	public double getKinectDepth(){
+		return this.kinectDepth;
 	}
 	
 	public double getXlength() {

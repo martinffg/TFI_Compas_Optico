@@ -16,9 +16,7 @@ public class KinectSensorDataCollector {
 	private BufferedImage imagenColor;
 	private BufferedImage imagenColorBackup;
 	private BufferedImage imagenProfundidad;
-	public static final float maxDistanceMMAllowed = 36000;//3,60 m
-	public static final float minDistanceMMAllowed = 8000;// 0,80 m
-		
+			
 	public KinectSensorDataCollector(Kinect kinect,Color colorOOR,int elevation) {
 		this.elevationAngle=elevation;
 		if (kinect==null) {
@@ -106,8 +104,8 @@ public class KinectSensorDataCollector {
 		matrizProfundidad = new double[this.getWidth()][this.getHeight()];		
 		imagenProfundidad = new BufferedImage(this.getWidth(),this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		int iEspejado=0;
-		float fixedMax=maxDistanceMMAllowed/10000;  // paso a metros la medida
-		float fixedMin=minDistanceMMAllowed/10000;  // paso a metros la medida
+		float fixedMax=Kinect.maxDistanceMMAllowed/10000;  // paso a metros la medida
+		float fixedMin=Kinect.minDistanceMMAllowed/10000;  // paso a metros la medida
 		int k=0;
 		int height=0;
 		Color color=null;
@@ -119,9 +117,9 @@ public class KinectSensorDataCollector {
 				height = this.getWidth() * j;
 				k = i + height;
 				iEspejado=this.getWidth()-1-i; // como la captura es espejada, se requiere espejar en eje y
-				// Aqui trato el problema del error de lectura de profundidad con certeza del 0,9785
+				// Aqui trato el problema del error de lectura de profundidad
 				unfixedDepth=(double)depth[k]/10000;  // guardo en metros la profundidad sensada y sin corregir
-				KinectDepthMeassureFixerController meassureFixer = new KinectDepthMeassureFixerController(unfixedDepth);
+				KinectDepthMeassureFixerController meassureFixer = new KinectDepthMeassureFixerController(unfixedDepth,iEspejado, j);
 				fixedDepth=meassureFixer.getRealKinectDepthMeassure(); 
 				color = getColorPorProfundidad(iEspejado,j,fixedDepth, fixedMax, fixedMin);
 				this.matrizProfundidad[iEspejado][j] = fixedDepth;
