@@ -60,6 +60,7 @@ public class KinectPointComponentsLengthController {
 		double divisor=Math.sqrt(1+xComponentPow2+yComponentPow2);
 		
 		distanceZN=pointDepth/divisor;		
+		System.out.println("DistanceZN: "+distanceZN);
 		
 		return distanceZN;
 	}

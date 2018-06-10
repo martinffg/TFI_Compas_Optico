@@ -17,6 +17,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import untref_tfi.controller.hardware.HardwareController;
+import untref_tfi.controller.kinect.Kinect;
 
 public class VerticalAngleSelectionPaneController {
 
@@ -40,7 +41,7 @@ public class VerticalAngleSelectionPaneController {
 		angleValue.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
 		angleValue.setAlignment(Pos.CENTER);
 		
-		Slider sliderAnguloVertical = new Slider(-27, 27, 0);
+		Slider sliderAnguloVertical = new Slider(-Kinect.kinectVerticalTiltAbsValue, Kinect.kinectVerticalTiltAbsValue, 0);
 		sliderAnguloVertical.setMajorTickUnit(3);
 		sliderAnguloVertical.setShowTickLabels(true);
 		sliderAnguloVertical.setShowTickMarks(true);
@@ -71,7 +72,7 @@ public class VerticalAngleSelectionPaneController {
 		Button plusButton = new Button("+");
 		plusButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 								            public void handle(MouseEvent e) {
-								            	if (hwController.getElevationAngle()<27){
+								            	if (hwController.getElevationAngle()<Kinect.kinectVerticalTiltAbsValue){
 								            		hwController.setElevationAngle(hwController.getElevationAngle()+1);
 								        			angleValue.setText(String.valueOf(hwController.getElevationAngle())+"°");
 								            	}
@@ -85,7 +86,7 @@ public class VerticalAngleSelectionPaneController {
 		minusButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 								            public void handle(MouseEvent e) {
 								            	
-								            	if (hwController.getElevationAngle()>-27){
+								            	if (hwController.getElevationAngle()>-Kinect.kinectVerticalTiltAbsValue){
 								            		hwController.setElevationAngle(hwController.getElevationAngle()-1);
 								        			angleValue.setText(String.valueOf(hwController.getElevationAngle())+"°");
 								            	}

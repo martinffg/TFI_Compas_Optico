@@ -37,6 +37,8 @@ public class HorizontalAngleRotationController {
 		if (stepsValidator(steps)) {		
 			System.out.println("Pasos enviados a Arduino: "+steps);
 			moveStepper(steps, mensaje); 
+		}else {
+			System.out.println("Error Exceso Pasos enviados a Arduino: "+steps);
 		}
 	}
 
@@ -75,7 +77,7 @@ public class HorizontalAngleRotationController {
 	}
 	
 	private boolean stepsValidator(int steps) {
-		return (steps>0)&&(steps<=motorHalfStepCount+microSteppingDivisor);  // controlo que los pasos sean de 1 a motorHalfStepCount cubriendo abanico de 0° a 180° de giro
+		return (steps>0)&&(steps<=motorHalfStepCount);  // controlo que los pasos sean de 1 a motorHalfStepCount+Tolerancia cubriendo abanico de 0° a 180° de giro
 	}
 
 	public int getMotorFullStepCount() {

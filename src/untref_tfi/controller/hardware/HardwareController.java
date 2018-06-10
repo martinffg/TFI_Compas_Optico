@@ -22,22 +22,29 @@ public class HardwareController {
 	}
 	
 	public void moveArduinoController(double angleSelected){
-		double fixedAngleSelected=fixAngleSelectedHorizontalDesviation(angleSelected);
+		double horizontalFixedAngleSelected=fixAngleSelectedHorizontalDesviation(angleSelected);
+		
+		double targetAngleSelected=angleSelected+this.getRotationAngle();
 
-		int stepsSelected = stepsCalculator(fixedAngleSelected);
+		int stepsSelected = stepsCalculator(horizontalFixedAngleSelected);
 		
 		System.out.println("Pasos a mover: " + stepsSelected);
 		System.out.println("Angulo sin fix a mover: " + angleSelected);
-		System.out.println("Angulo fixeado a mover: " + fixedAngleSelected);
+		System.out.println("Angulo fixeado a mover: " + horizontalFixedAngleSelected);
 		
-		if (stepsSelected>=0){
-			horizontalCtrl.movingForwardArduino(stepsSelected);
-		} else {
-			horizontalCtrl.movingBackwardArduino(Math.abs(stepsSelected));
+		if (Math.abs(targetAngleSelected)<=180){
+			
+			if (stepsSelected>=0){
+				horizontalCtrl.movingForwardArduino(stepsSelected);
+			} else {
+				horizontalCtrl.movingBackwardArduino(Math.abs(stepsSelected));
+			}
+			
+			setRotationAngle(angleSelected);
+		
+		}else {
+			System.out.println("El ángulo acumulado es > +/-180 grados.");
 		}
-		
-		setRotationAngle(angleSelected);
-		
 	}
 	
 	private int stepsCalculator(double angle){
@@ -128,16 +135,33 @@ public class HardwareController {
 	private double fixAngleSelectedHorizontalDesviation(double angleSelected){
 		
 		double fixedAngle=0.0;
+		// formula inicial
 		
 		if (Math.abs(angleSelected)<=18.0) {
 			// y = 0,0855x + 0,2162		R² = 0,9957		Correccion Angular horizontal de desvio en cono de 28,5°
 			fixedAngle=Math.abs(angleSelected)+(0.0855*Math.abs(angleSelected)+0.2162);
-		} else {
+		}else{
 			fixedAngle=Math.abs(angleSelected)+1.8;
+		}
+		
+		if (Math.abs(angleSelected)>22.0) {
+			fixedAngle=Math.abs(angleSelected)+2.5;
+		}
+		if (Math.abs(angleSelected)>=28.5) {
+			fixedAngle=Math.abs(angleSelected)+0.9;
+		}
+		if (Math.abs(angleSelected)>=179.1) {
+			fixedAngle=Math.abs(angleSelected);  // Cerca de 180° el error asciende a +/-1.8 grados
 		}
 		if (angleSelected<0.0) {
 			fixedAngle=(-1)*fixedAngle;
 		}
 		return fixedAngle;
 	}
+	
+	public void cleanCounters(){
+		this.elevationAngle=0;
+		this.rotationAngle=0.0;
+	}
+	
 }

@@ -6,7 +6,7 @@ public class Kinect extends J4KSDK {
 	
 	public static final int screenWidth=640;
 	public static final int screenHeight=480;
-	public static final float kinectVerticalTiltAbsValue = 27; 
+	public static final int kinectVerticalTiltAbsValue = 27; 
 	public static final double kinectFullVerticalViewingAngle=43;
 	public static final double kinectFullHorizontalViewingAngle=57;
 	public static final float maxDistanceMMAllowed = 37500;//3,60 m

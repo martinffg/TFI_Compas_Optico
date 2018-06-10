@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import untref_tfi.controller.hardware.HardwareController;
+import untref_tfi.controller.kinect.Kinect;
 import untref_tfi.domain.XYZpoint;
 
 public class SelectedPixelPaneController {
@@ -35,10 +36,10 @@ public class SelectedPixelPaneController {
 		this.hwController=mgic.getHardwareController();
 		
 		Label title = new Label(paneName);
-		title.setFont(Font.font ("Verdana", 15));
+		title.setFont(Font.font ("Verdana", 20));
 		title.setAlignment(Pos.CENTER);
 		title.setWrapText(true);
-		title.setPrefSize(120,40);
+		title.setPrefSize(120,25);
 		title.setTextFill(Paint.valueOf("#29446B"));
 		
 		Label xLabel = new Label("x");
@@ -162,7 +163,7 @@ public class SelectedPixelPaneController {
 		panel = new VBox();
 		panel.getChildren().addAll(title, posRefPane, posValPane,xLengthLabel,xLength,yLengthLabel,yLength,zLengthLabel,zLength,depthLabel,depthTf,xyColorLabel,xyColor,focusButton,backToPreviousPointButton,backToStartButton);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(120, 500);
+		panel.setMinSize(120, 460);
 		panel.setAlignment(Pos.CENTER);
 		panel.setSpacing(3.0);
 		panel.setPadding(new Insets(2,2,2,2));
@@ -208,7 +209,7 @@ public class SelectedPixelPaneController {
 			int relativeElevation = (int) Math.round(focusedPoint.getAnglesCalculator().getGamma());
 			int absoluteElevation = hwController.getElevationAngle()+relativeElevation;
 			double relativeRotation = focusedPoint.getAnglesCalculator().getPhi();
-			if (Math.abs(absoluteElevation)<=27) {  // HW limit for kinect Elevetion degree
+			if (Math.abs(absoluteElevation)<=Kinect.kinectVerticalTiltAbsValue) {  // HW limit for kinect Elevetion degree
 				hwController.moveArduinoController(relativeRotation);
 				hwController.setElevationAngle(absoluteElevation);			
 			} else {
