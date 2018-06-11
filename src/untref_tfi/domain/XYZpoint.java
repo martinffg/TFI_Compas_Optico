@@ -1,5 +1,6 @@
 package untref_tfi.domain;
 
+import untref_tfi.controller.MainGraphicInterfaceController;
 import untref_tfi.controller.kinect.KinectPointComponentsLengthController;
 
 public class XYZpoint {
@@ -12,13 +13,16 @@ public class XYZpoint {
 	private double kinectDepth=0.0;
 	private AnglesCalculator angCalculator=null;
 	private String colorString="";
-	
-	public XYZpoint(Integer xPos, Integer yPos, Double kinectDepthMeassure,String color){
+	private MainGraphicInterfaceController mgic=null;
+
+		public XYZpoint(Integer xPos, Integer yPos, Double kinectDepthMeassure,String color,MainGraphicInterfaceController mgictrl) {
+				
+		this.mgic=mgictrl;
 		this.xValue=xPos;
 		this.yValue=yPos;
 		this.kinectDepth=kinectDepthMeassure;
 		
-		KinectPointComponentsLengthController pointLengthController = new KinectPointComponentsLengthController(xPos,yPos,kinectDepthMeassure);
+		KinectPointComponentsLengthController pointLengthController = new KinectPointComponentsLengthController(xPos,yPos,kinectDepthMeassure,mgic);
 		this.xLength=pointLengthController.getXlengthInMeters();
 		this.yLength=pointLengthController.getYlengthInMeters();
 		this.zLength=pointLengthController.getZlengthInMeters();

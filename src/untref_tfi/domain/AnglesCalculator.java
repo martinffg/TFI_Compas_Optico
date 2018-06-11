@@ -58,7 +58,6 @@ public class AnglesCalculator {
 	    } else {
 	    	calculateThetaOnXYaxes(x,y);
 	    }	
-	    System.out.println(theta);
 	}
 	
 	private int delta(int x,int y){
@@ -121,7 +120,6 @@ public class AnglesCalculator {
 	    	this.phi=999;
 			this.isPhiCalculable=false;
 	    }	
-	    System.out.println(phi);
 	}
 	
 	private void calculateGamma(){
@@ -134,6 +132,5 @@ public class AnglesCalculator {
 	    	this.gamma=999;
 			this.isGammaCalculable=false;
 	    }	
-	    System.out.println(gamma);
 	}
 }

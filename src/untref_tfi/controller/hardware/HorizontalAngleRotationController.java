@@ -4,7 +4,6 @@ import com.panamahitek.ArduinoException;
 import com.panamahitek.PanamaHitek_Arduino;
 import jssc.SerialPortException;
 
-
 public class HorizontalAngleRotationController {
 	
 	private final int defaultMotorFullStepCount=200;        // cantidad de pasos default del motor
@@ -26,7 +25,6 @@ public class HorizontalAngleRotationController {
 			Thread.sleep(4000);  			// Tiempo de espera para que Arduino escuche comandos al abrir puerto COM3
 	    	
 	    } catch (ArduinoException | InterruptedException e){    	
-	    	//e.printStackTrace();
 	    	System.out.println("Error de conexion contra HW Arduino durante inicializacion");
 	    } 
 	    
@@ -35,18 +33,13 @@ public class HorizontalAngleRotationController {
 	public void movingForwardArduino(int steps){
 		String mensaje = "1";
 		if (stepsValidator(steps)) {		
-			System.out.println("Pasos enviados a Arduino: "+steps);
 			moveStepper(steps, mensaje); 
-		}else {
-			System.out.println("Error Exceso Pasos enviados a Arduino: "+steps);
 		}
 	}
 
 	public void movingBackwardArduino(int steps){
 		String mensaje = "0";
 		if (stepsValidator(steps)) {	
-			System.out.println("Pasos enviados a Arduino: "+steps);
-			System.out.println("Mensaje enviado a Arduino: "+mensaje);
 			moveStepper(steps, mensaje); 
 		}
 	}

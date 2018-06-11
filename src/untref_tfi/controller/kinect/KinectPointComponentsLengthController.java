@@ -1,5 +1,7 @@
 package untref_tfi.controller.kinect;
 
+import untref_tfi.controller.MainGraphicInterfaceController;
+
 public class KinectPointComponentsLengthController {
 	
 	private static final double kinectHalfVerticalViewingAngle=Kinect.kinectFullVerticalViewingAngle/2;
@@ -11,15 +13,19 @@ public class KinectPointComponentsLengthController {
 	private double distanceZn=0.0;
 	private int pixelXCount=0;
 	private int pixelYCount=0;
-	
-	
-	public KinectPointComponentsLengthController(int pixelsXCounted,int pixelsYCounted,double pointDepth){
+	private MainGraphicInterfaceController mgic=null;
+
+	public KinectPointComponentsLengthController(int pixelsXCounted,int pixelsYCounted,
+				double pointDepth,MainGraphicInterfaceController mgictrl) {
+			
+		this.mgic=mgictrl;
+			
 		if (isDistanceOnCaptureAllowedRange(pointDepth)) {
 			this.distanceZn = calculateOrtogonalDistanceZn(pixelsXCounted,pixelsYCounted,pointDepth);
 			this.pixelXCount=pixelsXCounted;
 			this.pixelYCount=pixelsYCounted;
 		} else {
-			System.out.println("Punto fuera de rango de captura.");
+			mgic.updateSystemMessagesPanel("Punto fuera de rango de captura.");
 		}
 	}
 	
@@ -60,8 +66,7 @@ public class KinectPointComponentsLengthController {
 		double divisor=Math.sqrt(1+xComponentPow2+yComponentPow2);
 		
 		distanceZN=pointDepth/divisor;		
-		System.out.println("DistanceZN: "+distanceZN);
-		
+				
 		return distanceZN;
 	}
 }

@@ -99,7 +99,6 @@ public class HorizontalAngleSelectionPaneController {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
         			angleValue.setText(String.valueOf(String.format("%.1f", new_val)+"°"));
         			angleTarget = new_val.doubleValue();
-        			//System.out.println("Angulo Objetivo Actual:" +angleTarget);
             }
         });
 		
@@ -118,6 +117,5 @@ public class HorizontalAngleSelectionPaneController {
 	
 	private void applyHorizontalMoveButton() {
 		hwController.moveArduinoController(angleTarget);
-		System.out.println("Angulo a mover: "+angleTarget);
 	}
 }

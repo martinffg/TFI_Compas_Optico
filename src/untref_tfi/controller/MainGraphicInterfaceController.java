@@ -34,7 +34,7 @@ public class MainGraphicInterfaceController {
 	private HorizontalAngleSelectionPaneController horizontalAnglePanel;
 	private AnglePaneController angleValuesPanel;
 	private KinectAnglePositionPaneController kinectAnglePositionPanel;
-	private SystemScreemMessagesPaneController systemScreenMessagesPanel;
+	private SystemScreenMessagesPaneController systemScreenMessagesPanel;
 	private Scene mainScene;
 	private static final int zeroXref=Kinect.screenWidth/2;  // 0Xref: 320
 	private static final int zeroYref=Kinect.screenHeight/2; // 0Yref: 240
@@ -72,7 +72,7 @@ public class MainGraphicInterfaceController {
 		verticalAnglePanel = new VerticalAngleSelectionPaneController("V_Elevate",hwController);
 		horizontalAnglePanel = new HorizontalAngleSelectionPaneController("H_Rotate",hwController);
 		kinectAnglePositionPanel = new KinectAnglePositionPaneController("Sensor Position",this);
-		systemScreenMessagesPanel= new SystemScreemMessagesPaneController("Messages Panel",this);
+		systemScreenMessagesPanel= new SystemScreenMessagesPaneController("Messages Panel",this);
 	}
 	
 	public Scene getMainScene(){
@@ -175,15 +175,8 @@ public class MainGraphicInterfaceController {
             		orderSelectedPixel();
             		getAllInfoAboutXYCartesianSelectedPoint(e); 
             		updateDisplayPanels();
-            		///*
-            		if (lastSelectedPixel != null) {	
-            			System.out.println("Ultimo: "+lastSelectedPixel.getXlength()
-            			+" "+lastSelectedPixel.getYlength()
-            			+" "+lastSelectedPixel.getZlength());
-            		}
-            		//*/	
             	} catch (Exception ex){
-            		System.out.println("Modo Test - Funcion deshabilitada");
+            		System.out.println("Modo Test - Operaciones OnMouseClicked deshabilitadas");
             	}
             }	
         });
@@ -194,7 +187,7 @@ public class MainGraphicInterfaceController {
 	            		getAllInfoAboutXYCartesianSelectedPoint(e); 
 	            		updateDisplayPanels();
 	            	} catch (Exception ex){
-	            		System.out.println("Modo Test - Funcion deshabilitada");
+	            		System.out.println("Modo Test - Operaciones OnMouseClicked deshabilitadas");
 	            	}
             	}
             }	
@@ -207,13 +200,12 @@ public class MainGraphicInterfaceController {
 	}
 	
 	private void getAllInfoAboutXYCartesianSelectedPoint(MouseEvent e) {
+		
 		selectedXpoint=(int) (e.getX() -zeroXref);			// Convert X to cartesian axe
     	selectedYpoint=(int) (e.getY() * -1) + zeroYref;	// Convert Y to cartesian axe
-    	//System.out.println(e.getX());
-    	//System.out.println(e.getY());
     	selectedDepthPoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY());
     	selectedColorPoint = imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY());
-    	lastSelectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedDepthPoint,selectedColorPoint);
+    	lastSelectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedDepthPoint,selectedColorPoint,this);
 	}
 
 	private AnchorPane createAnchorPane(){
@@ -294,27 +286,16 @@ public class MainGraphicInterfaceController {
 	}
 	
 	public void updateSystemMessagesPanel(String message){
-		systemScreenMessagesPanel.setHVvalues(message);
+		systemScreenMessagesPanel.setMessage(message);
 	}
 	
 	public void cleanUpdateSystemMessagesPanel(){
-		systemScreenMessagesPanel.clearValues();
+		systemScreenMessagesPanel.clearMessage();
+		
 	}
 	
 	public void orderSelectedPixel() {
-	
 		previousSelectedPixel=lastSelectedPixel;
-
-		if (previousSelectedPixel != null) {		
-			
-			System.out.println("Previo: "+previousSelectedPixel.getXlength()
-			+" "+previousSelectedPixel.getYlength()
-			+" "+previousSelectedPixel.getZlength()); 
-			
-		} else {
-			System.out.println("Previo: null");
-		}	
-	
 	}
 	
 	public void swapSelectedPixel() {

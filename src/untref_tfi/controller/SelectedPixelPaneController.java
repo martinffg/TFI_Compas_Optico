@@ -213,10 +213,10 @@ public class SelectedPixelPaneController {
 				hwController.moveArduinoController(relativeRotation);
 				hwController.setElevationAngle(absoluteElevation);			
 			} else {
-				System.out.println("Punto no enfocable, fuera de rango de HW - Vertical Focus Out Of Range");
+				mgic.updateSystemMessagesPanel("Punto no enfocable, fuera de rango de HW - Vertical Focus Out Of Range");
 			}
 		} else {
-			System.out.println("Punto no enfocable, fuera de rango de HW - Vertical Focus Out Of Range");
+			mgic.updateSystemMessagesPanel("Punto no enfocable, fuera de rango de HW - Vertical Focus Out Of Range");
 		}
 	}
 	
@@ -237,13 +237,13 @@ public class SelectedPixelPaneController {
 			previousEstimatedPoint = new XYZpoint((-1)*lastFocusedPoint.getXvalue(),
 													(-1)*lastFocusedPoint.getYvalue(),
 													previousFocusedPoint.getZlength(),
-													previousFocusedPoint.getColorString());
+													previousFocusedPoint.getColorString(),mgic);
 			mgic.setPreviousSelectedPixel(previousEstimatedPoint);	
 			mgic.swapSelectedPixel();
 			setFocusOnIt();
 			mgic.updateDisplayPanels();
 		} else {
-			System.out.print("No es posible obtener punto previo");
+			mgic.updateSystemMessagesPanel("No es posible obtener punto previo");
 		}
 	}
 }

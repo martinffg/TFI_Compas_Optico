@@ -5,21 +5,21 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
-public class SystemScreemMessagesPaneController {
+public class SystemScreenMessagesPaneController {
 
 	private static final String EMPTY_VALUE = "";
 	private final VBox panel;
-	private final TextField messageBox;
+	private final TextArea messageBox;
 	private MainGraphicInterfaceController mgic=null;
 	
-	public SystemScreemMessagesPaneController(String paneName,MainGraphicInterfaceController mgictrl) {
+	public SystemScreenMessagesPaneController(String paneName,MainGraphicInterfaceController mgictrl) {
 		
 		this.mgic=mgictrl;
 		Label title = new Label(paneName);
@@ -44,11 +44,11 @@ public class SystemScreemMessagesPaneController {
 		headerPane.getChildren().addAll(title,cleanButton);
 		headerPane.setSpacing(2.0);
 		
-		messageBox = new TextField(EMPTY_VALUE);
+		messageBox = new TextArea(EMPTY_VALUE);
 		messageBox.setEditable(false);
 		messageBox.setPrefSize(220, 180);
-		messageBox.setStyle("-fx-text-fill: red; -fx-font-size: 10;");
-		messageBox.setAlignment(Pos.CENTER);
+		messageBox.setStyle("-fx-text-fill: red; -fx-font-size: 16;");
+		messageBox.setWrapText(true);
 		
 		panel = new VBox();
 		panel.getChildren().addAll(headerPane, messageBox);
@@ -63,15 +63,16 @@ public class SystemScreemMessagesPaneController {
 		return this.panel;
 	}
 
-	public boolean setedValues() {
+	public boolean setedMessage() {
 		return !EMPTY_VALUE.equals(messageBox.getText());
 	}
 	
-	public void setHVvalues(String message){
-		messageBox.setText(messageBox.getText()+"\n"+message);
+	public void setMessage(String message){
+		String previous=messageBox.getText();
+		messageBox.setText(previous+"\n"+message);
 	}
 
-	public void clearValues() {
+	public void clearMessage() {
 		messageBox.setText(EMPTY_VALUE);
 	}
 }

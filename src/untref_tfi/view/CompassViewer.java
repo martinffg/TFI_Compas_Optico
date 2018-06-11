@@ -11,17 +11,14 @@ public class CompassViewer extends Application{
 	
 	private Scene myScene;
 	private MainGraphicInterfaceController mainGIController;
-	private boolean isTestMode=false;
-	
+		
 	public CompassViewer(boolean isTest){
-		isTestMode=isTest;
-		//System.out.println("Cvw Testmode: "+isTestMode);
+		mainGIController = new MainGraphicInterfaceController(isTest);
 	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
-		mainGIController = new MainGraphicInterfaceController(isTestMode);
+				
 		myScene = mainGIController.getMainScene();		
 		primaryStage.setScene(myScene);
 		primaryStage.setTitle("Compas Optico");

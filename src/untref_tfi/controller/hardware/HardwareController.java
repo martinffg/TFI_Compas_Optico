@@ -15,8 +15,8 @@ public class HardwareController {
 	private Kinect kinect=null;
 	private KinectSensorDataCollector data=null;
 				
-	public HardwareController (MainGraphicInterfaceController maingic,boolean isTestMode){	
-		this.mgic=maingic;
+	public HardwareController (MainGraphicInterfaceController mgictrl,boolean isTestMode){	
+		this.mgic=mgictrl;
 		this.horizontalCtrl = new HorizontalAngleRotationController();
 		this.startKinectWork(isTestMode);
 	}
@@ -27,10 +27,6 @@ public class HardwareController {
 		double targetAngleSelected=angleSelected+this.getRotationAngle();
 
 		int stepsSelected = stepsCalculator(horizontalFixedAngleSelected);
-		
-		System.out.println("Pasos a mover: " + stepsSelected);
-		System.out.println("Angulo sin fix a mover: " + angleSelected);
-		System.out.println("Angulo fixeado a mover: " + horizontalFixedAngleSelected);
 		
 		if (Math.abs(targetAngleSelected)<=180){
 			
@@ -43,7 +39,7 @@ public class HardwareController {
 			setRotationAngle(angleSelected);
 		
 		}else {
-			System.out.println("El ángulo acumulado es > +/-180 grados.");
+			mgic.updateSystemMessagesPanel("El ángulo acumulado es > +/-180 grados.");
 		}
 	}
 	
