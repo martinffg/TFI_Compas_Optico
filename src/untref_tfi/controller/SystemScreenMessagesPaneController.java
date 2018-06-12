@@ -31,7 +31,9 @@ public class SystemScreenMessagesPaneController {
 		Button cleanButton = new Button("Clean");
 		cleanButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 								            public void handle(MouseEvent e) {
-								            	mgic.cleanUpdateSystemMessagesPanel();
+								            	if (mgic!=null) {
+								            		mgic.cleanUpdateSystemMessagesPanel();
+								            	}
 								            }	
 							        });
 		

@@ -16,7 +16,7 @@ public class ImageCaptureControllerTest {
 		
 						try {
 							CompassViewer compassView = new CompassViewer(false);
-							ImageCaptureController icc = new ImageCaptureController(compassView.getMainGraphIntCont(),false);
+							ImageCaptureController icc = new ImageCaptureController(compassView.getMainGraphIntCont(),true);
 							icc.startImageCapture();
 							icc.imageRefresh();
 						} catch (Exception e) {

@@ -1,22 +1,25 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import untref_tfi.controller.MainGraphicInterfaceController;
 import untref_tfi.domain.AnglesCalculator;
 import untref_tfi.domain.XYZpoint;
 
 public class AngleCalculatorTest {
 	
+	private MainGraphicInterfaceController mgic=null;
+	
 	@Test
 	public void AngleTest() {
 		String color ="[0;0;0]";
-		XYZpoint point1 = new XYZpoint(1,0,2.0,color,null);
-		XYZpoint point2 = new XYZpoint(1,1,2.0,color,null);
-		XYZpoint point3 = new XYZpoint(0,0,2.0,color,null);
-		XYZpoint point4 = new XYZpoint(0,1,2.0,color,null);
-		XYZpoint point5 = new XYZpoint(0,-1,-2.0,color,null);
-		XYZpoint point6 = new XYZpoint(-1,0,-2.0,color,null);
-		XYZpoint point7 = new XYZpoint(1,-1,-2.0,color,null);
-		XYZpoint point8 = new XYZpoint(-1,-1,-2.0,color,null);
+		XYZpoint point1 = new XYZpoint(1,0,2.0,color,mgic);
+		XYZpoint point2 = new XYZpoint(1,1,2.0,color,mgic);
+		XYZpoint point3 = new XYZpoint(0,0,2.0,color,mgic);
+		XYZpoint point4 = new XYZpoint(0,1,2.0,color,mgic);
+		XYZpoint point5 = new XYZpoint(0,-1,-2.0,color,mgic);
+		XYZpoint point6 = new XYZpoint(-1,0,-2.0,color,mgic);
+		XYZpoint point7 = new XYZpoint(1,-1,-2.0,color,mgic);
+		XYZpoint point8 = new XYZpoint(-1,-1,-2.0,color,mgic);
 		
 		AnglesCalculator angleCalc1 = new AnglesCalculator(point1);
 		AnglesCalculator angleCalc2 = new AnglesCalculator(point2);

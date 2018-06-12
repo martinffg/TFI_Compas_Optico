@@ -47,8 +47,9 @@ public class MainGraphicInterfaceController {
 	private boolean depthImageSelected=false;
 	private boolean dynamicMousePointerSelection=false;
 	private Color colorOOR= Color.GRAY;
-		
+			
 	public MainGraphicInterfaceController(boolean isTest){
+		
 		try {
 			initializeMGIC(isTest);
 		} catch (Exception e) {
