@@ -36,8 +36,8 @@ public class MainGraphicInterfaceController {
 	private KinectAnglePositionPaneController kinectAnglePositionPanel;
 	private SystemScreenMessagesPaneController systemScreenMessagesPanel;
 	private Scene mainScene;
-	private static final int zeroXref=Kinect.screenWidth/2;  // 0Xref: 320
-	private static final int zeroYref=Kinect.screenHeight/2; // 0Yref: 240
+	public static final int zeroXref=Kinect.screenWidth/2;  // 0Xref: 320
+	public static final int zeroYref=Kinect.screenHeight/2; // 0Yref: 240
 	private int selectedXpoint=zeroXref;
 	private int selectedYpoint=zeroYref;
 	private double selectedDepthPoint=0.0;
@@ -45,6 +45,7 @@ public class MainGraphicInterfaceController {
 	private XYZpoint lastSelectedPixel=null;
 	private XYZpoint previousSelectedPixel=null;
 	private boolean depthImageSelected=false;
+	private boolean outOfFocusPointsSelected=false;
 	private boolean dynamicMousePointerSelection=false;
 	private Color colorOOR= Color.GRAY;
 			
@@ -132,6 +133,19 @@ public class MainGraphicInterfaceController {
 		this.depthImageSelected=false;
 	}
 	
+	public boolean isOutOfFocusPointsSelected(){
+		
+		return this.outOfFocusPointsSelected;
+	}
+	
+	public void enableOutOfFocusPointsSelection(){
+		this.outOfFocusPointsSelected=true;
+	}
+	
+	public void disableOutOfFocusPointsSelection(){
+		this.outOfFocusPointsSelected=false;
+	}
+	
 	public void enableDynamicMousePointer(){
 		this.dynamicMousePointerSelection=true;
 	}
@@ -206,7 +220,11 @@ public class MainGraphicInterfaceController {
     	selectedYpoint=(int) (e.getY() * -1) + zeroYref;	// Convert Y to cartesian axe
     	selectedDepthPoint = imageCapture.getXYMatrizProfundidad((int)e.getX(),(int)e.getY());
     	selectedColorPoint = imageCapture.getXYMatrizRGBColorCadena((int)e.getX(),(int)e.getY());
+    	boolean outOfVerticalBoundsPoint=imageCapture.isOutOfVerticalBoundsPoint((int)e.getX(),(int)e.getY());
     	lastSelectedPixel=new XYZpoint(selectedXpoint,selectedYpoint,selectedDepthPoint,selectedColorPoint,this);
+    	if (outOfVerticalBoundsPoint){
+    		updateSystemMessagesPanel("Punto fuera de foco.");
+    	}
 	}
 
 	private AnchorPane createAnchorPane(){

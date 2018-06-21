@@ -29,7 +29,7 @@ public class SettingsPaneController {
 		title.setMinSize(110, 25);
 		title.setTextFill(Paint.valueOf("#29446B"));
 				
-		String[] checkBoxNames = new String[]{"Dynam Calcs","OOR pixels"};
+		String[] checkBoxNames = new String[]{"Dynam Calcs","OOF pixels","OOR pixels"};
 		CheckBox[] cbs = new CheckBox[checkBoxNames.length];
 		for (int i = 0; i < checkBoxNames.length; i++) {
 			cbs[i] = new CheckBox(checkBoxNames[i]);
@@ -38,6 +38,7 @@ public class SettingsPaneController {
 		// Defino evento por cada checkbox
 		cbs[0].setOnMouseClicked(getMouseEventHandler(cbs,0));
 		cbs[1].setOnMouseClicked(getMouseEventHandler(cbs,1));
+		cbs[2].setOnMouseClicked(getMouseEventHandler(cbs,2));
 		
 		VBox vbox = new VBox(cbs);
 		Separator separator = new Separator();
@@ -86,6 +87,16 @@ public class SettingsPaneController {
 				
 			}
 			
+			private void evaluateOOFCheckBoxAction(CheckBox oofCbs){
+				
+				if (oofCbs.isSelected()) {
+					mgic.enableOutOfFocusPointsSelection();
+				}else{
+					mgic.disableOutOfFocusPointsSelection();
+				}
+				
+			}
+			
 			private void evaluateOORCheckBoxAction(CheckBox oorCbs){
 				
 				if (oorCbs.isSelected()) {
@@ -100,7 +111,9 @@ public class SettingsPaneController {
             	switch (pos) {
             		case 0: this.evaluateDynamicMousePointerCheckBoxAction(cbs[0]);
             		break;
-            		case 1: this.evaluateOORCheckBoxAction(cbs[1]);
+            		case 1: this.evaluateOOFCheckBoxAction(cbs[1]);
+            		break;
+            		case 2: this.evaluateOORCheckBoxAction(cbs[2]);
             		break;
             		default:{}
             	}

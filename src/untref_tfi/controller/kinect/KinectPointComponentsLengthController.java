@@ -25,7 +25,7 @@ public class KinectPointComponentsLengthController {
 			this.pixelXCount=pixelsXCounted;
 			this.pixelYCount=pixelsYCounted;
 		} else {
-			if (mgic!=null) mgic.updateSystemMessagesPanel("Punto fuera de rango de captura.");
+			if (mgic!=null) mgic.updateSystemMessagesPanel("Distancia fuera de rango.");
 		}
 	}
 	
