@@ -25,7 +25,7 @@ public class SystemScreenMessagesPaneController {
 		Label title = new Label(paneName);
 		title.setFont(Font.font ("Verdana",18));
 		title.setAlignment(Pos.TOP_CENTER);
-		title.setPrefSize(160, 20);
+		title.setPrefSize(210, 20);
 		title.setTextFill(Paint.valueOf("#29446B"));
 						
 		Button cleanButton = new Button("Clean");
@@ -37,25 +37,25 @@ public class SystemScreenMessagesPaneController {
 								            }	
 							        });
 		
-		cleanButton.setPrefSize(50, 20);
+		cleanButton.setPrefSize(70, 20);
 		cleanButton.setStyle("-fx-text-fill: green; -fx-font-size: 12;");
 		cleanButton.setAlignment(Pos.CENTER);
 				
 		HBox headerPane = new HBox();
-		headerPane.setMaxSize(220, 20);
+		headerPane.setMaxSize(280, 20);
 		headerPane.getChildren().addAll(title,cleanButton);
 		headerPane.setSpacing(2.0);
 		
 		messageBox = new TextArea(EMPTY_VALUE);
 		messageBox.setEditable(false);
-		messageBox.setPrefSize(220, 180);
+		messageBox.setPrefSize(280, 110);
 		messageBox.setStyle("-fx-text-fill: red; -fx-font-size: 16;");
 		messageBox.setWrapText(true);
 		
 		panel = new VBox();
 		panel.getChildren().addAll(headerPane, messageBox);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setPrefSize(220,200);
+		panel.setPrefSize(280,130);
 		panel.setAlignment(Pos.CENTER);
 		panel.setSpacing(2.0);
 		panel.setPadding(new Insets(2,2,2,2));
@@ -71,7 +71,11 @@ public class SystemScreenMessagesPaneController {
 	
 	public void setMessage(String message){
 		String previous=messageBox.getText();
-		messageBox.setText(previous+"\n"+message);
+		if (setedMessage()) {
+			messageBox.setText(previous+"\n"+message); 
+		} else {
+			messageBox.setText(message); 
+		}
 	}
 
 	public void clearMessage() {

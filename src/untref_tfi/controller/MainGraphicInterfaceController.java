@@ -35,6 +35,7 @@ public class MainGraphicInterfaceController {
 	private AnglePaneController angleValuesPanel;
 	private KinectAnglePositionPaneController kinectAnglePositionPanel;
 	private SystemScreenMessagesPaneController systemScreenMessagesPanel;
+	private RotationDelaySelectionPaneController delayPanel;
 	private Scene mainScene;
 	public static final int zeroXref=Kinect.screenWidth/2;  // 0Xref: 320
 	public static final int zeroYref=Kinect.screenHeight/2; // 0Yref: 240
@@ -75,6 +76,7 @@ public class MainGraphicInterfaceController {
 		horizontalAnglePanel = new HorizontalAngleSelectionPaneController("H_Rotate",hwController);
 		kinectAnglePositionPanel = new KinectAnglePositionPaneController("Sensor Position",this);
 		systemScreenMessagesPanel= new SystemScreenMessagesPaneController("Messages Panel",this);
+		delayPanel=new RotationDelaySelectionPaneController("H_Rotation_Speed_Settings",this.getHardwareController());
 	}
 	
 	public Scene getMainScene(){
@@ -168,6 +170,10 @@ public class MainGraphicInterfaceController {
 		return this.lastSelectedPixel;
 	}
 	
+	public void setLastSelectedPixel(XYZpoint point){
+		this.lastSelectedPixel=point;
+	}
+	
 	public XYZpoint getPreviousSelectedPixel(){
 		return this.previousSelectedPixel;
 	}
@@ -236,10 +242,11 @@ public class MainGraphicInterfaceController {
 		Pane angleValuesPane=angleValuesPanel.getPane();
 		Pane kinectAnglePositionPane=kinectAnglePositionPanel.getPane();
 		Pane systemScreenMessagesPane=systemScreenMessagesPanel.getPane();
+		Pane delayPane=delayPanel.getPane();
 		List<Node> principalPaneChildrens = new ArrayList<Node>();
 		principalPaneChildrens.addAll(Arrays.asList(imageRosaView,imageEjesView,kinectImageView,imageRosaIconView,
 				pixelPane,settingsPane,verticalAnglePane,horizontalAnglePane,angleValuesPane,
-				kinectAnglePositionPane,systemScreenMessagesPane));
+				kinectAnglePositionPane,systemScreenMessagesPane,delayPane));
 		
 		AnchorPane anchorpane = new AnchorPane();
 		anchorpane.getChildren().addAll(principalPaneChildrens);
@@ -257,9 +264,9 @@ public class MainGraphicInterfaceController {
 		AnchorPane.setLeftAnchor(pixelPane, 20.0);
 		AnchorPane.setBottomAnchor(kinectAnglePositionPane, 40.0);
 		AnchorPane.setLeftAnchor(kinectAnglePositionPane, 150.0);
-		AnchorPane.setTopAnchor(settingsPane, 250.0);
+		AnchorPane.setTopAnchor(settingsPane, 162.0);
 		AnchorPane.setRightAnchor(settingsPane, 20.0);
-		AnchorPane.setBottomAnchor(verticalAnglePane, 140.0);
+		AnchorPane.setTopAnchor(verticalAnglePane, 402.0);
 		AnchorPane.setRightAnchor(verticalAnglePane, 20.0);
 		AnchorPane.setTopAnchor(angleValuesPane, 250.0);
 		AnchorPane.setLeftAnchor(angleValuesPane, 20.0);
@@ -267,6 +274,8 @@ public class MainGraphicInterfaceController {
 		AnchorPane.setRightAnchor(horizontalAnglePane, 20.0);
 		AnchorPane.setTopAnchor(systemScreenMessagesPane, 30.0);
 		AnchorPane.setRightAnchor(systemScreenMessagesPane, 20.0);
+		AnchorPane.setBottomAnchor(delayPane, 133.0);
+		AnchorPane.setRightAnchor(delayPane, 20.0);
 			
 		return anchorpane;
 	}

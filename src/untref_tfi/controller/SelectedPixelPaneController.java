@@ -1,5 +1,7 @@
 package untref_tfi.controller;
 
+import com.sun.prism.paint.Color;
+
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -225,6 +227,8 @@ public class SelectedPixelPaneController {
 		double correctionAngle = (-1)*hwController.getRotationAngle();
 		hwController.moveArduinoController(correctionAngle);
 		hwController.setRotationAngle(hwController.getRotationAngle());
+		mgic.setLastSelectedPixel(new XYZpoint(0,0,0.0,Color.TRANSPARENT.toString(),mgic));
+		mgic.setPreviousSelectedPixel(new XYZpoint(0,0,0.0,Color.TRANSPARENT.toString(),mgic));
 	}
 	
 	private void setBackToPreviousPoint(){

@@ -26,10 +26,10 @@ public class SettingsPaneController {
 		Label title = new Label(paneName);
 		title.setFont(Font.font ("Verdana", 20));
 		title.setAlignment(Pos.TOP_CENTER);
-		title.setMinSize(110, 25);
+		title.setMinSize(145, 25);
 		title.setTextFill(Paint.valueOf("#29446B"));
 				
-		String[] checkBoxNames = new String[]{"Dynam Calcs","OOF pixels","OOR pixels"};
+		String[] checkBoxNames = new String[]{"Dynamic Calcs","OOFocus pixels","OORange pixels"};
 		CheckBox[] cbs = new CheckBox[checkBoxNames.length];
 		for (int i = 0; i < checkBoxNames.length; i++) {
 			cbs[i] = new CheckBox(checkBoxNames[i]);
@@ -51,7 +51,7 @@ public class SettingsPaneController {
 		Label labelColor = new Label("OOR Color");
 		labelColor.setFont(new Font(16));
 		ColorPicker colorPicker = new ColorPicker(Color.GRAY);
-		colorPicker.setPrefSize(110, 40);
+		colorPicker.setPrefSize(145, 40);
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {	
 			
             public void handle(ActionEvent e) {
@@ -67,7 +67,7 @@ public class SettingsPaneController {
 		panel.getChildren().addAll(title,vbox,labelColor,vbox2);
 		panel.setBackground(Background.EMPTY);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(110, 150);
+		panel.setMinSize(145, 150);
 		panel.setAlignment(Pos.CENTER);
 		panel.setSpacing(5.0);
 		panel.setPadding(new Insets(2,2,2,2));

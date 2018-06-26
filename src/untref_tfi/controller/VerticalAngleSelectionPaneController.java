@@ -37,7 +37,7 @@ public class VerticalAngleSelectionPaneController {
 		
 		angleValue = new TextField("0°");
 		angleValue.setEditable(false);
-		angleValue.setMaxSize(90, 50);
+		angleValue.setPrefSize(100,50);
 		angleValue.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
 		angleValue.setAlignment(Pos.CENTER);
 		
@@ -49,7 +49,7 @@ public class VerticalAngleSelectionPaneController {
 		sliderAnguloVertical.setSnapToTicks(true);
 		sliderAnguloVertical.setMinorTickCount(1);
 		sliderAnguloVertical.setOrientation(Orientation.VERTICAL);
-		sliderAnguloVertical.setPrefSize(100, 290);
+		sliderAnguloVertical.setPrefSize(100, 280);
 		sliderAnguloVertical.setLabelFormatter(new StringConverter<Double>(){
 				@Override
 				public String toString(Double object) {
@@ -78,7 +78,8 @@ public class VerticalAngleSelectionPaneController {
 								            	}
 								            }	
 							        });
-		plusButton.setPrefSize(25, 25);
+		plusButton.setFont(Font.font ("Verdana", 10));
+		plusButton.setPrefSize(20,14);
 		plusButton.setStyle("-fx-text-fill: green; -fx-font-size: 10;");
 		plusButton.setAlignment(Pos.CENTER);
 		
@@ -92,7 +93,9 @@ public class VerticalAngleSelectionPaneController {
 								            	}
 								            }	
 							        });
-		minusButton.setPrefSize(25, 25);
+		
+		minusButton.setFont(Font.font ("Verdana", 10));
+		minusButton.setPrefSize(20,14);
 		minusButton.setStyle("-fx-text-fill: green; -fx-font-size: 10;");
 		minusButton.setAlignment(Pos.CENTER);
 		
@@ -101,11 +104,11 @@ public class VerticalAngleSelectionPaneController {
 		
 		HBox anglePanel = new HBox();
 		anglePanel.getChildren().addAll(addremoveOnePanel,angleValue);
-		
+		anglePanel.setPrefSize(120,40);
 		panel = new VBox();
 		panel.getChildren().addAll(title,sliderAnguloVertical,anglePanel);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(120, 350);
+		panel.setMinSize(125, 350);
 		panel.setAlignment(Pos.CENTER);
 		panel.setSpacing(2.0);
 		panel.setPadding(new Insets(2,2,2,2));

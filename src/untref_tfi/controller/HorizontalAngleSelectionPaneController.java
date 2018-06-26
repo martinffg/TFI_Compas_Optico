@@ -80,9 +80,8 @@ public class HorizontalAngleSelectionPaneController {
 		sliderAnguloHorizontal.setSnapToTicks(true);
 		sliderAnguloHorizontal.setMinorTickCount(18);
 		sliderAnguloHorizontal.setOrientation(Orientation.HORIZONTAL);
-		sliderAnguloHorizontal.setPrefSize(300, 50);
-		
-		
+		sliderAnguloHorizontal.setPrefSize(320, 50);
+				
 		sliderAnguloHorizontal.setLabelFormatter(new StringConverter<Double>(){
 				@Override
 				public String toString(Double object) {
@@ -105,7 +104,7 @@ public class HorizontalAngleSelectionPaneController {
 		panel = new VBox();
 		panel.getChildren().addAll(titlePanel,sliderAnguloHorizontal);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMaxSize(318,90);
+		panel.setPrefSize(320,90);
 		panel.setAlignment(Pos.CENTER);
 		panel.setSpacing(2.0);
 		panel.setPadding(new Insets(2,2,2,2));
