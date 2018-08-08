@@ -14,19 +14,18 @@ public class ImageCaptureController {
 	private MainGraphicInterfaceController compassMGIC=null;
 	private HardwareController hwController=null;
 	private KinectSensorDataCollector data=null;
+	private ImageCaptureRefresh imageCaptureRefresh=null;
 	private int contador=0;
-	private boolean isTestMode=false;
-					
-	public ImageCaptureController(MainGraphicInterfaceController mainGIController,boolean isTest) {
+							
+	public ImageCaptureController(MainGraphicInterfaceController mainGIController) {
 		
 		this.compassMGIC=mainGIController;
 		this.hwController=mainGIController.getHardwareController();
-		isTestMode=isTest;	
 	}
 	
 	public void startImageCapture() {
 		BufferedImage imagenKinect=null;
-		if (hwController.chequearInicializacionKinect() && (!isTestMode)) {
+		if (hwController.chequearInicializacionKinect() && (!compassMGIC.isTestMode())) {
 			data = hwController.getKinectSensorDataCollector();
 			if (!compassMGIC.isDepthImageSelected()){
 				imagenKinect = data.getImagenColor();
@@ -34,10 +33,16 @@ public class ImageCaptureController {
 				imagenKinect = data.getImagenProfundidad();
 			}
 			compassMGIC.setKinectImage(SwingFXUtils.toFXImage(imagenKinect, null)); 
-			ImageCaptureRefresh imageCaptureRefresh = new ImageCaptureRefresh(this);
+			imageCaptureRefresh = new ImageCaptureRefresh(this);
 			imageCaptureRefresh.run();
 		} else {
 			compassMGIC.setKinectImage(new Image(getClass().getResource("../../resource/images/errorImageOpeningKinectSensor.jpg").toString()));
+		}
+	}
+	
+	public void stopImageCapture() {
+		if (imageCaptureRefresh!=null) { 
+			imageCaptureRefresh.stop();
 		}
 	}
 	
@@ -62,6 +67,10 @@ public class ImageCaptureController {
 		Color colorOrange = Color.ORANGE;
 		Color colorOOlimits= Color.BLACK;
 		
+		if (isAutoTrackingEnabled()){
+			imagenKinect=procesarImagenContornoActivo(imagenKinect);
+		} 
+		
 		for (int i = 0; i < imagenKinect.getWidth(); i++) {
 			for (int j = 0; j < imagenKinect.getHeight() ; j++) {			
 				if ((compassMGIC.isOutOfFocusPointsSelected())&&(isOutOfVerticalBoundsPoint(i,j))){
@@ -74,6 +83,18 @@ public class ImageCaptureController {
 		}
 		
 		return imagenKinect;
+	}
+	
+	private BufferedImage procesarImagenContornoActivo(BufferedImage imagenKinect){
+		BufferedImage imagenContornoSalida = new BufferedImage(Kinect.screenWidth,Kinect.screenHeight,BufferedImage.TYPE_3BYTE_BGR);
+		ActiveContoursControllerAdapter acController = compassMGIC.getActiveContoursController();
+		if ((acController!=null)&&acController.areBothPointsSetted()){
+			imagenContornoSalida=acController.reproduceImageWithContour(imagenKinect);
+			System.out.println("Llegue a entrar al if de reproduceImageWithContour");
+		}else{
+			imagenContornoSalida=imagenKinect;
+		}
+		return imagenContornoSalida;
 	}
 	
 	public boolean isOutOfVerticalBoundsPoint(int xValue,int yValue) {
@@ -104,7 +125,7 @@ public class ImageCaptureController {
 
 	private Boolean evaluateIfIsAxePoint(int i, int j) {
 		
-		return (i==320)||(j==240);
+		return (i==(Kinect.screenWidth/2))||(j==(Kinect.screenHeight/2));
 		
 	}
 	
@@ -129,5 +150,9 @@ public class ImageCaptureController {
 		return (x>=0)&&(y>=0)
 				&&(x<Kinect.screenWidth)
 				&&(y<Kinect.screenHeight);
-	}	
+	}
+	
+	public boolean isAutoTrackingEnabled(){
+		return compassMGIC.isAutotrackingSelected();
+	}
 }

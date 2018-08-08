@@ -15,10 +15,10 @@ public class HardwareController {
 	private Kinect kinect=null;
 	private KinectSensorDataCollector data=null;
 				
-	public HardwareController (MainGraphicInterfaceController mgictrl,boolean isTestMode){	
+	public HardwareController (MainGraphicInterfaceController mgictrl){	
 		this.mgic=mgictrl;
 		this.horizontalCtrl = new HorizontalAngleRotationController();
-		this.startKinectWork(isTestMode);
+		this.startKinectWork(mgic.isTestMode());
 	}
 	
 	public void moveArduinoController(double angleSelected){

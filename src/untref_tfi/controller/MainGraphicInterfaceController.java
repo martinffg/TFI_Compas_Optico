@@ -28,6 +28,7 @@ public class MainGraphicInterfaceController {
 	private ImageView imageRosaIconView;
 	private ImageCaptureController imageCapture;
 	private HardwareController hwController;
+	private ActiveContoursControllerAdapter actCountControler;
 	private SelectedPixelPaneController pixelPanel;
 	private SettingsPaneController settingsPanel;
 	private VerticalAngleSelectionPaneController verticalAnglePanel;
@@ -46,9 +47,11 @@ public class MainGraphicInterfaceController {
 	private XYZpoint lastSelectedPixel=null;
 	private XYZpoint previousSelectedPixel=null;
 	private boolean depthImageSelected=false;
+	private boolean autoTrackingSelected=false;
 	private boolean outOfFocusPointsSelected=false;
 	private boolean dynamicMousePointerSelection=false;
 	private Color colorOOR= Color.GRAY;
+	private boolean testMode=false;
 			
 	public MainGraphicInterfaceController(boolean isTest){
 		
@@ -61,10 +64,9 @@ public class MainGraphicInterfaceController {
 	}
 	
 	public void initializeMGIC(boolean isTest){
-		
-		hwController = new HardwareController(this,isTest);
-		imageCapture = new ImageCaptureController(this,isTest);
-		imageCapture.startImageCapture();
+		testMode=isTest;
+		hwController = new HardwareController(this);
+		powerOnCapture();
 		createKinectImageView();
 		createImageRosaView();
 		createImageEjesView();
@@ -77,6 +79,24 @@ public class MainGraphicInterfaceController {
 		kinectAnglePositionPanel = new KinectAnglePositionPaneController("Sensor Position",this);
 		systemScreenMessagesPanel= new SystemScreenMessagesPaneController("Messages Panel",this);
 		delayPanel=new RotationDelaySelectionPaneController("H_Rotation_Speed_Settings",this.getHardwareController());
+	}
+	
+	public MainGraphicInterfaceController getMainGraphicInterfaceController(){
+		return this;
+	}
+
+	private void powerOnCapture() {
+		imageCapture = new ImageCaptureController(this);
+		imageCapture.startImageCapture();
+	}
+	
+	private void restartCapture() {
+		imageCapture.stopImageCapture();
+		powerOnCapture();
+	}
+	
+	public boolean isTestMode(){
+		return testMode;
 	}
 	
 	public Scene getMainScene(){
@@ -134,6 +154,27 @@ public class MainGraphicInterfaceController {
 	public void disableDepthImageSelection(){
 		this.depthImageSelected=false;
 	}
+	
+	public boolean isAutotrackingSelected(){
+		
+		return this.autoTrackingSelected;
+	}
+	
+	public void enableAutotrackingSelection(){
+		this.autoTrackingSelected=true;
+		restartCapture();
+		actCountControler= new ActiveContoursControllerAdapter(this);
+		if (actCountControler!=null){
+			System.out.println("Active Contour creado");
+		}
+	}
+	
+	public void disableAutotrackingSelection(){
+		this.autoTrackingSelected=false;
+		restartCapture();
+		actCountControler=null;
+		System.out.println("Active Contour eliminado");
+	}	
 	
 	public boolean isOutOfFocusPointsSelected(){
 		
@@ -196,6 +237,9 @@ public class MainGraphicInterfaceController {
             		orderSelectedPixel();
             		getAllInfoAboutXYCartesianSelectedPoint(e); 
             		updateDisplayPanels();
+            		if (isAutotrackingSelected()){
+            			actCountControler.acPointSelection(e);
+            		}
             	} catch (Exception ex){
             		System.out.println("Modo Test - Operaciones OnMouseClicked deshabilitadas");
             	}
@@ -207,12 +251,19 @@ public class MainGraphicInterfaceController {
 	            	try {
 	            		getAllInfoAboutXYCartesianSelectedPoint(e); 
 	            		updateDisplayPanels();
+	            		if (isAutotrackingSelected()){
+	            			System.out.println("Auto Tracking Deshabilitado en Modo Dinamic Clic");
+	            		}
 	            	} catch (Exception ex){
 	            		System.out.println("Modo Test - Operaciones OnMouseClicked deshabilitadas");
 	            	}
             	}
             }	
         });
+	}
+	
+	public ActiveContoursControllerAdapter getActiveContoursController(){
+		return actCountControler;
 	}
 	
 	public void updateDisplayPanels() {

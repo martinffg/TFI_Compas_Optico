@@ -26,10 +26,10 @@ public class SettingsPaneController {
 		Label title = new Label(paneName);
 		title.setFont(Font.font ("Verdana", 20));
 		title.setAlignment(Pos.TOP_CENTER);
-		title.setMinSize(145, 25);
+		title.setMinSize(135, 25);
 		title.setTextFill(Paint.valueOf("#29446B"));
 				
-		String[] checkBoxNames = new String[]{"Dynamic Calcs","OOFocus pixels","OORange pixels"};
+		String[] checkBoxNames = new String[]{"Auto Tracking","Dynamic clic","ooFocus pixels","ooRange pixels"};
 		CheckBox[] cbs = new CheckBox[checkBoxNames.length];
 		for (int i = 0; i < checkBoxNames.length; i++) {
 			cbs[i] = new CheckBox(checkBoxNames[i]);
@@ -39,9 +39,11 @@ public class SettingsPaneController {
 		cbs[0].setOnMouseClicked(getMouseEventHandler(cbs,0));
 		cbs[1].setOnMouseClicked(getMouseEventHandler(cbs,1));
 		cbs[2].setOnMouseClicked(getMouseEventHandler(cbs,2));
-		
-		VBox vbox = new VBox(cbs);
+		cbs[3].setOnMouseClicked(getMouseEventHandler(cbs,3));
+			
 		Separator separator = new Separator();
+				
+		VBox vbox = new VBox(cbs);
 		vbox.setAlignment(Pos.CENTER_LEFT);
 		vbox.getChildren().add(checkBoxNames.length, separator);
 		vbox.setSpacing(5.0);
@@ -51,7 +53,7 @@ public class SettingsPaneController {
 		Label labelColor = new Label("OOR Color");
 		labelColor.setFont(new Font(16));
 		ColorPicker colorPicker = new ColorPicker(Color.GRAY);
-		colorPicker.setPrefSize(145, 40);
+		colorPicker.setPrefSize(135, 40);
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {	
 			
             public void handle(ActionEvent e) {
@@ -67,7 +69,7 @@ public class SettingsPaneController {
 		panel.getChildren().addAll(title,vbox,labelColor,vbox2);
 		panel.setBackground(Background.EMPTY);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(145, 150);
+		panel.setMinSize(135, 150);
 		panel.setAlignment(Pos.CENTER);
 		panel.setSpacing(5.0);
 		panel.setPadding(new Insets(2,2,2,2));
@@ -106,14 +108,26 @@ public class SettingsPaneController {
 				}
 				
 			}
+			
+			private void evaluateAutoTrackingCheckBoxAction(CheckBox autotrackingCbs){
+				
+				if (autotrackingCbs.isSelected()) {
+					mgic.enableAutotrackingSelection();
+				}else{
+					mgic.disableAutotrackingSelection();
+				}
+				
+			}
  
             public void handle(MouseEvent e) {
             	switch (pos) {
-            		case 0: this.evaluateDynamicMousePointerCheckBoxAction(cbs[0]);
+            		case 0: this.evaluateAutoTrackingCheckBoxAction(cbs[0]);
             		break;
-            		case 1: this.evaluateOOFCheckBoxAction(cbs[1]);
+            		case 1: this.evaluateDynamicMousePointerCheckBoxAction(cbs[1]);
             		break;
-            		case 2: this.evaluateOORCheckBoxAction(cbs[2]);
+            		case 2: this.evaluateOOFCheckBoxAction(cbs[2]);
+            		break;
+            		case 3: this.evaluateOORCheckBoxAction(cbs[3]);
             		break;
             		default:{}
             	}
