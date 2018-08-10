@@ -5,7 +5,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import untref_tfi.pkg_ActiveContours.controllers.PixelSelectionControllerMartin;
+import untref_tfi.pkg_ActiveContours.controllers.PixelSelectionController;
 import untref_tfi.pkg_ActiveContours.controllers.nodeutils.ImageSetter;
 import untref_tfi.pkg_ActiveContours.domain.ImagePosition;
 import untref_tfi.pkg_ActiveContours.domain.activecontours.Contour;
@@ -18,8 +18,8 @@ public class ActiveContoursControllerAdapter {
 
 	private static final String FIRST_PIXEL = "first pixel   ";
 	private static final String SECOND_PIXEL = "second pixel  ";
-	private final PixelSelectionControllerMartin firstPixelPaneController;
-	private final PixelSelectionControllerMartin secondPixelPaneController;
+	private final PixelSelectionController firstPixelPaneController;
+	private final PixelSelectionController secondPixelPaneController;
 	private final ActiveContoursService activeContoursService;
 	private ImageView imageView;
 	private Image imageToShow;
@@ -29,8 +29,8 @@ public class ActiveContoursControllerAdapter {
 	private ImagePosition centroideCurva;
 	
 	public ActiveContoursControllerAdapter(MainGraphicInterfaceController mgic) {
-		firstPixelPaneController = new PixelSelectionControllerMartin(FIRST_PIXEL);
-		secondPixelPaneController = new PixelSelectionControllerMartin(SECOND_PIXEL);
+		firstPixelPaneController = new PixelSelectionController(FIRST_PIXEL);
+		secondPixelPaneController = new PixelSelectionController(SECOND_PIXEL);
 		imageView = mgic.getKinectImageView();
 		imageCounter=0;
 		contour = new Contour[1];

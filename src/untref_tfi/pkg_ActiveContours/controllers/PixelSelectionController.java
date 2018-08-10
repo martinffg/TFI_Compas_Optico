@@ -3,13 +3,13 @@ package untref_tfi.pkg_ActiveContours.controllers;
 
 import untref_tfi.pkg_ActiveContours.domain.ImagePosition;
 
-public class PixelSelectionControllerMartin {
+public class PixelSelectionController {
 
 	private int yValue=999;
 	private int xValue=999;
 	private String name;
 
-	public PixelSelectionControllerMartin(String pixelName) {
+	public PixelSelectionController(String pixelName) {
 		this.name=pixelName;
 	}
 	
