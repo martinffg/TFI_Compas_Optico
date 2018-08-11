@@ -46,6 +46,7 @@ public class MainGraphicInterfaceController {
 	private String selectedColorPoint="";
 	private XYZpoint lastSelectedPixel=null;
 	private XYZpoint previousSelectedPixel=null;
+	private XYZpoint centroidPoint=null;
 	private boolean depthImageSelected=false;
 	private boolean autoTrackingSelected=false;
 	private boolean outOfFocusPointsSelected=false;
@@ -385,5 +386,13 @@ public class MainGraphicInterfaceController {
 	
 	public HardwareController getHardwareController(){
 		return this.hwController;
+	}
+	
+	public XYZpoint getCentroidPoint() {
+		return centroidPoint;
+	}
+
+	public void setCentroidPoint(XYZpoint centroidPoint) {
+		this.centroidPoint = centroidPoint;
 	}
 }

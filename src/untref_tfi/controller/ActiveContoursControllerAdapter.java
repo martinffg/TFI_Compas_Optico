@@ -5,6 +5,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import untref_tfi.domain.XYZpoint;
 import untref_tfi.pkg_ActiveContours.controllers.PixelSelectionController;
 import untref_tfi.pkg_ActiveContours.controllers.nodeutils.ImageSetter;
 import untref_tfi.pkg_ActiveContours.domain.ImagePosition;
@@ -27,11 +28,13 @@ public class ActiveContoursControllerAdapter {
 	private double objectColorDeltaValue=50.0;
 	private int imageCounter=0;
 	private ImagePosition centroideCurva;
-	
-	public ActiveContoursControllerAdapter(MainGraphicInterfaceController mgic) {
+	private MainGraphicInterfaceController mgic;
+		
+	public ActiveContoursControllerAdapter(MainGraphicInterfaceController mGraphIntCont) {
 		firstPixelPaneController = new PixelSelectionController(FIRST_PIXEL);
 		secondPixelPaneController = new PixelSelectionController(SECOND_PIXEL);
-		imageView = mgic.getKinectImageView();
+		mgic=mGraphIntCont;
+		imageView = mGraphIntCont.getKinectImageView();
 		imageCounter=0;
 		contour = new Contour[1];
 		activeContoursService = new ActiveContoursServiceImpl();
@@ -74,16 +77,20 @@ public class ActiveContoursControllerAdapter {
 		
 		Image imagenFXinput=SwingFXUtils.toFXImage(imagenKinect, null);
 		BufferedImage imagenBIoutput;
+		XYZpoint centroidPoint;
 				
 		if (contour[0] != null) {  
 			contour[0] = activeContoursService.applyContourToNewImage(contour[0],imagenFXinput);
 			contour[0] = activeContoursService.adjustContours(contour[0], objectColorDeltaValue);
 			
 			centroideCurva=activeContoursService.calculateCentroid(contour[0].getlIn());
+			centroidPoint= imagePositionToXYZpointConverter(centroideCurva);
+			mgic.setCentroidPoint(centroidPoint);
 			
 			imageCounter++;
 			
-			System.out.println("Imagen nro: "+imageCounter+" Centroide en ("+centroideCurva.getColumn()+";"+centroideCurva.getRow()+")");
+			System.out.println("Imagen nro: "+imageCounter+" Centroide en ("+centroidPoint.getXvalue()
+			+";"+centroidPoint.getYvalue()+";"+centroidPoint.getKinectDepth()+"); Color: "+centroidPoint.getColorString());
 						
 			try {
 				Thread.sleep(200);
@@ -100,4 +107,14 @@ public class ActiveContoursControllerAdapter {
 		
 		return imagenBIoutput;
 	}
+	
+	public XYZpoint imagePositionToXYZpointConverter(ImagePosition centroide){
+		int centroidXvalue=centroide.getColumn() - MainGraphicInterfaceController.zeroXref;
+		int centroidYvalue=(centroide.getRow() * -1) + MainGraphicInterfaceController.zeroYref;
+		Double centroidDepthValue = mgic.getImageCaptureController().getXYMatrizProfundidad(centroide.getColumn(),centroide.getRow());
+		String centroidColorValue = mgic.getImageCaptureController().getXYMatrizRGBColorCadena(centroide.getColumn(),centroide.getRow());
+	
+		 return new XYZpoint(centroidXvalue,centroidYvalue,centroidDepthValue,centroidColorValue,mgic);
+	}
+	
 }
