@@ -15,7 +15,7 @@ public class ImageCaptureController {
 	private HardwareController hwController=null;
 	private KinectSensorDataCollector data=null;
 	private ImageCaptureRefresh imageCaptureRefresh=null;
-	private int contador=0;
+	private int contadorRotacion=0;
 							
 	public ImageCaptureController(MainGraphicInterfaceController mainGIController) {
 		
@@ -48,8 +48,8 @@ public class ImageCaptureController {
 	
 	public void imageRefresh(){
 		BufferedImage imagenKinect=null;
-		if (contador==360) { 
-			contador=0; 
+		if (contadorRotacion==360) { 
+			contadorRotacion=0; 
 		}
 		data = hwController.getKinectSensorDataCollector();
 		if (!compassMGIC.isDepthImageSelected()){
@@ -57,9 +57,12 @@ public class ImageCaptureController {
 		}else{
 			imagenKinect = setXYaxesAndVerticalLimitsToBuffImage(data.getImagenProfundidad());
 		}
-		compassMGIC.setKinectImage(SwingFXUtils.toFXImage(imagenKinect, null));
-		compassMGIC.getKinectImageView().setImage(compassMGIC.getKinectImage());
-		compassMGIC.getImageRosaIconView().setRotate(contador++);
+		
+		if (imagenKinect!=null){
+			compassMGIC.setKinectImage(SwingFXUtils.toFXImage(imagenKinect, null));
+			compassMGIC.getKinectImageView().setImage(compassMGIC.getKinectImage());
+			compassMGIC.getImageRosaIconView().setRotate(contadorRotacion++);
+		}
 	}
 
 	private BufferedImage setXYaxesAndVerticalLimitsToBuffImage(BufferedImage imagenKinect) {
@@ -90,7 +93,6 @@ public class ImageCaptureController {
 		ActiveContoursControllerAdapter acController = compassMGIC.getActiveContoursController();
 		if ((acController!=null)&&acController.areBothPointsSetted()){
 			imagenContornoSalida=acController.reproduceImageWithContour(imagenKinect);
-			System.out.println("Llegue a entrar al if de reproduceImageWithContour");
 		}else{
 			imagenContornoSalida=imagenKinect;
 		}
@@ -153,6 +155,8 @@ public class ImageCaptureController {
 	}
 	
 	public boolean isAutoTrackingEnabled(){
-		return compassMGIC.isAutotrackingSelected();
+		ActiveContoursControllerAdapter acController = compassMGIC.getActiveContoursController();
+		
+		return compassMGIC.isAutotrackingSelected() && (acController!=null) && acController.areBothPointsSetted();
 	}
 }

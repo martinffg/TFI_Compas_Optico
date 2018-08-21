@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+//import com.sun.prism.paint.Color;
 import untref_tfi.controller.hardware.HardwareController;
 import untref_tfi.controller.kinect.Kinect;
 import untref_tfi.domain.XYZpoint;
@@ -31,6 +32,7 @@ public class MainGraphicInterfaceController {
 	private ActiveContoursControllerAdapter actCountControler;
 	private SelectedPixelPaneController pixelPanel;
 	private SettingsPaneController settingsPanel;
+	private ColorDeltaValueSelectionPaneController colorDeltaPanel;
 	private VerticalAngleSelectionPaneController verticalAnglePanel;
 	private HorizontalAngleSelectionPaneController horizontalAnglePanel;
 	private AnglePaneController angleValuesPanel;
@@ -75,6 +77,7 @@ public class MainGraphicInterfaceController {
 		angleValuesPanel = new AnglePaneController("Relative\nAngles");
 		pixelPanel = new SelectedPixelPaneController("Point Clic",this);
 		settingsPanel = new SettingsPaneController("Settings",this);
+		colorDeltaPanel = new ColorDeltaValueSelectionPaneController("Delta_Color",this);
 		verticalAnglePanel = new VerticalAngleSelectionPaneController("V_Elevate",hwController);
 		horizontalAnglePanel = new HorizontalAngleSelectionPaneController("H_Rotate",hwController);
 		kinectAnglePositionPanel = new KinectAnglePositionPaneController("Sensor Position",this);
@@ -289,6 +292,7 @@ public class MainGraphicInterfaceController {
 		
 		Pane pixelPane=pixelPanel.getPane();
 		Pane settingsPane=settingsPanel.getPane();
+		Pane colorDeltaPane=colorDeltaPanel.getPane();
 		Pane verticalAnglePane=verticalAnglePanel.getPane();
 		Pane horizontalAnglePane=horizontalAnglePanel.getPane();
 		Pane angleValuesPane=angleValuesPanel.getPane();
@@ -297,7 +301,7 @@ public class MainGraphicInterfaceController {
 		Pane delayPane=delayPanel.getPane();
 		List<Node> principalPaneChildrens = new ArrayList<Node>();
 		principalPaneChildrens.addAll(Arrays.asList(imageRosaView,imageEjesView,kinectImageView,imageRosaIconView,
-				pixelPane,settingsPane,verticalAnglePane,horizontalAnglePane,angleValuesPane,
+				pixelPane,settingsPane,colorDeltaPane,verticalAnglePane,horizontalAnglePane,angleValuesPane,
 				kinectAnglePositionPane,systemScreenMessagesPane,delayPane));
 		
 		AnchorPane anchorpane = new AnchorPane();
@@ -316,9 +320,11 @@ public class MainGraphicInterfaceController {
 		AnchorPane.setLeftAnchor(pixelPane, 20.0);
 		AnchorPane.setBottomAnchor(kinectAnglePositionPane, 40.0);
 		AnchorPane.setLeftAnchor(kinectAnglePositionPane, 150.0);
-		AnchorPane.setTopAnchor(settingsPane, 162.0);
+		AnchorPane.setTopAnchor(settingsPane, 242.0);
 		AnchorPane.setRightAnchor(settingsPane, 20.0);
-		AnchorPane.setTopAnchor(verticalAnglePane, 402.0);
+		AnchorPane.setTopAnchor(colorDeltaPane, 161.0);
+		AnchorPane.setRightAnchor(colorDeltaPane, 20.0);
+		AnchorPane.setTopAnchor(verticalAnglePane, 518.0);
 		AnchorPane.setRightAnchor(verticalAnglePane, 20.0);
 		AnchorPane.setTopAnchor(angleValuesPane, 250.0);
 		AnchorPane.setLeftAnchor(angleValuesPane, 20.0);
@@ -394,5 +400,53 @@ public class MainGraphicInterfaceController {
 
 	public void setCentroidPoint(XYZpoint centroidPoint) {
 		this.centroidPoint = centroidPoint;
+	}
+	
+	public void setFocusOnLastSelectedPixel(){
+		
+		XYZpoint focusedPoint = getLastSelectedPixel();
+		
+		if (focusedPoint.isFocusablePoint()) {
+			int relativeElevation = (int) Math.round(focusedPoint.getAnglesCalculator().getGamma());
+			int absoluteElevation = hwController.getElevationAngle()+relativeElevation;
+			double relativeRotation = focusedPoint.getAnglesCalculator().getPhi();
+			if (Math.abs(absoluteElevation)<=Kinect.kinectVerticalTiltAbsValue) {  // HW limit for kinect Elevetion degree
+				hwController.moveArduinoController(relativeRotation);
+				hwController.setElevationAngle(absoluteElevation);			
+			} else {
+				updateSystemMessagesPanel("Punto no enfocable, fuera de rango de HW - Vertical Focus Out Of Range");
+			}
+		} else {
+			updateSystemMessagesPanel("Punto no enfocable, fuera de rango de HW - Vertical Focus Out Of Range");
+		}
+	}
+	
+	public void setBackToStartPoint(){
+		hwController.setElevationAngle(0);
+		double correctionAngle = (-1)*hwController.getRotationAngle();
+		hwController.moveArduinoController(correctionAngle);
+		hwController.setRotationAngle(hwController.getRotationAngle());
+		setLastSelectedPixel(new XYZpoint(0,0,0.0,Color.TRANSPARENT.toString(),this));
+		setPreviousSelectedPixel(new XYZpoint(0,0,0.0,Color.TRANSPARENT.toString(),this));
+	}
+	
+	public void setBackToPreviousPoint(){
+		XYZpoint lastFocusedPoint = getLastSelectedPixel();
+		XYZpoint previousFocusedPoint=getPreviousSelectedPixel();
+		XYZpoint previousEstimatedPoint=null;
+		
+		if ((lastFocusedPoint!=null) && (lastFocusedPoint.isFocusablePoint())&&(previousFocusedPoint!=null)){
+		
+			previousEstimatedPoint = new XYZpoint((-1)*lastFocusedPoint.getXvalue(),
+													(-1)*lastFocusedPoint.getYvalue(),
+													previousFocusedPoint.getZlength(),
+													previousFocusedPoint.getColorString(),this);
+			setPreviousSelectedPixel(previousEstimatedPoint);	
+			swapSelectedPixel();
+			setFocusOnLastSelectedPixel();
+			updateDisplayPanels();
+		} else {
+			updateSystemMessagesPanel("No es posible obtener punto previo");
+		}
 	}
 }

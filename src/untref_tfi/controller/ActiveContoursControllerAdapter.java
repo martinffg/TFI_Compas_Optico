@@ -25,9 +25,10 @@ public class ActiveContoursControllerAdapter {
 	private ImageView imageView;
 	private Image imageToShow;
 	private final Contour[] contour;
-	private double objectColorDeltaValue=50.0;
+	private double objectColorDeltaValue=30.0;
 	private int imageCounter=0;
 	private ImagePosition centroideCurva;
+	XYZpoint centroidPoint;
 	private MainGraphicInterfaceController mgic;
 		
 	public ActiveContoursControllerAdapter(MainGraphicInterfaceController mGraphIntCont) {
@@ -65,7 +66,22 @@ public class ActiveContoursControllerAdapter {
 			contour[0] = activeContoursService.adjustContours(contour[0], objectColorDeltaValue);
 			ImageSetter.setWithImageSize(imageView, contour[0].getImageWithContour());
 			imageCounter++;
-			System.out.println("Segundo Punto Elegido. \n Imagen nro: "+imageCounter);
+			
+			centroideCurva=activeContoursService.calculateCentroid(contour[0].getlIn());
+			//System.out.println("Centroide Curva en ("+centroideCurva.getColumn()+";"+centroideCurva.getRow()+");");
+			centroidPoint= imagePositionToXYZpointConverter(centroideCurva);
+			mgic.setCentroidPoint(centroidPoint);
+			
+			if (centroidPoint!=null) {
+				mgic.orderSelectedPixel();
+				mgic.setLastSelectedPixel(centroidPoint);
+				mgic.updateDisplayPanels();
+				System.out.println("Imagen nro: "+imageCounter+" Centroide en ("+centroidPoint.getXvalue()
+				+";"+centroidPoint.getYvalue()+";"+centroidPoint.getKinectDepth()+"); Color: "+centroidPoint.getColorString()
+				+" Delta Color: "+objectColorDeltaValue);
+			} else {
+				System.out.println("CENTROIDE NO DETECTABLE EN EL INICIO.");
+			}
 		}
 	}
 	
@@ -77,20 +93,29 @@ public class ActiveContoursControllerAdapter {
 		
 		Image imagenFXinput=SwingFXUtils.toFXImage(imagenKinect, null);
 		BufferedImage imagenBIoutput;
-		XYZpoint centroidPoint;
+		
 				
 		if (contour[0] != null) {  
 			contour[0] = activeContoursService.applyContourToNewImage(contour[0],imagenFXinput);
 			contour[0] = activeContoursService.adjustContours(contour[0], objectColorDeltaValue);
 			
 			centroideCurva=activeContoursService.calculateCentroid(contour[0].getlIn());
+			//System.out.println("Centroide Curva en ("+centroideCurva.getColumn()+";"+centroideCurva.getRow()+");");
 			centroidPoint= imagePositionToXYZpointConverter(centroideCurva);
 			mgic.setCentroidPoint(centroidPoint);
 			
 			imageCounter++;
 			
-			System.out.println("Imagen nro: "+imageCounter+" Centroide en ("+centroidPoint.getXvalue()
-			+";"+centroidPoint.getYvalue()+";"+centroidPoint.getKinectDepth()+"); Color: "+centroidPoint.getColorString());
+			if (centroidPoint!=null) {
+				mgic.orderSelectedPixel();
+				mgic.setLastSelectedPixel(centroidPoint);
+				mgic.updateDisplayPanels();
+				System.out.println("Imagen nro: "+imageCounter+" Centroide en ("+centroidPoint.getXvalue()
+				+";"+centroidPoint.getYvalue()+";"+centroidPoint.getKinectDepth()+"); Color: "+centroidPoint.getColorString()
+				+" Delta Color: "+objectColorDeltaValue);
+			} else {
+				System.out.println("CENTROIDE VACIO, PERDIDA DE CONTORNO");
+			}
 						
 			try {
 				Thread.sleep(200);
@@ -109,12 +134,25 @@ public class ActiveContoursControllerAdapter {
 	}
 	
 	public XYZpoint imagePositionToXYZpointConverter(ImagePosition centroide){
-		int centroidXvalue=centroide.getColumn() - MainGraphicInterfaceController.zeroXref;
-		int centroidYvalue=(centroide.getRow() * -1) + MainGraphicInterfaceController.zeroYref;
-		Double centroidDepthValue = mgic.getImageCaptureController().getXYMatrizProfundidad(centroide.getColumn(),centroide.getRow());
-		String centroidColorValue = mgic.getImageCaptureController().getXYMatrizRGBColorCadena(centroide.getColumn(),centroide.getRow());
-	
-		 return new XYZpoint(centroidXvalue,centroidYvalue,centroidDepthValue,centroidColorValue,mgic);
+		
+		XYZpoint convertedPoint=null;
+		
+		if (centroide.isValidImagePosition()){
+			int centroidXvalue=centroide.getColumn() - MainGraphicInterfaceController.zeroXref;
+			int centroidYvalue=(centroide.getRow() * -1) + MainGraphicInterfaceController.zeroYref;
+			Double centroidDepthValue = mgic.getImageCaptureController().getXYMatrizProfundidad(centroide.getColumn(),centroide.getRow());
+			String centroidColorValue = mgic.getImageCaptureController().getXYMatrizRGBColorCadena(centroide.getColumn(),centroide.getRow());
+			convertedPoint=new XYZpoint(centroidXvalue,centroidYvalue,centroidDepthValue,centroidColorValue,mgic);	
+		} 
+		
+		return convertedPoint;
 	}
-	
+
+	public double getObjectColorDeltaValue() {
+		return objectColorDeltaValue;
+	}
+
+	public void setObjectColorDeltaValue(double objectColorDeltaValue) {
+		this.objectColorDeltaValue = objectColorDeltaValue;
+	}
 }

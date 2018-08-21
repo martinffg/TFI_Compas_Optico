@@ -17,6 +17,10 @@ public class ImagePosition implements Cloneable,Comparable<ImagePosition> {
 	public int getColumn() {
 		return column;
 	}
+	
+	public boolean isValidImagePosition(){
+		return ((this.row>=0)&&(this.column>=0));
+	}
 
 	@Override
 	public boolean equals(Object o) {

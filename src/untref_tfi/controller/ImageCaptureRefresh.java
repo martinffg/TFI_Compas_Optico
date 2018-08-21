@@ -5,8 +5,8 @@ import java.util.TimerTask;
 
 public class ImageCaptureRefresh extends TimerTask {
 	
-	private static final long DEFAULT_PERIOD = 100; // (1 / 10) * 1000; // actual 10 fps - max 30 fps con period 34
-	private static final long MAXIMUM_PERIOD = 250;
+	private static final long DEFAULT_PERIOD = 100; // (1 / 10) * 1000; // 10 fps (max 30 fps) para modo normal
+	private static final long MAXIMUM_PERIOD = 500; // (1 / 2) * 1000; // 2 fps para Active Contours
 	private static final long DEFAULT_DELAY = 0;
 	private static final long MAXIMUM_DELAY = 50;
 	private long valuePeriod=0;

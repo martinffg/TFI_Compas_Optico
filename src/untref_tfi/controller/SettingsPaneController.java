@@ -24,15 +24,16 @@ public class SettingsPaneController {
 		this.mgic=mainGrapIntCont;
 		
 		Label title = new Label(paneName);
-		title.setFont(Font.font ("Verdana", 20));
+		title.setFont(Font.font ("Verdana", 18));
 		title.setAlignment(Pos.TOP_CENTER);
-		title.setMinSize(135, 25);
+		title.setPrefSize(120, 20);
 		title.setTextFill(Paint.valueOf("#29446B"));
 				
 		String[] checkBoxNames = new String[]{"Auto Tracking","Dynamic clic","ooFocus pixels","ooRange pixels"};
 		CheckBox[] cbs = new CheckBox[checkBoxNames.length];
 		for (int i = 0; i < checkBoxNames.length; i++) {
 			cbs[i] = new CheckBox(checkBoxNames[i]);
+			cbs[i].setFont(Font.font ("Verdana", 12));
 		}
 		
 		// Defino evento por cada checkbox
@@ -46,14 +47,14 @@ public class SettingsPaneController {
 		VBox vbox = new VBox(cbs);
 		vbox.setAlignment(Pos.CENTER_LEFT);
 		vbox.getChildren().add(checkBoxNames.length, separator);
-		vbox.setSpacing(5.0);
+		vbox.setSpacing(10.0);
 		vbox.setPadding(new Insets(2,2,2,2));
 		
 			
 		Label labelColor = new Label("OOR Color");
 		labelColor.setFont(new Font(16));
 		ColorPicker colorPicker = new ColorPicker(Color.GRAY);
-		colorPicker.setPrefSize(135, 40);
+		colorPicker.setPrefSize(120, 40);
 		colorPicker.setOnAction(new EventHandler<ActionEvent>() {	
 			
             public void handle(ActionEvent e) {
@@ -69,9 +70,9 @@ public class SettingsPaneController {
 		panel.getChildren().addAll(title,vbox,labelColor,vbox2);
 		panel.setBackground(Background.EMPTY);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(135, 150);
+		panel.setPrefSize(126, 255);
 		panel.setAlignment(Pos.CENTER);
-		panel.setSpacing(5.0);
+		panel.setSpacing(10.0);
 		panel.setPadding(new Insets(2,2,2,2));
 		
 	}

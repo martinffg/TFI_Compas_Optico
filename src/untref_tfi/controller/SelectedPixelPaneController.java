@@ -1,7 +1,5 @@
 package untref_tfi.controller;
 
-import com.sun.prism.paint.Color;
-
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,8 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import untref_tfi.controller.hardware.HardwareController;
-import untref_tfi.controller.kinect.Kinect;
 import untref_tfi.domain.XYZpoint;
 
 public class SelectedPixelPaneController {
@@ -28,15 +24,13 @@ public class SelectedPixelPaneController {
 	private final TextField zLength;
 	private final TextField depthTf;
 	private final TextField xyColor;
-	private XYZpoint selectedPoint=null;
-	private HardwareController hwController=null;
+	@SuppressWarnings("unused")
 	private MainGraphicInterfaceController mgic=null;
 
 	public SelectedPixelPaneController(String paneName, MainGraphicInterfaceController mgic) {
 		
 		this.mgic=mgic;
-		this.hwController=mgic.getHardwareController();
-		
+				
 		Label title = new Label(paneName);
 		title.setFont(Font.font ("Verdana", 20));
 		title.setAlignment(Pos.CENTER);
@@ -135,7 +129,7 @@ public class SelectedPixelPaneController {
 		Button focusButton = new Button("Focus On It");
 		focusButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 								            public void handle(MouseEvent e) {
-								            	setFocusOnIt();
+								            	mgic.setFocusOnLastSelectedPixel();
 								            }	
 							        });
 		focusButton.setMaxSize(120, 20);
@@ -145,7 +139,7 @@ public class SelectedPixelPaneController {
 		Button backToStartButton = new Button("Go to Start");
 		backToStartButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 								            public void handle(MouseEvent e) {
-								            	setBackToStartPoint();
+								            	mgic.setBackToStartPoint();
 								            }	
 							        });
 		backToStartButton.setMaxSize(120, 20);
@@ -155,7 +149,7 @@ public class SelectedPixelPaneController {
 		Button backToPreviousPointButton = new Button("Previous");
 		backToPreviousPointButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 								            public void handle(MouseEvent e) {
-								            	setBackToPreviousPoint();
+								            	mgic.setBackToPreviousPoint();
 								            }	
 							        });
 		backToPreviousPointButton.setMaxSize(120, 20);
@@ -165,7 +159,7 @@ public class SelectedPixelPaneController {
 		panel = new VBox();
 		panel.getChildren().addAll(title, posRefPane, posValPane,xLengthLabel,xLength,yLengthLabel,yLength,zLengthLabel,zLength,depthLabel,depthTf,xyColorLabel,xyColor,focusButton,backToPreviousPointButton,backToStartButton);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(120, 460);
+		panel.setMinSize(120, 470);
 		panel.setAlignment(Pos.CENTER);
 		panel.setSpacing(3.0);
 		panel.setPadding(new Insets(2,2,2,2));
@@ -180,7 +174,6 @@ public class SelectedPixelPaneController {
 	}
 
 	public void setXYZvalues(XYZpoint pixel,String rgbColor){
-		this.selectedPoint = pixel;
 		xPos.setText(String.valueOf(pixel.getXvalue()));
 		yPos.setText(String.valueOf(pixel.getYvalue()));
 		xLength.setText(String.format("%.3f", pixel.getXlength())+"m");
@@ -197,57 +190,5 @@ public class SelectedPixelPaneController {
 		yLength.setText(EMPTY_VALUE);
 		zLength.setText(EMPTY_VALUE);
 		depthTf.setText(EMPTY_VALUE);
-	}
-
-	public XYZpoint getXYZpoint(){
-		return this.selectedPoint;
-	}
-	
-	private void setFocusOnIt(){
-		
-		XYZpoint focusedPoint = mgic.getLastSelectedPixel();
-		
-		if (focusedPoint.isFocusablePoint()) {
-			int relativeElevation = (int) Math.round(focusedPoint.getAnglesCalculator().getGamma());
-			int absoluteElevation = hwController.getElevationAngle()+relativeElevation;
-			double relativeRotation = focusedPoint.getAnglesCalculator().getPhi();
-			if (Math.abs(absoluteElevation)<=Kinect.kinectVerticalTiltAbsValue) {  // HW limit for kinect Elevetion degree
-				hwController.moveArduinoController(relativeRotation);
-				hwController.setElevationAngle(absoluteElevation);			
-			} else {
-				mgic.updateSystemMessagesPanel("Punto no enfocable, fuera de rango de HW - Vertical Focus Out Of Range");
-			}
-		} else {
-			mgic.updateSystemMessagesPanel("Punto no enfocable, fuera de rango de HW - Vertical Focus Out Of Range");
-		}
-	}
-	
-	private void setBackToStartPoint(){
-		hwController.setElevationAngle(0);
-		double correctionAngle = (-1)*hwController.getRotationAngle();
-		hwController.moveArduinoController(correctionAngle);
-		hwController.setRotationAngle(hwController.getRotationAngle());
-		mgic.setLastSelectedPixel(new XYZpoint(0,0,0.0,Color.TRANSPARENT.toString(),mgic));
-		mgic.setPreviousSelectedPixel(new XYZpoint(0,0,0.0,Color.TRANSPARENT.toString(),mgic));
-	}
-	
-	private void setBackToPreviousPoint(){
-		XYZpoint lastFocusedPoint = mgic.getLastSelectedPixel();
-		XYZpoint previousFocusedPoint=mgic.getPreviousSelectedPixel();
-		XYZpoint previousEstimatedPoint=null;
-		
-		if ((lastFocusedPoint!=null) && (lastFocusedPoint.isFocusablePoint())&&(previousFocusedPoint!=null)){
-		
-			previousEstimatedPoint = new XYZpoint((-1)*lastFocusedPoint.getXvalue(),
-													(-1)*lastFocusedPoint.getYvalue(),
-													previousFocusedPoint.getZlength(),
-													previousFocusedPoint.getColorString(),mgic);
-			mgic.setPreviousSelectedPixel(previousEstimatedPoint);	
-			mgic.swapSelectedPixel();
-			setFocusOnIt();
-			mgic.updateDisplayPanels();
-		} else {
-			mgic.updateSystemMessagesPanel("No es posible obtener punto previo");
-		}
 	}
 }

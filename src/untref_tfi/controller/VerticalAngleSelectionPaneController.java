@@ -37,8 +37,8 @@ public class VerticalAngleSelectionPaneController {
 		
 		angleValue = new TextField("0°");
 		angleValue.setEditable(false);
-		angleValue.setPrefSize(100,50);
-		angleValue.setStyle("-fx-text-fill: green; -fx-font-size: 16;");
+		angleValue.setPrefSize(56,30);
+		angleValue.setStyle("-fx-text-fill: green; -fx-font-size: 14;");
 		angleValue.setAlignment(Pos.CENTER);
 		
 		Slider sliderAnguloVertical = new Slider(-Kinect.kinectVerticalTiltAbsValue, Kinect.kinectVerticalTiltAbsValue, 0);
@@ -49,7 +49,7 @@ public class VerticalAngleSelectionPaneController {
 		sliderAnguloVertical.setSnapToTicks(true);
 		sliderAnguloVertical.setMinorTickCount(1);
 		sliderAnguloVertical.setOrientation(Orientation.VERTICAL);
-		sliderAnguloVertical.setPrefSize(100, 280);
+		sliderAnguloVertical.setPrefSize(80, 180);
 		sliderAnguloVertical.setLabelFormatter(new StringConverter<Double>(){
 				@Override
 				public String toString(Double object) {
@@ -79,7 +79,7 @@ public class VerticalAngleSelectionPaneController {
 								            }	
 							        });
 		plusButton.setFont(Font.font ("Verdana", 10));
-		plusButton.setPrefSize(20,14);
+		plusButton.setPrefSize(30,30);
 		plusButton.setStyle("-fx-text-fill: green; -fx-font-size: 10;");
 		plusButton.setAlignment(Pos.CENTER);
 		
@@ -95,20 +95,17 @@ public class VerticalAngleSelectionPaneController {
 							        });
 		
 		minusButton.setFont(Font.font ("Verdana", 10));
-		minusButton.setPrefSize(20,14);
+		minusButton.setPrefSize(30,30);
 		minusButton.setStyle("-fx-text-fill: green; -fx-font-size: 10;");
 		minusButton.setAlignment(Pos.CENTER);
 		
-		VBox addremoveOnePanel = new VBox();
-		addremoveOnePanel.getChildren().addAll(plusButton,minusButton);
-		
 		HBox anglePanel = new HBox();
-		anglePanel.getChildren().addAll(addremoveOnePanel,angleValue);
-		anglePanel.setPrefSize(120,40);
+		anglePanel.getChildren().addAll(minusButton,angleValue,plusButton);
+		anglePanel.setPrefSize(116,30);
 		panel = new VBox();
 		panel.getChildren().addAll(title,sliderAnguloVertical,anglePanel);
 		panel.setStyle("-fx-background-color: #6DF1D8; -fx-border-color: #29446B; -fx-border-width:2px; -fx-border-style: solid;");
-		panel.setMinSize(125, 350);
+		panel.setMinSize(120, 200);
 		panel.setAlignment(Pos.CENTER);
 		panel.setSpacing(2.0);
 		panel.setPadding(new Insets(2,2,2,2));

@@ -128,12 +128,16 @@ public class ActiveContoursServiceImpl implements ActiveContoursService {
 				totalColumn += imagePosition.getColumn();
 			}
 			
-			xPos=totalRow / curve.size();
-			yPos=totalColumn / curve.size();
+			yPos=totalRow / curve.size();
+			xPos=totalColumn / curve.size();
 		
+		} else {
+			xPos=-1;
+			yPos=-1;
 		}
+		
 
-		return new ImagePosition(xPos,yPos);
+		return new ImagePosition(yPos,xPos);
 	}
 
 	private Contour adjustContoursForVideo(Contour contour, Double colorDelta) {
