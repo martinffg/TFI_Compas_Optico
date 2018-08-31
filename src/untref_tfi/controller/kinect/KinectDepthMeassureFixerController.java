@@ -25,8 +25,7 @@ public class KinectDepthMeassureFixerController {
 		if (this.kinectDepthMeassure>0){
 			realMeassure = getUnfixedKinectDepthMeassure() 
 					+ getDeltaErrorOnDepthMeassuredRespectOrigin()
-					+ getHorizontalErrorOnDepthMeassured()
-					+ getVerticalErrorOnDepthMeassured();
+					+ Math.sqrt(Math.pow(getHorizontalErrorOnDepthMeassured(),2)+ Math.pow(getVerticalErrorOnDepthMeassured(),2));
 		}
 		return realMeassure;
 	}
