@@ -17,7 +17,7 @@ public class OpticCompassModoTest {
 						String[] args = {"test"};
 						oc.start(args);							
 					}catch(Exception e){
-						System.out.println("Exception launching mainTest run method catched.");
+						//System.out.println("Exception launching mainTest run method catched.");
 						e.printStackTrace();
 					}
 				}
@@ -27,7 +27,7 @@ public class OpticCompassModoTest {
 			Thread.sleep(1000);
 			Assert.assertFalse(Platform.isFxApplicationThread());
 		}catch(Exception ex){
-			System.out.println("Exception in mainTest thread catched.");
+			//System.out.println("Exception in mainTest thread catched.");
 			ex.printStackTrace();
 		}
 	}

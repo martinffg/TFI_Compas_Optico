@@ -20,7 +20,7 @@ public class ImageCaptureControllerTest {
 							icc.startImageCapture();
 							icc.imageRefresh();
 						} catch (Exception e) {
-							System.out.println("iccProdTest() exception");
+							//System.out.println("iccProdTest() exception");
 						}
 				}
 			});
@@ -30,7 +30,7 @@ public class ImageCaptureControllerTest {
 			Assert.assertFalse(Platform.isFxApplicationThread());
 			Platform.exit();
 		}catch(Exception ex){
-			System.out.println("Exception stopping iccProdTest catched.");
+			//System.out.println("Exception stopping iccProdTest catched.");
 		}
 	}
 

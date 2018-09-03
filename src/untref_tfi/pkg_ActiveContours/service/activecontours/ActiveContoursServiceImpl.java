@@ -91,7 +91,7 @@ public class ActiveContoursServiceImpl implements ActiveContoursService {
 			double distance = Double.MAX_VALUE;
 			for (int centroidIndex = 0; centroidIndex < centroids.size(); centroidIndex++) {
 				double distanceToOldCentroid = calculateDistance(oldCentroid, centroids.get(centroidIndex));
-				System.out.println("curve:" + centroidIndex + " distance:" + distanceToOldCentroid + " pixels:" + curves.get(centroidIndex).size());
+				//System.out.println("curve:" + centroidIndex + " distance:" + distanceToOldCentroid + " pixels:" + curves.get(centroidIndex).size());
 				if (distance > distanceToOldCentroid) {
 					distance = distanceToOldCentroid;
 					candidateCurve = centroidIndex;
@@ -164,7 +164,7 @@ public class ActiveContoursServiceImpl implements ActiveContoursService {
 	}
 
 	private Contour evaluateOclusion(List<ImagePosition> lIn, Double reductionTolerance, Contour contour, int expandSize) {
-		System.out.println("lIn: " + lIn.size() + " tolerance: " + reductionTolerance * average);
+		//System.out.println("lIn: " + lIn.size() + " tolerance: " + reductionTolerance * average);
 		if (lIn.size() < reductionTolerance * average) {
 			ImagePosition imagePosition = new ImagePosition(Math.max(this.initialImagePosition.getRow() - expandSize, 0),
 					Math.max(this.initialImagePosition.getColumn() - expandSize, 0));
@@ -189,9 +189,9 @@ public class ActiveContoursServiceImpl implements ActiveContoursService {
 	private void updateLinAverage(List<ImagePosition> lIn) {
 		processedImages++;
 		totalLin += lIn.size();
-		System.out.println("processed images:" + processedImages);
+		//System.out.println("processed images:" + processedImages);
 		average = totalLin / processedImages;
-		System.out.println("average:" + average);
+		//System.out.println("average:" + average);
 	}
 
 	private void shortenContour(boolean isPositive, Contour contour, ImagePosition imagePosition) {

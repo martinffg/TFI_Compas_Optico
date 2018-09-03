@@ -168,16 +168,12 @@ public class MainGraphicInterfaceController {
 		this.autoTrackingSelected=true;
 		restartCapture();
 		actCountControler= new ActiveContoursControllerAdapter(this);
-		if (actCountControler!=null){
-			System.out.println("Active Contour creado");
-		}
 	}
 	
 	public void disableAutotrackingSelection(){
 		this.autoTrackingSelected=false;
 		restartCapture();
 		actCountControler=null;
-		System.out.println("Active Contour eliminado");
 	}	
 	
 	public boolean isOutOfFocusPointsSelected(){

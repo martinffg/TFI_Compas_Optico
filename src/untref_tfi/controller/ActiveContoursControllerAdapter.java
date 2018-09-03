@@ -26,7 +26,7 @@ public class ActiveContoursControllerAdapter {
 	private Image imageToShow;
 	private final Contour[] contour;
 	private double objectColorDeltaValue=30.0;
-	private int imageCounter=0;
+	//private int imageCounter=0;
 	private ImagePosition centroideCurva;
 	XYZpoint centroidPoint;
 	private MainGraphicInterfaceController mgic;
@@ -36,7 +36,7 @@ public class ActiveContoursControllerAdapter {
 		secondPixelPaneController = new PixelSelectionController(SECOND_PIXEL);
 		mgic=mGraphIntCont;
 		imageView = mGraphIntCont.getKinectImageView();
-		imageCounter=0;
+		//imageCounter=0;
 		contour = new Contour[1];
 		activeContoursService = new ActiveContoursServiceImpl();
 		
@@ -49,23 +49,23 @@ public class ActiveContoursControllerAdapter {
 
 		if (!firstPixelPaneController.setedValues()) {
 			firstPixelPaneController.setValues(x, y);
-			System.out.println("Primer Punto Elegido");
+			//System.out.println("Primer Punto Elegido");
 		} else if (!secondPixelPaneController.setedValues()) {
 			secondPixelPaneController.setValues(x, y);
 			contour[0] = activeContoursService.initializeActiveContours(imageToShow,firstPixelPaneController.getPosition(),secondPixelPaneController.getPosition());
-			System.out.println("Segundo Punto Elegido y Contorno inicializado");
+			//System.out.println("Segundo Punto Elegido y Contorno inicializado");
 		} else {
 			firstPixelPaneController.clearValues();
 			secondPixelPaneController.clearValues();
-			imageCounter=0;
+			//imageCounter=0;
 			contour[0] = null;
-			System.out.println("Se limpio seleccion de puntos y contour, contador imagenes en 0");
+			//System.out.println("Se limpio seleccion de puntos y contour, contador imagenes en 0");
 		}
 
 		if (contour[0] != null) {
 			contour[0] = activeContoursService.adjustContours(contour[0], objectColorDeltaValue);
 			ImageSetter.setWithImageSize(imageView, contour[0].getImageWithContour());
-			imageCounter++;
+			//imageCounter++;
 			
 			centroideCurva=activeContoursService.calculateCentroid(contour[0].getlIn());
 			//System.out.println("Centroide Curva en ("+centroideCurva.getColumn()+";"+centroideCurva.getRow()+");");
@@ -76,9 +76,9 @@ public class ActiveContoursControllerAdapter {
 				mgic.orderSelectedPixel();
 				mgic.setLastSelectedPixel(centroidPoint);
 				mgic.updateDisplayPanels();
-				System.out.println("Imagen nro: "+imageCounter+" Centroide en ("+centroidPoint.getXvalue()
+				/*System.out.println("Imagen nro: "+imageCounter+" Centroide en ("+centroidPoint.getXvalue()
 				+";"+centroidPoint.getYvalue()+";"+centroidPoint.getKinectDepth()+"); Color: "+centroidPoint.getColorString()
-				+" Delta Color: "+objectColorDeltaValue);
+				+" Delta Color: "+objectColorDeltaValue);*/
 			} else {
 				System.out.println("CENTROIDE NO DETECTABLE EN EL INICIO.");
 			}
@@ -104,18 +104,18 @@ public class ActiveContoursControllerAdapter {
 			centroidPoint= imagePositionToXYZpointConverter(centroideCurva);
 			mgic.setCentroidPoint(centroidPoint);
 			
-			imageCounter++;
+			//imageCounter++;
 			
 			if (centroidPoint!=null) {
 				mgic.orderSelectedPixel();
 				mgic.setLastSelectedPixel(centroidPoint);
 				mgic.updateDisplayPanels();
-				System.out.println("Imagen nro: "+imageCounter+" Centroide en ("+centroidPoint.getXvalue()
+				/*System.out.println("Imagen nro: "+imageCounter+" Centroide en ("+centroidPoint.getXvalue()
 				+";"+centroidPoint.getYvalue()+";"+centroidPoint.getKinectDepth()+"); Color: "+centroidPoint.getColorString()
-				+" Delta Color: "+objectColorDeltaValue);
-			} else {
-				System.out.println("CENTROIDE VACIO, PERDIDA DE CONTORNO");
-			}
+				+" Delta Color: "+objectColorDeltaValue);*/
+			} /* else {
+				//System.out.println("CENTROIDE VACIO, PERDIDA DE CONTORNO");
+			}*/
 						
 			try {
 				Thread.sleep(200);

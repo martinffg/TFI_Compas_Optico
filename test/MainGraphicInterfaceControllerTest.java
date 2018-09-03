@@ -28,7 +28,7 @@ public class MainGraphicInterfaceControllerTest extends Application {
 						String[] args = {};
 						MainGraphicInterfaceControllerTest.main(args);
 					}catch(Exception e){
-						System.out.println("Exception in Thread run method."); 
+						//System.out.println("Exception in Thread run method."); 
 						e.printStackTrace();
 					}
 				}
@@ -38,7 +38,7 @@ public class MainGraphicInterfaceControllerTest extends Application {
 			Assert.assertFalse(Platform.isFxApplicationThread());
 			Thread.sleep(3000);
 		}catch(Exception ex){
-			System.out.println("Exception in Thread");
+			//System.out.println("Exception in Thread");
 			ex.printStackTrace();
 		}
 	}

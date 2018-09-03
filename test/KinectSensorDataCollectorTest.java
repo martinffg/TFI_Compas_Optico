@@ -20,7 +20,6 @@ public class KinectSensorDataCollectorTest {
 				Assert.assertEquals(Color.gray,ksdc.getColorEnPixel(1, 1));
 				Assert.assertNotNull(ksdc.getDistancia(1, 1));
 				Assert.assertNotNull(ksdc.getImagenColor());
-				Assert.assertNotNull(ksdc.getImagenColorBackup());
 				Assert.assertNotNull(ksdc.getImagenProfundidad());
 			} else {
 				Assert.assertNotNull(kinect);
@@ -37,7 +36,6 @@ public class KinectSensorDataCollectorTest {
 			Assert.assertEquals(Color.gray,ksdc.getColorEnPixel(1, 1));
 			Assert.assertNotNull(ksdc.getDistancia(1, 1));
 			Assert.assertNotNull(ksdc.getImagenColor());
-			Assert.assertNotNull(ksdc.getImagenColorBackup());
 			Assert.assertNotNull(ksdc.getImagenProfundidad());
 		} catch (Exception e) {}
 	}

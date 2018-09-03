@@ -14,7 +14,6 @@ public class KinectSensorDataCollector {
 	private int imageHeight;
 	private int elevationAngle=0;  // angle in degrees between -27 to 27
 	private BufferedImage imagenColor;
-	private BufferedImage imagenColorBackup;
 	private BufferedImage imagenProfundidad;
 			
 	public KinectSensorDataCollector(Kinect kinect,Color colorOOR,int elevation) {
@@ -61,10 +60,6 @@ public class KinectSensorDataCollector {
 		return imagenColor;
 	}
 	
-	public BufferedImage getImagenColorBackup() {
-		return imagenColorBackup;
-	}
-
 	public BufferedImage getImagenProfundidad() {
 		return imagenProfundidad;
 	}
@@ -72,7 +67,6 @@ public class KinectSensorDataCollector {
 	private void construirMatrizColor() {
 		matrizColor = new Color[this.getWidth()][this.getHeight()];
 		imagenColor = new BufferedImage(this.getWidth(), this.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
-		imagenColorBackup = new BufferedImage(this.getWidth(), this.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
 		int iEspejado=0,posicionInicial=0,height=0,red=0,green=0,blue=0,alpha=0;
 		Color color=null;
 		
@@ -88,7 +82,6 @@ public class KinectSensorDataCollector {
 				iEspejado=this.getWidth()-1-i; // como la captura es espejada, se requiere espejar en eje y
 				this.matrizColor[iEspejado][j] = color;
 				this.imagenColor.setRGB(iEspejado, j, color.getRGB());
-				this.imagenColorBackup.setRGB(iEspejado, j, color.getRGB());
 			}
 		}
 	}
